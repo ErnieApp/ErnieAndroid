@@ -12,14 +12,16 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/log_dest"
-        android:name="com.ernie.LogFragment"
-        android:label="fragment_log"
-        tools:layout="@layout/fragment_log" />
+        android:id="@+id/journal_dest"
+        android:name="com.ernie.JournalFragment"
+        android:label="fragment_journal"
+        tools:layout="@layout/fragment_journal" />
+
     <fragment
         android:id="@+id/profile_dest"
         android:name="com.ernie.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
+
 
 </navigation>

@@ -14,11 +14,11 @@ class MainActivity : AppCompatActivity() {
                 findNavController(R.id.nav_host).navigate(R.id.home_dest)
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.navigation_log -> {
-                findNavController(R.id.nav_host).navigate(R.id.log_dest)
+            R.id.navigation_journal -> {
+                findNavController(R.id.nav_host).navigate(R.id.journal_dest)
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.navigation_notifications -> {
+            R.id.navigation_profile -> {
                 findNavController(R.id.nav_host).navigate(R.id.profile_dest)
                 return@OnNavigationItemSelectedListener true
             }

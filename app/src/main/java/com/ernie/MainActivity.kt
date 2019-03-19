@@ -14,7 +14,7 @@ class MainActivity : AppCompatActivity() {
                 findNavController(R.id.nav_host).navigate(R.id.main_dest)
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.navigation_dashboard -> {
+            R.id.navigation_log -> {
                 findNavController(R.id.nav_host).navigate(R.id.log_dest)
                 return@OnNavigationItemSelectedListener true
             }

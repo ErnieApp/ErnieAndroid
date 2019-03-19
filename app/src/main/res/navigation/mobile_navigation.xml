@@ -10,4 +10,9 @@
         android:name="com.ernie.MainFragment"
         android:label="fragment_main"
         tools:layout="@layout/fragment_main" />
+    <fragment
+        android:id="@+id/log_dest"
+        android:name="com.ernie.LogFragment"
+        android:label="fragment_log"
+        tools:layout="@layout/fragment_log" />
 </navigation>

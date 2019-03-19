@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_notifications -> {
-
+                findNavController(R.id.nav_host).navigate(R.id.profile_dest)
                 return@OnNavigationItemSelectedListener true
             }
         }

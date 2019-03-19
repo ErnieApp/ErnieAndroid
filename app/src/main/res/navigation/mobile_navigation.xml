@@ -16,5 +16,10 @@
         android:name="com.ernie.LogFragment"
         android:label="fragment_log"
         tools:layout="@layout/fragment_log" />
+    <fragment
+        android:id="@+id/profile_dest"
+        android:name="com.ernie.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
 
 </navigation>

@@ -3,16 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@id/main_dest">
+    app:startDestination="@id/home_dest">
 
     <fragment
-        android:id="@+id/main_dest"
-        android:name="com.ernie.MainFragment"
-        android:label="fragment_main"
-        tools:layout="@layout/fragment_main" />
+        android:id="@+id/home_dest"
+        android:name="com.ernie.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" />
+
     <fragment
         android:id="@+id/log_dest"
         android:name="com.ernie.LogFragment"
         android:label="fragment_log"
         tools:layout="@layout/fragment_log" />
+
 </navigation>

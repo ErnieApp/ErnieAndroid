@@ -11,7 +11,7 @@ class MainActivity : AppCompatActivity() {
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_home -> {
-                findNavController(R.id.nav_host).navigate(R.id.main_dest)
+                findNavController(R.id.nav_host).navigate(R.id.home_dest)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_log -> {

@@ -2,28 +2,31 @@ package com.ernie
 
 
 import android.os.Bundle
+import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
+import android.support.v4.view.ViewPager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- *
- */
 class JournalFragment : Fragment() {
+    private lateinit var viewPager: ViewPager
+    private lateinit var tabs: TabLayout
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_journal, container, false)
+        val view: View = inflater.inflate(R.layout.fragment_journal, container, false)
+        viewPager = view.findViewById(R.id.viewpager_main)
+        tabs = view.findViewById(R.id.tabs_main)
+
+        val fragmentAdapter = PagerAdapter(childFragmentManager)
+        viewPager.adapter = fragmentAdapter
+        tabs.setupWithViewPager(viewPager)
+
+        return view
     }
 
-
-}
+} // Required empty public  constructor

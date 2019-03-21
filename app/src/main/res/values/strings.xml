@@ -4,5 +4,9 @@
     <string name="title_journal">Journal</string>
     <string name="title_profile">Profile</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="log">Log</string>
+    <string name="record">Record</string>
+
 
 </resources>

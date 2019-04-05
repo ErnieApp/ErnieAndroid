@@ -61,8 +61,16 @@ class Record : Fragment() {
             return
         }
 
+
         val user = User(text)
         database.child("users").child(userId).setValue(user)
+
+
+        // Create a new post reference with an auto-generated id
+//        var newPostRef = database.push();
+//        newPostRef.s({
+//            // ...
+//        });
     }
 
 

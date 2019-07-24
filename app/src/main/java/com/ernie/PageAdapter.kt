@@ -16,7 +16,7 @@ class PagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
                 Record()
             }
             else -> {
-                return Log()
+                return History()
             }
         }
     }
@@ -29,7 +29,7 @@ class PagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
         return when (position) {
             0 -> "Record"
             else -> {
-                return "Log"
+                return "History"
             }
         }
     }

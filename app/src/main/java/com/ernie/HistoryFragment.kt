@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import kotlinx.android.synthetic.main.fragment_log.*
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -19,7 +18,7 @@ private const val ARG_PARAM2 = "param2"
  * A simple [Fragment] subclass.
  *
  */
-class Log : Fragment() {
+class History : Fragment() {
 
     private var userData: EditText? = null
 
@@ -28,13 +27,11 @@ class Log : Fragment() {
         // Inflate the layout for this fragment
 
 
-        return inflater.inflate(R.layout.fragment_log, container, false)
+        return inflater.inflate(R.layout.fragment_history, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    fun onClick(view: View) {
 
-        txtData.setText("helloworld")
     }
 
     fun displayData() {

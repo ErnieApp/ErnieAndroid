@@ -1,4 +1,4 @@
-package com.ernie
+package com.ernie.home
 
 
 import android.os.Bundle
@@ -6,7 +6,7 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
+import com.ernie.R
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -18,24 +18,15 @@ private const val ARG_PARAM2 = "param2"
  * A simple [Fragment] subclass.
  *
  */
-class History : Fragment() {
-
-    private var userData: EditText? = null
+class HomeFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
+
+
         // Inflate the layout for this fragment
-
-
-        return inflater.inflate(R.layout.fragment_history, container, false)
+        return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
-    fun onClick(view: View) {
-
-    }
-
-    fun displayData() {
-
-    }
 
 }

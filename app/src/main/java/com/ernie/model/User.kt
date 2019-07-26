@@ -1,4 +1,4 @@
-package com.ernie
+package com.ernie.model
 
 import com.google.firebase.database.IgnoreExtraProperties
 

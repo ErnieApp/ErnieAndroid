@@ -7,19 +7,19 @@
 
     <fragment
         android:id="@+id/home_dest"
-        android:name="com.ernie.HomeFragment"
+        android:name="com.ernie.home.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/journal_dest"
-        android:name="com.ernie.JournalFragment"
+        android:name="com.ernie.journal.JournalFragment"
         android:label="fragment_journal"
         tools:layout="@layout/fragment_journal" />
 
     <fragment
         android:id="@+id/profile_dest"
-        android:name="com.ernie.ProfileFragment"
+        android:name="com.ernie.profile.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
 

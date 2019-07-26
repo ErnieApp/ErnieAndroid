@@ -1,12 +1,9 @@
 <resources>
     <string name="app_name">ErnieAndroid</string>
-    <string name="title_home">Home</string>
+    <string name="title_home">home</string>
     <string name="title_journal">Journal</string>
     <string name="title_profile">Profile</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="History">History</string>
-    <string name="record">Record</string>
 
 
 </resources>

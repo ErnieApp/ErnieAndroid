@@ -4,6 +4,7 @@ package com.ernie.journal
 import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
+
 import android.support.v4.view.ViewPager
 import android.view.LayoutInflater
 import android.view.View
@@ -22,6 +23,16 @@ class JournalFragment : Fragment() {
         val view: View = inflater.inflate(R.layout.fragment_journal, container, false)
 
         return view
+    }
+
+    private fun addFragment() {
+
+
+        val ft = fragmentManager!!.beginTransaction()
+        ft.add(R.id.fragmentContainer, journal_list_dest)
+        ft.commit()
+
+
     }
 
 } // Required empty public  constructor

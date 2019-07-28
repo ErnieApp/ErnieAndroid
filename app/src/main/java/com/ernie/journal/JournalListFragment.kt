@@ -8,8 +8,16 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import com.ernie.R
 
+
+class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    var entryDate: TextView = view.findViewById(R.id.entryDate)
+    var entryEarned: TextView = view.findViewById(R.id.entryEarned)
+    var entryBreakHours: TextView = view.findViewById(R.id.entryBreakHours)
+    var entryWorkedTime: TextView = view.findViewById(R.id.entryWorkedTime)
+}
 class JournalListFragment : Fragment() {
 
     companion object {
@@ -39,11 +47,12 @@ class JournalListFragment : Fragment() {
             layoutInflater = LayoutInflater.from(context)
         }
 
-        override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
-            val recyclerDogModelBinding = RecyclerItemDogModelBinding.inflate(layoutInflater,
-                    viewGroup, false)
-            return ViewHolder(recyclerDogModelBinding.root, recyclerDogModelBinding)
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.fragment_journal_list_entry, parent, false)
+            return ViewHolder(view)
         }
+
 
         override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
             val dog = DogModel(imageResIds[position], names[position],
@@ -57,15 +66,6 @@ class JournalListFragment : Fragment() {
         }
     }
 
-    internal inner class ViewHolder constructor(itemView: View,
-                                                val recyclerItemDogListBinding:
-                                                RecyclerItemDogModelBinding
-    ) :
-            RecyclerView.ViewHolder(itemView) {
 
-        fun setData(dogModel: DogModel) {
-            recyclerItemDogListBinding.dogModel = dogModel
-        }
-    }
 
 }

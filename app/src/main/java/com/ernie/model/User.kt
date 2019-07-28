@@ -1,8 +1,10 @@
 package com.ernie.model
 
-import com.google.firebase.database.IgnoreExtraProperties
-
-@IgnoreExtraProperties
-data class User(
-        var username: String? = ""
+class User(_id: String,
+           name: String,
+           email: String,
+           password: String,
+           hourly_rate: String,
+           contract_id: String
 )
+

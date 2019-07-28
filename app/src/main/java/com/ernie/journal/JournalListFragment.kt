@@ -27,8 +27,45 @@ class JournalListFragment : Fragment() {
         val activity = activity as Context
         val recyclerView = view.findViewById<RecyclerView>(R.id.journalRecyclerView) as RecyclerView
         recyclerView.layoutManager = GridLayoutManager(activity, 1)
-//        recyclerView.adapter = JournalListAdapter(activity)
+        recyclerView.adapter = JournalListAdapter(activity)
         return view
+    }
+
+    internal inner class JournalListAdapter(context: Context) : RecyclerView.Adapter<ViewHolder>() {
+
+        private val layoutInflater: LayoutInflater
+
+        init {
+            layoutInflater = LayoutInflater.from(context)
+        }
+
+        override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
+            val recyclerDogModelBinding = RecyclerItemDogModelBinding.inflate(layoutInflater,
+                    viewGroup, false)
+            return ViewHolder(recyclerDogModelBinding.root, recyclerDogModelBinding)
+        }
+
+        override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
+            val dog = DogModel(imageResIds[position], names[position],
+                    descriptions[position], urls[position])
+            viewHolder.setData(dog)
+            viewHolder.itemView.setOnClickListener { listener.onDogSelected(dog) }
+        }
+
+        override fun getItemCount(): Int {
+            return names.size
+        }
+    }
+
+    internal inner class ViewHolder constructor(itemView: View,
+                                                val recyclerItemDogListBinding:
+                                                RecyclerItemDogModelBinding
+    ) :
+            RecyclerView.ViewHolder(itemView) {
+
+        fun setData(dogModel: DogModel) {
+            recyclerItemDogListBinding.dogModel = dogModel
+        }
     }
 
 }

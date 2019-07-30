@@ -1,9 +1,12 @@
-package learnprogramming.academy.tasktimer
+package com.ernie
 
+import android.content.ContentValues
 import android.content.Context
+import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
+import com.ernie.model.User
 
 /**
  * Created by timbuchalka for the Android Oreo using Kotlin course
@@ -16,10 +19,13 @@ import android.util.Log
 
 private const val TAG = "AppDatabase"
 
-private const val DATABASE_NAME = "TaskTimer.db"
+private const val DATABASE_NAME = "ErnieApp.db"
 private const val DATABASE_VERSION = 3
 
-internal class AppDatabase private constructor(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
+class AppDatabase(context: Context,
+                  factory: SQLiteDatabase.CursorFactory?) :
+        SQLiteOpenHelper(context, DATABASE_NAME,
+                factory, DATABASE_VERSION) {
 
     init {
         Log.d(TAG, "AppDatabase: initialising")
@@ -28,7 +34,7 @@ internal class AppDatabase private constructor(context: Context) : SQLiteOpenHel
     override fun onCreate(db: SQLiteDatabase) {
         // CREATE TABLE Tasks (_id INTEGER PRIMARY KEY NOT NULL, Name TEXT NOT NULL, Description TEXT, SortOrder INTEGER);
         Log.d(TAG, "onCreate: starts")
-        val sSQL = """CREATE TABLE User (
+        val sSQL = """CREATE TABLE IF NOT EXISTS User (
                         _id INTEGER PRIMARY KEY AUTOINCREMENT,
                         name TEXT NOT NULL,
                         email TEXT NOT NULL,
@@ -39,7 +45,7 @@ internal class AppDatabase private constructor(context: Context) : SQLiteOpenHel
                         ON DELETE RESTRICT ON UPDATE CASCADE
                     );
 
-                    CREATE TABLE Entry (
+                    CREATE TABLE IF NOT EXISTS Entry (
                         _id INTEGER PRIMARY KEY AUTOINCREMENT,
                         user_id INTEGER NOT NULL,
                         date_recorded DATE DEFAULT (datetime(current_timestamp)),
@@ -51,7 +57,7 @@ internal class AppDatabase private constructor(context: Context) : SQLiteOpenHel
                         ON DELETE RESTRICT ON UPDATE CASCADE
                     );
 
-                    CREATE TABLE Contract (
+                    CREATE TABLE IF NOT EXISTS Contract (
                         _id INTEGER PRIMARY KEY AUTOINCREMENT,
                         monStart TEXT NOT NULL,
                         monEnd TEXT NOT NULL,
@@ -89,9 +95,33 @@ internal class AppDatabase private constructor(context: Context) : SQLiteOpenHel
         onUpgrade(db, oldVersion, newVersion)
     }
 
-    fun getAllEntries(): Cursor? {
-        val db = this.readableDatabase
-        return db.rawQuery("SELECT * FROM $TABLE_NAME", null)
+
+    fun addUser(user: User) {
+
+
+        val values = ContentValues().apply {
+            put("name", user.name)
+            put("email", user.email)
+            put("hourly_rate", user.hourly_rate)
+            put("contract_id", 0)
+        }
+        val db = this.writableDatabase
+        db.insert("User", null, values)
+        db.close()
+
+
     }
 
+    fun getAllUsers(): Cursor? {
+        val db = this.readableDatabase
+        return db.rawQuery("SELECT * FROM User", null)
+    }
+
+    companion object {
+        private val DATABASE_VERSION = 1
+        private const val DATABASE_NAME = "ErnieApp.db"
+        val TABLE_NAME = "User"
+        val COLUMN_ID = "_id"
+        val COLUMN_NAME = "name"
+    }
 }

@@ -6,7 +6,10 @@ import android.support.v7.app.AppCompatActivity
 import androidx.navigation.findNavController
 import kotlinx.android.synthetic.main.activity_main.*
 
+
 class MainActivity : AppCompatActivity() {
+
+//    private val sqliteDB = baseContext.openOrCreateDatabase("ernieApp-sqlite.db", Context.MODE_PRIVATE, null)
 
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
@@ -31,6 +34,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+
+
     }
+
 
 }

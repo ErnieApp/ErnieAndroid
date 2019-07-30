@@ -89,4 +89,9 @@ internal class AppDatabase private constructor(context: Context) : SQLiteOpenHel
         onUpgrade(db, oldVersion, newVersion)
     }
 
+    fun getAllEntries(): Cursor? {
+        val db = this.readableDatabase
+        return db.rawQuery("SELECT * FROM $TABLE_NAME", null)
+    }
+
 }

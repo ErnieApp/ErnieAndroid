@@ -102,6 +102,7 @@ class AppDatabase(context: Context,
         val values = ContentValues().apply {
             put("name", user.name)
             put("email", user.email)
+            put("password", user.password)
             put("hourly_rate", user.hourly_rate)
             put("contract_id", 0)
         }

@@ -20,10 +20,12 @@ class JournalFragment : Fragment() {
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view: View = inflater.inflate(R.layout.fragment_journal, container, false)
-        fragmentManager!!.beginTransaction()
-                .add(R.id.fragmentContainer, JournalListFragment.newInstance(), "list")
-                .commit()
+        val fragment = fragmentManager!!.findFragmentById(R.id.fragmentContainer)
+        if (fragment == null) {
+            fragmentManager!!.beginTransaction()
+                    .add(R.id.fragmentContainer, JournalListFragment.newInstance(), "list")
+                    .commit()
+        }
         return view
     }
-
 }

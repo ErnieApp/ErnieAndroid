@@ -14,14 +14,17 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="6dp">
 
             <TextView
                 android:id="@+id/entryDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="SASADADA" />
+                android:text="Date"
+                android:textColor="#000000"
+                android:textSize="18sp" />
 
             <Space
                 android:layout_width="wrap_content"
@@ -33,7 +36,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="SASASASASASA" />
+                android:text="Pay"
+                android:textColor="#000000"
+                android:textSize="18sp" />
         </LinearLayout>
 
         <View
@@ -45,20 +50,22 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="6dp">
 
             <ImageView
                 android:id="@+id/imageView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:src="@drawable/googleg_standard_color_18" />
+                android:src="@drawable/ic_work" />
 
             <TextView
                 android:id="@+id/entryWorkedTime"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:gravity="center"
                 android:text="TextView" />
 
             <Space
@@ -71,13 +78,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:src="@drawable/googleg_standard_color_18" />
+                android:src="@drawable/ic_break" />
 
             <TextView
                 android:id="@+id/entryBreakHours"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:gravity="center"
                 android:text="TextView" />
         </LinearLayout>
     </LinearLayout>

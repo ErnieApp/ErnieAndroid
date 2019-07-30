@@ -55,14 +55,15 @@ class JournalListFragment : Fragment() {
 
 
         override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-            val dog = DogModel(imageResIds[position], names[position],
-                    descriptions[position], urls[position])
-            viewHolder.setData(dog)
-            viewHolder.itemView.setOnClickListener { listener.onDogSelected(dog) }
+            viewHolder.entryDate.setText("26/05/2019")
+            viewHolder.entryWorkedTime.setText("10:30 - 18:00")
+            viewHolder.entryBreakHours.setText("50 minutes")
+            viewHolder.entryEarned.setText("$5000")
+            viewHolder.itemView.setOnClickListener { System.out.println("Clicky") }
         }
 
         override fun getItemCount(): Int {
-            return names.size
+            return 10
         }
     }
 

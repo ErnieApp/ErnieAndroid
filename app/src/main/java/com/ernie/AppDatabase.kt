@@ -97,8 +97,6 @@ class AppDatabase(context: Context,
 
 
     fun addUser(user: User) {
-
-
         val values = ContentValues().apply {
             put("name", user.name)
             put("email", user.email)

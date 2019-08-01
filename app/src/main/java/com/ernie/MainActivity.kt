@@ -1,13 +1,16 @@
 package com.ernie
 
+import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
 import androidx.navigation.findNavController
+import com.ernie.journal.JournalListAddEntryFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), JournalListAddEntryFragment.OnFragmentInteractionListener {
+
 
 //    private val sqliteDB = baseContext.openOrCreateDatabase("ernieApp-sqlite.db", Context.MODE_PRIVATE, null)
 
@@ -38,5 +41,8 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    override fun onFragmentInteraction(uri: Uri) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
 }

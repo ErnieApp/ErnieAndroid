@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.ernie.AppDatabase
 import com.ernie.R
+import java.io.Serializable
 
 
 class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -21,7 +22,8 @@ class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     var entryBreakHours: TextView = view.findViewById(R.id.entryBreakHours)
     var entryWorkedTime: TextView = view.findViewById(R.id.entryWorkedTime)
 }
-class JournalListFragment : Fragment() {
+
+class JournalListFragment : Fragment(), Serializable {
 
     var dbHandler: AppDatabase? = null
     var entryCursor: Cursor? = null

@@ -15,6 +15,7 @@ import com.ernie.R
 import com.ernie.model.Entry
 import kotlinx.android.synthetic.main.fragment_journal_list_add_entry.*
 import kotlinx.android.synthetic.main.fragment_profile.tvDisplayName
+import java.io.Serializable
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -32,7 +33,7 @@ private const val TAG = "JournalListFragment"
  * create an instance of this fragment.
  *
  */
-class JournalListAddEntryFragment : Fragment() {
+class JournalListAddEntryFragment : Fragment(), Serializable {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null

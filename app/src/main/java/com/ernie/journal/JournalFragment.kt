@@ -30,7 +30,16 @@ class JournalFragment : Fragment() {
         if (savedInstanceState == null) {
             journalListFragment = JournalListFragment.newInstance()
             journalListAddEntryFragment = JournalListAddEntryFragment.newInstance()
+        } else {
+            journalListFragment = savedInstanceState.get("entryList") as JournalListFragment
+            journalListAddEntryFragment = savedInstanceState.get("entryAddForm") as JournalListAddEntryFragment
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putSerializable("entryList", journalListFragment)
+        outState.putSerializable("entryAddForm", journalListAddEntryFragment)
     }
 
     override fun onCreateView(inflater: LayoutInflater,

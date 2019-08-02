@@ -6,6 +6,7 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
+import com.ernie.model.Entry
 import com.ernie.model.User
 
 /**
@@ -28,13 +29,14 @@ class AppDatabase(context: Context,
                 factory, DATABASE_VERSION) {
 
     init {
-        Log.d(TAG, "AppDatabase: initialising")
+
     }
 
     override fun onCreate(db: SQLiteDatabase) {
         // CREATE TABLE Tasks (_id INTEGER PRIMARY KEY NOT NULL, Name TEXT NOT NULL, Description TEXT, SortOrder INTEGER);
         Log.d(TAG, "onCreate: starts")
-        val sSQL = """CREATE TABLE IF NOT EXISTS User (
+
+        val createUserTableSQL = """CREATE TABLE IF NOT EXISTS User (
                         _id INTEGER PRIMARY KEY AUTOINCREMENT,
                         name TEXT NOT NULL,
                         email TEXT NOT NULL,
@@ -43,9 +45,9 @@ class AppDatabase(context: Context,
                         contract_id INTEGER UNSIGNED,
                         FOREIGN KEY (contract_id) REFERENCES Contract(id)
                         ON DELETE RESTRICT ON UPDATE CASCADE
-                    );
+                    );""".replaceIndent(" ")
 
-                    CREATE TABLE IF NOT EXISTS Entry (
+        val createEntryTableSQL = """CREATE TABLE IF NOT EXISTS Entry (
                         _id INTEGER PRIMARY KEY AUTOINCREMENT,
                         user_id INTEGER NOT NULL,
                         date_recorded DATE DEFAULT (datetime(current_timestamp)),
@@ -55,9 +57,9 @@ class AppDatabase(context: Context,
                         earned INTEGER DEFAULT 0,
                         FOREIGN KEY (user_id) REFERENCES User(id)
                         ON DELETE RESTRICT ON UPDATE CASCADE
-                    );
+                    );""".replaceIndent(" ")
 
-                    CREATE TABLE IF NOT EXISTS Contract (
+        val createContractTableSQL = """CREATE TABLE IF NOT EXISTS Contract (
                         _id INTEGER PRIMARY KEY AUTOINCREMENT,
                         monStart TEXT NOT NULL,
                         monEnd TEXT NOT NULL,
@@ -77,7 +79,10 @@ class AppDatabase(context: Context,
                         FOREIGN KEY (user_id) REFERENCES User(id)
                         ON DELETE RESTRICT ON UPDATE CASCADE
                     );""".replaceIndent(" ")
-        db.execSQL(sSQL)
+
+        db.execSQL(createUserTableSQL)
+        db.execSQL(createEntryTableSQL)
+        db.execSQL(createContractTableSQL)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -97,8 +102,6 @@ class AppDatabase(context: Context,
 
 
     fun addUser(user: User) {
-
-
         val values = ContentValues().apply {
             put("name", user.name)
             put("email", user.email)
@@ -118,11 +121,40 @@ class AppDatabase(context: Context,
         return db.rawQuery("SELECT * FROM User", null)
     }
 
+
+    fun addEntry(entry: Entry) {
+        val values = ContentValues().apply {
+            put("start_time", entry.start_time)
+            put("end_time", entry.end_time)
+            put("break_duration", entry.break_duration)
+            put("earned", entry.earned)
+        }
+        val db = this.writableDatabase
+        db.insert("Entry", null, values)
+        db.close()
+        Log.d(TAG, "Entry added to db")
+
+    }
+
+    fun getAllEntries(): Cursor? {
+        val db = this.readableDatabase
+        return db.rawQuery("SELECT * FROM Entry", null)
+    }
+
+    fun numberOfEntries(): Int {
+        return getAllEntries()!!.count
+    }
+
+
+
+
+
     companion object {
         private val DATABASE_VERSION = 1
         private const val DATABASE_NAME = "ErnieApp.db"
         val TABLE_NAME = "User"
         val COLUMN_ID = "_id"
         val COLUMN_NAME = "name"
+        val COLUMN_START = "start_time"
     }
 }

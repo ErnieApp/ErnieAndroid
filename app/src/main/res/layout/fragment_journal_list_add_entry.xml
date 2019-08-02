@@ -4,11 +4,9 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/journalList"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".profile.ProfileFragment">
-
+    tools:context=".journal.JournalListAddEntryFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,7 +19,37 @@
             android:layout_height="wrap_content" />
 
         <EditText
-            android:id="@+id/etName"
+            android:id="@+id/entryStartTimeInputTextField"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:ems="10"
+            android:text="StartTime" />
+
+        <EditText
+            android:id="@+id/entryEndTimeInputTextField"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:ems="10"
+            android:text="EndTime" />
+
+        <EditText
+            android:id="@+id/entryBreakDurationInputTextField"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:ems="10"
+            android:text="BreakDuration" />
+
+        <EditText
+            android:id="@+id/entryEarnedInputTextField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -29,66 +57,24 @@
             android:layout_marginEnd="8dp"
             android:ems="10"
             android:inputType="textPersonName"
-            android:text="Name" />
-
-        <EditText
-            android:id="@+id/etEmail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"
-            android:ems="10"
-            android:text="Email" />
-
-        <EditText
-            android:id="@+id/etPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"
-            android:ems="10"
-            android:text="Password" />
-
-        <EditText
-            android:id="@+id/etHourlyRate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:text="HourlyRate" />
-
-        <EditText
-            android:id="@+id/etContractID"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:text="ContractID" />
+            android:text="Earned" />
     </LinearLayout>
 
     <Button
-        android:id="@+id/btnAddToUserTable"
+        android:id="@+id/btnAddToEntryTable"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Add to database"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/btnShowDatafromUserTable" />
+        app:layout_constraintStart_toEndOf="@+id/btnShowDatafromEntryTable" />
 
     <Button
-        android:id="@+id/btnShowDatafromUserTable"
+        android:id="@+id/btnShowDatafromEntryTable"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Show Data"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btnAddToUserTable"
+        app:layout_constraintEnd_toStartOf="@+id/btnAddToEntryTable"
         app:layout_constraintStart_toStartOf="parent" />
 </android.support.constraint.ConstraintLayout>

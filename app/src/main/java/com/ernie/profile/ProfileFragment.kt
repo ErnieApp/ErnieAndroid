@@ -43,7 +43,7 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        btnShowDatafromDb.setOnClickListener {
+        btnShowDatafromUserTable.setOnClickListener {
             tvDisplayName.text = ""
             val dbHandler = AppDatabase(this.activity!!, null)
             val cursor = dbHandler.getAllUsers()
@@ -56,8 +56,9 @@ class ProfileFragment : Fragment() {
             cursor.close()
         }
 
-        btnAddToDb.setOnClickListener {
+        btnAddToUserTable.setOnClickListener {
             val dbHandler = AppDatabase(this.activity!!, null)
+
 
             val user = User(etName.text.toString(), etEmail.text.toString(), etPassword.text.toString(), etHourlyRate.text.toString(), etContractID.text.toString().toInt())
             dbHandler.addUser(user)

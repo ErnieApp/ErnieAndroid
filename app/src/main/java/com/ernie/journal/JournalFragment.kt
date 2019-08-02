@@ -73,9 +73,7 @@ class JournalFragment : Fragment() {
 
             ft.show(journalListFragment)
         } else {
-
             ft.add(R.id.fragmentContainer, journalListFragment, "journalListFragment")
-
         }
         // Hide fragment
         if (journalListAddEntryFragment.isAdded) {

@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,6 +26,11 @@ class JournalListFragment : Fragment(), Serializable {
 
     var dbHandler: AppDatabase? = null
     var entryCursor: Cursor? = null
+    var date_recordedIndex: Int = 0
+    var start_timeIndex: Int = 0
+    var end_timeIndex: Int = 0
+    var break_durationIndex: Int = 0
+    var earnedIndex: Int = 0
 
     companion object {
 
@@ -39,6 +43,13 @@ class JournalListFragment : Fragment(), Serializable {
         super.onCreate(savedInstanceState)
         dbHandler = context?.let { AppDatabase(it, null) }
         entryCursor = dbHandler!!.getAllEntries()
+        entryCursor!!.moveToNext()
+
+        date_recordedIndex = entryCursor!!.getColumnIndex("date_recorded")
+        start_timeIndex = entryCursor!!.getColumnIndex("start_time")
+        end_timeIndex = entryCursor!!.getColumnIndex("end_time")
+        break_durationIndex = entryCursor!!.getColumnIndex("break_duration")
+        earnedIndex = entryCursor!!.getColumnIndex("earned")
     }
 
     override fun onCreateView(inflater: LayoutInflater,
@@ -69,19 +80,17 @@ class JournalListFragment : Fragment(), Serializable {
 
 
         override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-            if (entryCursor!!.position < entryCursor!!.count - 1) {
-                entryCursor!!.moveToNext()
+            viewHolder.entryDate.text = entryCursor!!.getString(date_recordedIndex)
+            viewHolder.entryWorkedTime.text = entryCursor!!.getString(start_timeIndex) + " - " + entryCursor!!.getString(end_timeIndex)
+            viewHolder.entryBreakHours.text = entryCursor!!.getString(break_durationIndex) + " minutes"
+            viewHolder.entryEarned.text = "£" + entryCursor!!.getString(earnedIndex)
+            viewHolder.itemView.setOnClickListener {
+                
             }
 
-            viewHolder.entryDate.text = entryCursor!!.getString(entryCursor!!.getColumnIndex("date_recorded"))
-            Log.d("MERT", "Mashallah")
-            viewHolder.entryWorkedTime.text = entryCursor!!.getString(entryCursor!!.getColumnIndex("start_time")) + " - " + entryCursor!!.getString(entryCursor!!.getColumnIndex("end_time"))
-            Log.d("MERT", "Mashallah")
-            viewHolder.entryBreakHours.text = entryCursor!!.getString(entryCursor!!.getColumnIndex("break_duration")) + " minutes"
-            Log.d("MERT", "Mashallah")
-            viewHolder.entryEarned.text = "£" + entryCursor!!.getString(entryCursor!!.getColumnIndex("earned"))
-            viewHolder.itemView.setOnClickListener { System.out.println("Clicky") }
-
+            if (entryCursor!!.position < entryCursor!!.count) {
+                entryCursor!!.moveToNext()
+            }
         }
 
         override fun getItemCount(): Int {

@@ -120,7 +120,6 @@ class JournalListAddEntryFragment : Fragment(), Serializable {
 
     }
     companion object {
-
         fun newInstance(): JournalListAddEntryFragment {
             return JournalListAddEntryFragment()
         }

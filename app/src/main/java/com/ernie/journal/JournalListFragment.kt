@@ -24,6 +24,8 @@ class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
 class JournalListFragment : Fragment(), Serializable {
 
+    private var journalFragment: JournalFragment? = null
+
     var dbHandler: AppDatabase? = null
     var entryCursor: Cursor? = null
     var date_recordedIndex: Int = 0
@@ -37,6 +39,10 @@ class JournalListFragment : Fragment(), Serializable {
         fun newInstance(): JournalListFragment {
             return JournalListFragment()
         }
+    }
+
+    fun setJournalFragment(jf: JournalFragment) {
+        journalFragment = jf
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -85,7 +91,7 @@ class JournalListFragment : Fragment(), Serializable {
             viewHolder.entryBreakHours.text = entryCursor!!.getString(break_durationIndex) + " minutes"
             viewHolder.entryEarned.text = "£" + entryCursor!!.getString(earnedIndex)
             viewHolder.itemView.setOnClickListener {
-                
+                journalFragment!!.displayFragmentC()
             }
 
             if (entryCursor!!.position < entryCursor!!.count) {

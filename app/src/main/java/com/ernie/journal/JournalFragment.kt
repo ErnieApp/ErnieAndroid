@@ -16,6 +16,7 @@ class JournalFragment : Fragment() {
 
     private lateinit var journalListAddEntryFragment: JournalListAddEntryFragment
     private lateinit var journalListFragment: JournalListFragment
+    private lateinit var journalListExpandedEntryFragment: JournalListExpandedEntryFragment
 
     companion object {
 
@@ -30,9 +31,12 @@ class JournalFragment : Fragment() {
         if (savedInstanceState == null) {
             journalListFragment = JournalListFragment.newInstance()
             journalListAddEntryFragment = JournalListAddEntryFragment.newInstance()
+            journalListExpandedEntryFragment = JournalListExpandedEntryFragment.newInstance()
+            journalListFragment.setJournalFragment(this)
         } else {
             journalListFragment = savedInstanceState.get("entryList") as JournalListFragment
             journalListAddEntryFragment = savedInstanceState.get("entryAddForm") as JournalListAddEntryFragment
+            journalListExpandedEntryFragment = savedInstanceState.get("entryExpanded") as JournalListExpandedEntryFragment
         }
     }
 
@@ -40,6 +44,7 @@ class JournalFragment : Fragment() {
         super.onSaveInstanceState(outState)
         outState.putSerializable("entryList", journalListFragment)
         outState.putSerializable("entryAddForm", journalListAddEntryFragment)
+        outState.putSerializable("entryExpanded", journalListExpandedEntryFragment)
     }
 
     override fun onCreateView(inflater: LayoutInflater,
@@ -79,6 +84,9 @@ class JournalFragment : Fragment() {
         if (journalListAddEntryFragment.isAdded) {
             ft.hide(journalListAddEntryFragment)
         }
+        if (journalListExpandedEntryFragment.isAdded) {
+            ft.hide(journalListExpandedEntryFragment)
+        }
 
         // Commit changes
         ft.commit()
@@ -99,6 +107,32 @@ class JournalFragment : Fragment() {
         // Hide fragment
         if (journalListFragment.isAdded) {
             ft.hide(journalListFragment)
+        }
+        if (journalListExpandedEntryFragment.isAdded) {
+            ft.hide(journalListExpandedEntryFragment)
+        }
+
+        // Commit changes
+        ft.commit()
+    }
+
+    fun displayFragmentC() {
+        val ft = childFragmentManager.beginTransaction()
+
+        if (journalListExpandedEntryFragment.isAdded) {
+
+            ft.show(journalListExpandedEntryFragment)
+        } else {
+
+            ft.add(R.id.fragmentContainer, journalListExpandedEntryFragment, "journalListFragment")
+
+        }
+        // Hide fragment
+        if (journalListFragment.isAdded) {
+            ft.hide(journalListFragment)
+        }
+        if (journalListAddEntryFragment.isAdded) {
+            ft.hide(journalListAddEntryFragment)
         }
 
         // Commit changes

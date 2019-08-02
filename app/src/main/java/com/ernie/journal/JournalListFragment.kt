@@ -1,14 +1,17 @@
 package com.ernie.journal
 
 import android.content.Context
+import android.database.Cursor
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import com.ernie.AppDatabase
 import com.ernie.R
 
 
@@ -20,11 +23,20 @@ class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 }
 class JournalListFragment : Fragment() {
 
+    var dbHandler: AppDatabase? = null
+    var entryCursor: Cursor? = null
+
     companion object {
 
         fun newInstance(): JournalListFragment {
             return JournalListFragment()
         }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        dbHandler = context?.let { AppDatabase(it, null) }
+        entryCursor = dbHandler!!.getAllEntries()
     }
 
     override fun onCreateView(inflater: LayoutInflater,
@@ -55,15 +67,23 @@ class JournalListFragment : Fragment() {
 
 
         override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-            viewHolder.entryDate.setText("26/05/2019")
-            viewHolder.entryWorkedTime.setText("10:30 - 18:00")
-            viewHolder.entryBreakHours.setText("50 minutes")
-            viewHolder.entryEarned.setText("$5000")
+            if (entryCursor!!.position < entryCursor!!.count - 1) {
+                entryCursor!!.moveToNext()
+            }
+
+            viewHolder.entryDate.text = entryCursor!!.getString(entryCursor!!.getColumnIndex("date_recorded"))
+            Log.d("MERT", "Mashallah")
+            viewHolder.entryWorkedTime.text = entryCursor!!.getString(entryCursor!!.getColumnIndex("start_time")) + " - " + entryCursor!!.getString(entryCursor!!.getColumnIndex("end_time"))
+            Log.d("MERT", "Mashallah")
+            viewHolder.entryBreakHours.text = entryCursor!!.getString(entryCursor!!.getColumnIndex("break_duration")) + " minutes"
+            Log.d("MERT", "Mashallah")
+            viewHolder.entryEarned.text = "£" + entryCursor!!.getString(entryCursor!!.getColumnIndex("earned"))
             viewHolder.itemView.setOnClickListener { System.out.println("Clicky") }
+
         }
 
         override fun getItemCount(): Int {
-            return 10
+            return dbHandler!!.numberOfEntries()
         }
     }
 

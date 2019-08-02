@@ -75,20 +75,20 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/btnAddToDb"
+        android:id="@+id/btnAddToUserTable"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Add to database"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/btnShowDatafromDb" />
+        app:layout_constraintStart_toEndOf="@+id/btnShowDatafromUserTable" />
 
     <Button
-        android:id="@+id/btnShowDatafromDb"
+        android:id="@+id/btnShowDatafromUserTable"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Show Data"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btnAddToDb"
+        app:layout_constraintEnd_toStartOf="@+id/btnAddToUserTable"
         app:layout_constraintStart_toStartOf="parent" />
 </android.support.constraint.ConstraintLayout>

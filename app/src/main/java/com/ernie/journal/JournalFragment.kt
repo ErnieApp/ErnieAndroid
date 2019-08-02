@@ -10,7 +10,12 @@ import com.ernie.R
 import kotlinx.android.synthetic.main.fragment_journal.*
 
 
+private const val TAG = "JournalFragment"
+
 class JournalFragment : Fragment() {
+
+    private lateinit var journalListAddEntryFragment: JournalListAddEntryFragment
+    private lateinit var journalListFragment: JournalListFragment
 
     companion object {
 
@@ -19,16 +24,23 @@ class JournalFragment : Fragment() {
         }
     }
 
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        if (savedInstanceState == null) {
+            journalListFragment = JournalListFragment.newInstance()
+            journalListAddEntryFragment = JournalListAddEntryFragment.newInstance()
+        }
+    }
+
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view: View = inflater.inflate(R.layout.fragment_journal, container, false)
-        val fragment = fragmentManager!!.findFragmentById(R.id.fragmentContainer)
-        if (fragment == null) {
-            fragmentManager!!.beginTransaction()
-                    .add(R.id.fragmentContainer, JournalListFragment.newInstance(), "list")
-                    .commit()
-        }
+
+
+        displayFragmentA()
+
         return view
     }
 
@@ -38,17 +50,58 @@ class JournalFragment : Fragment() {
 
 
         floatingActionButton.setOnClickListener { view ->
-            val nextFrag = JournalListAddEntryFragment()
-            childFragmentManager.beginTransaction()
-                    .replace(R.id.journalFragmentContainer, nextFrag, "findThisFragment")
-                    .addToBackStack(null)
-                    .commit()
+            displayFragmentB()
         }
+        //Begin Transcation
+
     }
 
-    interface OnFragmentInteractionListener {
-        fun onFragmentInteraction(uri: Uri)
+
+    protected fun displayFragmentA() {
+        val ft = childFragmentManager.beginTransaction()
+
+        if (journalListFragment.isAdded) {
+
+            ft.show(journalListFragment)
+        } else {
+
+            ft.add(R.id.fragmentContainer, journalListFragment, "journalListFragment")
+
+        }
+        // Hide fragment
+        if (journalListAddEntryFragment.isAdded) {
+            ft.hide(journalListAddEntryFragment)
+        }
+
+        // Commit changes
+        ft.commit()
     }
 
+
+    protected fun displayFragmentB() {
+        val ft = childFragmentManager.beginTransaction()
+
+        if (journalListAddEntryFragment.isAdded) {
+
+            ft.show(journalListAddEntryFragment)
+        } else {
+
+            ft.add(R.id.fragmentContainer, journalListAddEntryFragment, "journalListFragment")
+
+        }
+        // Hide fragment
+        if (journalListFragment.isAdded) {
+            ft.hide(journalListFragment)
+        }
+
+        // Commit changes
+        ft.commit()
+    }
 
 }
+
+
+interface OnFragmentInteractionListener {
+    fun onFragmentInteraction(uri: Uri)
+}
+

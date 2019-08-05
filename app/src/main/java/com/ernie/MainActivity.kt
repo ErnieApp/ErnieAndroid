@@ -1,11 +1,13 @@
 package com.ernie
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.support.design.widget.BottomNavigationView
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import com.ernie.journal.JournalListAddEntryFragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -36,6 +38,14 @@ class MainActivity : AppCompatActivity(), JournalListAddEntryFragment.OnFragment
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val fireAuth = FirebaseAuth.getInstance()
+
+        if (fireAuth.currentUser == null) {
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+        }
+
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
 

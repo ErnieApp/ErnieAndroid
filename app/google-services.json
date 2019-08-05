@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "466256073929-4cve9p8j2d9n37i70jhotq6vsfjajqm3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ernie",
+            "certificate_hash": "645e0fbeaf3f2acd7301922b20516bcefee73c80"
+          }
+        },
+        {
           "client_id": "466256073929-49rse4t6dsbqt92oq9u07hidj8025u5i.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -25,15 +33,13 @@
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
-        },
-        "ads_service": {
-          "status": 2
+          "other_platform_oauth_client": [
+            {
+              "client_id": "466256073929-49rse4t6dsbqt92oq9u07hidj8025u5i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

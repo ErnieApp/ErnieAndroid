@@ -1,6 +1,7 @@
 package com.ernie.profile
 
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,8 +9,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.ernie.AppDatabase
+import com.ernie.LoginActivity
 import com.ernie.R
 import com.ernie.model.User
+import com.firebase.ui.auth.AuthUI
 import kotlinx.android.synthetic.main.fragment_profile.*
 
 
@@ -36,7 +39,6 @@ class ProfileFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-
         return inflater.inflate(R.layout.fragment_profile, container, false)
     }
 
@@ -65,9 +67,20 @@ class ProfileFragment : Fragment() {
             Toast.makeText(this.activity!!, etName.text.toString() + "Added to database", Toast.LENGTH_LONG).show()
         }
 
-
+        btnLogOut.setOnClickListener {
+            signOut()
+        }
     }
 
+
+    private fun signOut() {
+        AuthUI.getInstance()
+                .signOut(activity!!.applicationContext)
+                .addOnCompleteListener {
+                    val intent = Intent(activity!!.applicationContext, LoginActivity::class.java)
+                    startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK))
+                }
+    }
 
 
 

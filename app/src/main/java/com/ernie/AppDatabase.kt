@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
 import com.ernie.model.Entry
 import com.ernie.model.User
+import java.io.Serializable
 
 /**
  * Created by timbuchalka for the Android Oreo using Kotlin course
@@ -26,7 +27,7 @@ private const val DATABASE_VERSION = 3
 class AppDatabase(context: Context,
                   factory: SQLiteDatabase.CursorFactory?) :
         SQLiteOpenHelper(context, DATABASE_NAME,
-                factory, DATABASE_VERSION) {
+                factory, DATABASE_VERSION), Serializable {
 
     init {
 

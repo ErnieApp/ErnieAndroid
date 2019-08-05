@@ -77,7 +77,8 @@ class LoginActivity : AppCompatActivity() {
                 val user = FirebaseAuth.getInstance().currentUser
 
                 val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
+                startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK))
+                finish()
 
             } else {
 
@@ -96,25 +97,6 @@ class LoginActivity : AppCompatActivity() {
     }
 
     // [END auth_fui_result]
-
-
-    private fun signOut() {
-
-        // [START auth_fui_signout]
-
-        AuthUI.getInstance()
-
-                .signOut(this)
-
-                .addOnCompleteListener {
-
-                    // ...
-
-                }
-
-        // [END auth_fui_signout]
-
-    }
 
 
     private fun delete() {

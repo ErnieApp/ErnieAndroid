@@ -43,7 +43,8 @@ class MainActivity : AppCompatActivity(), JournalListAddEntryFragment.OnFragment
 
         if (fireAuth.currentUser == null) {
             val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
+            startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK))
+            finish()
         }
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)

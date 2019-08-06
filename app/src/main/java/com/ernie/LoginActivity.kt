@@ -47,6 +47,8 @@ class LoginActivity : AppCompatActivity() {
 
                         .setAvailableProviders(providers)
 
+                        .setLogo(R.drawable.ernie_logo)
+
                         .build(),
 
                 RC_SIGN_IN)
@@ -116,35 +118,6 @@ class LoginActivity : AppCompatActivity() {
         // [END auth_fui_delete]
 
     }
-
-
-    private fun themeAndLogo() {
-
-        val providers = emptyList<AuthUI.IdpConfig>()
-
-
-        // [START auth_fui_theme_logo]
-
-        startActivityForResult(
-
-                AuthUI.getInstance()
-
-                        .createSignInIntentBuilder()
-
-                        .setAvailableProviders(providers)
-
-                        .setLogo(R.drawable.ernie_logo) // Set logo drawable
-
-//                        .setTheme(R.style.AppTheme) // Set theme
-
-                        .build(),
-
-                RC_SIGN_IN)
-
-        // [END auth_fui_theme_logo]
-
-    }
-
 
     private fun privacyAndTerms() {
 

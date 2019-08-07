@@ -26,10 +26,6 @@ private const val TAG = "HomeFragment"
 class HomeFragment : Fragment() {
 
 
-    private val yData = floatArrayOf(25.3f, 10.6f, 66.76f, 44.32f, 46.01f, 16.89f, 23.9f)
-    private val xData = arrayOf("Mitch", "Jessica", "Mohammad", "Kelsey", "Sam", "Robert", "Ashley")
-
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 

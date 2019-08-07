@@ -13,6 +13,7 @@ import com.ernie.LoginActivity
 import com.ernie.R
 import com.ernie.model.User
 import com.firebase.ui.auth.AuthUI
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_profile.*
 
 
@@ -25,16 +26,17 @@ private const val ARG_PARAM2 = "param2"
  * A simple [Fragment] subclass.
  *
  */
+private const val TAG = "ProfileFragment"
+
 
 
 class ProfileFragment : Fragment() {
 
 
-//    private val database: AppDatabase = AppDatabase(activity)
+    val db = FirebaseFirestore.getInstance()
 
 
-
-
+    // Create a new user with a first and last name
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -65,11 +67,26 @@ class ProfileFragment : Fragment() {
             val user = User(etName.text.toString(), etEmail.text.toString(), etPassword.text.toString(), etHourlyRate.text.toString(), etContractID.text.toString().toInt())
             dbHandler.addUser(user)
             Toast.makeText(this.activity!!, etName.text.toString() + "Added to database", Toast.LENGTH_LONG).show()
+
+
+            val userHashMap = hashMapOf(
+                    "name" to etName.text.toString(),
+                    "email" to etEmail.text.toString(),
+                    "hourlyRate" to etHourlyRate.text.toString()
+
+
+            )
+
+            // Add a new document with a generated ID
+            db.collection("entries").document().set(user)
+
         }
 
         btnLogOut.setOnClickListener {
             signOut()
         }
+
+
     }
 
 

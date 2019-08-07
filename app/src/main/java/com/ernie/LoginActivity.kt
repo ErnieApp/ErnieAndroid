@@ -7,6 +7,7 @@ import android.os.Bundle
 import com.ernie.login.introSlide1Fragment
 import com.ernie.login.introSlide2Fragment
 import com.ernie.login.introSlide3Fragment
+import com.ernie.login.introSlide4Fragment
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.github.paolorotolo.appintro.AppIntro
@@ -21,6 +22,7 @@ class LoginActivity : AppIntro() {
         addSlide(introSlide1Fragment.newInstance())
         addSlide(introSlide2Fragment.newInstance())
         addSlide(introSlide3Fragment.newInstance())
+        addSlide(introSlide4Fragment.newInstance())
 
         setIndicatorColor(Color.rgb(102, 204, 255), Color.rgb(217, 217, 217))
 
@@ -29,11 +31,9 @@ class LoginActivity : AppIntro() {
         setNextArrowColor(Color.rgb(120, 120, 120))
         setDoneText("Get Started")
 
-//        val btn_login = findViewById<Button>(R.id.btnLogin)
-//        // set on-click listener
-//        btn_login.setOnClickListener {
-//            createSignInIntent()
-//        }
+        doneButton.setOnClickListener {
+            createSignInIntent()
+        }
     }
 
     private fun createSignInIntent() {

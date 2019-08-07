@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
-    tools:context=".login.introSlide2Fragment">
+    tools:context=".login.introSlide4Fragment">
 
     <!-- TODO: Update blank fragment layout -->
     <LinearLayout
@@ -38,7 +38,7 @@
             android:layout_marginBottom="50dp"
             android:fontFamily="@font/basic"
             android:gravity="center"
-            android:text="Record your earnings"
+            android:text="Share the experience"
             android:textSize="36sp" />
 
         <TextView
@@ -47,7 +47,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/basic"
             android:gravity="center"
-            android:text="There has been a incredible demand to facilitate this need."
+            android:text="Invite friends and family."
             android:textSize="18sp" />
     </LinearLayout>
 

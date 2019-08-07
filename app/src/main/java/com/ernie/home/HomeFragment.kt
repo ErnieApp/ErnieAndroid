@@ -2,30 +2,72 @@ package com.ernie.home
 
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.ernie.R
+import com.github.mikephil.charting.data.PieData
+import com.github.mikephil.charting.data.PieDataSet
+import com.github.mikephil.charting.data.PieEntry
+import kotlinx.android.synthetic.main.fragment_home.*
 
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
+
+private const val TAG = "HomeFragment"
 /**
  * A simple [Fragment] subclass.
  *
  */
 class HomeFragment : Fragment() {
 
+
+    private val yData = floatArrayOf(25.3f, 10.6f, 66.76f, 44.32f, 46.01f, 16.89f, 23.9f)
+    private val xData = arrayOf("Mitch", "Jessica", "Mohammad", "Kelsey", "Sam", "Robert", "Ashley")
+
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
 
+
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_home, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setupPieChart()
+    }
+
+    private fun setupPieChart() {
+
+        Log.d(TAG, "addDataSet started")
+
+        val entries = ArrayList<PieEntry>()
+
+        entries.add(PieEntry(8f, 0))
+        entries.add(PieEntry(2f, 1))
+        entries.add(PieEntry(5f, 2))
+
+        val pieDataSet = PieDataSet(entries, "Cells")
+
+        val labels = ArrayList<String>()
+
+        labels.add("18-Jan")
+        labels.add("19-Jan")
+        labels.add("20-Jan")
+
+        val data = PieData(pieDataSet)
+
+        pieChart.data = data
+
+
     }
 
 

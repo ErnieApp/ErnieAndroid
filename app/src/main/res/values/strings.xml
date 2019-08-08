@@ -7,5 +7,23 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <string name="intro_slide1_title">Ernie</string>
+    <string name="intro_slide1_text">The simplest way to manage your income.</string>
+    <string name="intro_slide1_content_description">Ernie logo.</string>
+
+    <string name="intro_slide2_title">Record your earnings</string>
+    <string name="intro_slide2_text">Designed to be intuitive allowing a hassle-free experience.</string>
+    <string name="intro_slide2_content_description">A cartoon collection of finance tools including a calculator, clipboard, and money.</string>
+
+    <string name="intro_slide3_title">Personalised statistics</string>
+    <string name="intro_slide3_text">Let Ernie do the thinking and identify trends in your income.</string>
+    <string name="intro_slide3_content_description">A cartoon businessman showcasing a chart.</string>
+
+    <string name="intro_slide4_title">Start now</string>
+    <string name="intro_slide4_text">Join the millions of users already enjoying our app.</string>
+    <string name="intro_slide4_content_description">A cartoon crowd of happy people.</string>
+
+    <string name="intro_begin_button_text">Get Started</string>
+    <string name="intro_login_button_text">Log in</string>
 
 </resources>

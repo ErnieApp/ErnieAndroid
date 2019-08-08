@@ -8,6 +8,7 @@ import com.ernie.login.introSlide1Fragment
 import com.ernie.login.introSlide2Fragment
 import com.ernie.login.introSlide3Fragment
 import com.ernie.login.introSlide4Fragment
+import com.firebase.ui.auth.AuthMethodPickerLayout
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.github.paolorotolo.appintro.AppIntro
@@ -35,7 +36,8 @@ class LoginActivity : AppIntro() {
         backButtonVisibilityWithDone = true
 
         get_started.setOnClickListener {
-            createSignInIntent()
+            setContentView(R.layout.log_in_layout)
+
         }
 
         log_in.setOnClickListener {
@@ -49,15 +51,21 @@ class LoginActivity : AppIntro() {
 
     private fun createSignInIntent() {
 
+        val customLayout: AuthMethodPickerLayout = AuthMethodPickerLayout
+                .Builder(R.layout.log_in_layout)
+                .setGoogleButtonId(R.id.google_login_button)
+//                .setTosAndPrivacyPolicyId(R.id.baz)
+                .build()
+
         // [START auth_fui_create_intent]
 
         // Choose authentication providers
 
         val providers = arrayListOf(
 
-                AuthUI.IdpConfig.EmailBuilder().build(),
+//                AuthUI.IdpConfig.EmailBuilder().build(),
 
-                AuthUI.IdpConfig.PhoneBuilder().build(),
+//                AuthUI.IdpConfig.PhoneBuilder().build(),
 
                 AuthUI.IdpConfig.GoogleBuilder().build())
 
@@ -72,7 +80,9 @@ class LoginActivity : AppIntro() {
 
                         .setAvailableProviders(providers)
 
-                        .setLogo(R.drawable.ernie_logo)
+                        .setAuthMethodPickerLayout(customLayout)
+
+                        .setTosAndPrivacyPolicyUrls("google.com", "yahoo.co.uk")
 
                         .build(),
 
@@ -123,61 +133,7 @@ class LoginActivity : AppIntro() {
 
     }
 
-    // [END auth_fui_result]
-
-
-    private fun delete() {
-
-        // [START auth_fui_delete]
-
-        AuthUI.getInstance()
-
-                .delete(this)
-
-                .addOnCompleteListener {
-
-                    // ...
-
-                }
-
-        // [END auth_fui_delete]
-
-    }
-
-    private fun privacyAndTerms() {
-
-        val providers = emptyList<AuthUI.IdpConfig>()
-
-        // [START auth_fui_pp_tos]
-
-        startActivityForResult(
-
-                AuthUI.getInstance()
-
-                        .createSignInIntentBuilder()
-
-                        .setAvailableProviders(providers)
-
-                        .setTosAndPrivacyPolicyUrls(
-
-                                "https://example.com/terms.html",
-
-                                "https://example.com/privacy.html")
-
-                        .build(),
-
-                RC_SIGN_IN)
-
-        // [END auth_fui_pp_tos]
-
-    }
-
-
     companion object {
-
-
         private const val RC_SIGN_IN = 123
-
     }
-
 }

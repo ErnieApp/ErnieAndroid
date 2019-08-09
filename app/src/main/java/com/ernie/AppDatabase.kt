@@ -165,9 +165,6 @@ class AppDatabase(context: Context,
         )
 
 
-        Log.d(TAG, currentFirebaseUser?.uid!!)
-
-
         // Create users collection -> random token -> entries collection
         firestoreDB.collection("users").document(currentFirebaseUser?.uid!!).collection("entries").add(firestoreEntry)
 

@@ -1,6 +1,5 @@
 package com.ernie
 
-import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
@@ -8,6 +7,9 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
 import com.ernie.model.Entry
 import com.ernie.model.User
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.FirebaseFirestore
 import java.io.Serializable
 
 /**
@@ -29,9 +31,11 @@ class AppDatabase(context: Context,
         SQLiteOpenHelper(context, DATABASE_NAME,
                 factory, DATABASE_VERSION), Serializable {
 
-    init {
 
-    }
+    val firestoreDB = FirebaseFirestore.getInstance()
+    var currentFirebaseUser = FirebaseAuth.getInstance().currentUser
+
+
 
     override fun onCreate(db: SQLiteDatabase) {
         // CREATE TABLE Tasks (_id INTEGER PRIMARY KEY NOT NULL, Name TEXT NOT NULL, Description TEXT, SortOrder INTEGER);
@@ -84,6 +88,7 @@ class AppDatabase(context: Context,
         db.execSQL(createUserTableSQL)
         db.execSQL(createEntryTableSQL)
         db.execSQL(createContractTableSQL)
+
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -103,18 +108,31 @@ class AppDatabase(context: Context,
 
 
     fun addUser(user: User) {
-        val values = ContentValues().apply {
-            put("name", user.name)
-            put("email", user.email)
-            put("password", user.password)
-            put("hourly_rate", user.hourly_rate)
-            put("contract_id", 0)
-        }
-        val db = this.writableDatabase
-        db.insert("User", null, values)
-        db.close()
+
+//        val values = ContentValues().apply {
+//            put("name", user.name)
+//            put("email", user.email)
+//            put("password", user.password)
+//            put("hourly_rate", user.hourly_rate)
+//            put("contract_id", 0)
+//        }
+//        val db = this.writableDatabase
+//        db.insert("User", null, values)
+//        db.close()
+//
 
 
+        // Create a new user store it in a hashmap
+        val firestoreUser = hashMapOf(
+                "name" to user.name,
+                "email" to user.email,
+                "hour_rate" to user.hourly_rate,
+                "contract" to 0
+        )
+
+
+        // Store user in firestore database
+        firestoreDB.collection("users").document(currentFirebaseUser?.uid!!).set(firestoreUser)
     }
 
     fun getAllUsers(): Cursor? {
@@ -124,16 +142,34 @@ class AppDatabase(context: Context,
 
 
     fun addEntry(entry: Entry) {
-        val values = ContentValues().apply {
-            put("start_time", entry.start_time)
-            put("end_time", entry.end_time)
-            put("break_duration", entry.break_duration)
-            put("earned", entry.earned)
-        }
-        val db = this.writableDatabase
-        db.insert("Entry", null, values)
-        db.close()
-        Log.d(TAG, "Entry added to db")
+//        val values = ContentValues().apply {
+//            put("start_time", entry.start_time)
+//            put("end_time", entry.end_time)
+//            put("break_duration", entry.break_duration)
+//            put("earned", entry.earned)
+//        }
+//        val db = this.writableDatabase
+//        db.insert("Entry", null, values)
+//        db.close()
+//        Log.d(TAG, "Entry added to db")
+//
+
+
+        // Create a new entry store it in a hashmap
+        val firestoreEntry = hashMapOf(
+                "date_recorded" to FieldValue.serverTimestamp(),
+                "start_time" to entry.start_time,
+                "end_time" to entry.end_time,
+                "break_duration" to entry.break_duration,
+                "earned" to entry.earned
+        )
+
+
+        Log.d(TAG, currentFirebaseUser?.uid!!)
+
+
+        // Create users collection -> random token -> entries collection
+        firestoreDB.collection("users").document(currentFirebaseUser?.uid!!).collection("entries").add(firestoreEntry)
 
     }
 

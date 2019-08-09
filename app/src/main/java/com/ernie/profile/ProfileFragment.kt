@@ -35,7 +35,6 @@ class ProfileFragment : Fragment() {
 
     val db = FirebaseFirestore.getInstance()
 
-
     // Create a new user with a first and last name
 
 
@@ -68,17 +67,6 @@ class ProfileFragment : Fragment() {
             dbHandler.addUser(user)
             Toast.makeText(this.activity!!, etName.text.toString() + "Added to database", Toast.LENGTH_LONG).show()
 
-
-            val userHashMap = hashMapOf(
-                    "name" to etName.text.toString(),
-                    "email" to etEmail.text.toString(),
-                    "hourlyRate" to etHourlyRate.text.toString()
-
-
-            )
-
-            // Add a new document with a generated ID
-            db.collection("entries").document().set(user)
 
         }
 

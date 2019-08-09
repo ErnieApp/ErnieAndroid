@@ -1,4 +1,4 @@
-package com.ernie.login
+package com.ernie.intro
 
 import android.os.Bundle
 import android.view.LayoutInflater

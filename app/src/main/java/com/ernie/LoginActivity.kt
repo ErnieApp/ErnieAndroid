@@ -3,56 +3,23 @@ package com.ernie
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.widget.ImageButton
-import com.ernie.login.introSlide1Fragment
-import com.ernie.login.introSlide2Fragment
-import com.ernie.login.introSlide3Fragment
-import com.ernie.login.introSlide4Fragment
+import androidx.appcompat.app.AppCompatActivity
 import com.firebase.ui.auth.AuthMethodPickerLayout
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
-import com.github.paolorotolo.appintro.AppIntro
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.android.synthetic.main.appintro_layout.*
 
-class LoginActivity : AppIntro() {
+class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        addSlide(introSlide1Fragment.newInstance())
-        addSlide(introSlide2Fragment.newInstance())
-        addSlide(introSlide3Fragment.newInstance())
-        addSlide(introSlide4Fragment.newInstance())
-
-        setIndicatorColor(R.color.colorIntroSelectedIndicator, R.color.colorIntroUnselectedIndicator)
-
-        val previousButton = findViewById<ImageButton>(com.github.paolorotolo.appintro.R.id.back)
-        previousButton.setColorFilter(R.color.colorIntroText)
-        setNextArrowColor(R.color.colorIntroText)
-
-        showSkipButton(false)
-        wizardMode = true
-        backButtonVisibilityWithDone = true
-
-        get_started.setOnClickListener {
-            setContentView(R.layout.log_in_layout)
-
-        }
-
-        log_in.setOnClickListener {
-            createSignInIntent()
-        }
-    }
-
-    override fun getLayoutId(): Int {
-        return R.layout.appintro_layout
+        setContentView(R.layout.activity_login)
     }
 
     private fun createSignInIntent() {
 
         val customLayout: AuthMethodPickerLayout = AuthMethodPickerLayout
-                .Builder(R.layout.log_in_layout)
+                .Builder(R.layout.activity_login)
                 .setGoogleButtonId(R.id.google_login_button)
 //                .setTosAndPrivacyPolicyId(R.id.baz)
                 .build()

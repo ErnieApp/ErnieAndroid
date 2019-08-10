@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import com.ernie.MainActivity
 import com.ernie.R
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -34,7 +35,30 @@ class LoginFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         setupBtnLoginListener()
         setupBtnGoogleLoginListener()
+        setupForgotPasswordListener()
+        setupNewUserListener()
+    }
 
+    private fun isValidEmail(target: CharSequence): Boolean {
+        return !TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches()
+    }
+
+    private fun guideUserHome() {
+        val intent = Intent(activity, MainActivity::class.java)
+        startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK))
+        activity!!.finish()
+    }
+
+    private fun setupNewUserListener() {
+        newUserTextView.setOnClickListener {
+            val fragmentManager: FragmentManager = activity!!.supportFragmentManager
+            val transaction = fragmentManager.beginTransaction()
+            transaction.replace(R.id.authenticationFrame, SignUpFragment())
+            transaction.commit()
+        }
+    }
+
+    private fun setupForgotPasswordListener() {
         forgotPasswordTextView.setOnClickListener {
             val userEmail = fieldEmail.text.toString()
             if (isValidEmail(userEmail)) {
@@ -54,16 +78,6 @@ class LoginFragment : Fragment() {
                 }
             }
         }
-    }
-
-    private fun isValidEmail(target: CharSequence): Boolean {
-        return !TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches()
-    }
-
-    private fun guideUserHome() {
-        val intent = Intent(activity, MainActivity::class.java)
-        startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK))
-        activity!!.finish()
     }
 
     private fun setupBtnLoginListener() {

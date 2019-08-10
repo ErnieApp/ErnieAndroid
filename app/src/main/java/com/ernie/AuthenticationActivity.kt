@@ -20,9 +20,9 @@ class AuthenticationActivity : AppCompatActivity() {
         val transaction = fragmentManager.beginTransaction()
 
         if (shouldLaunchLogin) {
-            transaction.add(R.id.authenticationFrame, LoginFragment())
+            transaction.add(R.id.authenticationFrame, LoginFragment(), "LOGIN_FRAGMENT")
         } else {
-            transaction.add(R.id.authenticationFrame, SignUpFragment())
+            transaction.add(R.id.authenticationFrame, SignUpFragment(), "SIGNUP_FRAGMENT")
         }
         transaction.commit()
     }

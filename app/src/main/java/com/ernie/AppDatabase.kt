@@ -38,8 +38,6 @@ class AppDatabase(context: Context,
 
 
     override fun onCreate(db: SQLiteDatabase) {
-        // CREATE TABLE Tasks (_id INTEGER PRIMARY KEY NOT NULL, Name TEXT NOT NULL, Description TEXT, SortOrder INTEGER);
-        Log.d(TAG, "onCreate: starts")
 
         val createUserTableSQL = """CREATE TABLE IF NOT EXISTS User (
                         _id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -172,6 +170,7 @@ class AppDatabase(context: Context,
 
     fun getAllEntries(): Cursor? {
         val db = this.readableDatabase
+
         return db.rawQuery("SELECT * FROM Entry", null)
     }
 

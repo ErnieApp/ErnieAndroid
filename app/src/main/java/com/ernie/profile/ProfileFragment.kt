@@ -13,7 +13,6 @@ import com.ernie.LoginActivity
 import com.ernie.R
 import com.ernie.model.User
 import com.firebase.ui.auth.AuthUI
-import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_profile.*
 
 
@@ -33,11 +32,6 @@ private const val TAG = "ProfileFragment"
 class ProfileFragment : Fragment() {
 
 
-    val db = FirebaseFirestore.getInstance()
-
-    // Create a new user with a first and last name
-
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_profile, container, false)
@@ -45,6 +39,7 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
 
         btnShowDatafromUserTable.setOnClickListener {
             tvDisplayName.text = ""
@@ -61,8 +56,6 @@ class ProfileFragment : Fragment() {
 
         btnAddToUserTable.setOnClickListener {
             val dbHandler = AppDatabase(this.activity!!, null)
-
-
             val user = User(etName.text.toString(), etEmail.text.toString(), etPassword.text.toString(), etHourlyRate.text.toString(), etContractID.text.toString().toInt())
             dbHandler.addUser(user)
             Toast.makeText(this.activity!!, etName.text.toString() + "Added to database", Toast.LENGTH_LONG).show()

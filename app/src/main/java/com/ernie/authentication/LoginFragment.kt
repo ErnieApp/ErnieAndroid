@@ -1,12 +1,17 @@
-package com.ernie
+package com.ernie.authentication
 
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
 import android.util.Patterns
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import com.ernie.MainActivity
+import com.ernie.R
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -14,15 +19,19 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
-import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.android.synthetic.main.fragment_login.*
 
-class LoginActivity : AppCompatActivity() {
+class LoginFragment : Fragment() {
 
     val fireAuth: FirebaseAuth = FirebaseAuth.getInstance()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_login, container, false)
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
         setupBtnLoginListener()
         setupBtnGoogleLoginListener()
 
@@ -31,9 +40,9 @@ class LoginActivity : AppCompatActivity() {
             if (isValidEmail(userEmail)) {
                 fireAuth.sendPasswordResetEmail(userEmail).addOnCompleteListener {
                     if (it.isSuccessful) {
-                        Toast.makeText(this, "Email sent", Toast.LENGTH_LONG).show()
+                        Toast.makeText(activity, "Email sent", Toast.LENGTH_LONG).show()
                     } else {
-                        Toast.makeText(this, "Error", Toast.LENGTH_LONG).show()
+                        Toast.makeText(activity, "Error", Toast.LENGTH_LONG).show()
                     }
                 }
             } else {
@@ -52,9 +61,9 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun guideUserHome() {
-        val intent = Intent(this, MainActivity::class.java)
+        val intent = Intent(activity, MainActivity::class.java)
         startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK))
-        finish()
+        activity!!.finish()
     }
 
     private fun setupBtnLoginListener() {
@@ -93,7 +102,7 @@ class LoginActivity : AppCompatActivity() {
                     .requestEmail()
                     .build()
 
-            val signInIntent = GoogleSignIn.getClient(this, gso).signInIntent
+            val signInIntent = GoogleSignIn.getClient(activity!!.application, gso).signInIntent
             startActivityForResult(signInIntent, RC_GOOGLE_SIGN_IN)
         }
     }
@@ -127,15 +136,15 @@ class LoginActivity : AppCompatActivity() {
                         Log.e("TAG", "Is Old User!")
 
                         fireAuth.signInWithCredential(credential)
-                                .addOnCompleteListener(this) { task ->
-                                    if (task.isSuccessful) {
+                                .addOnCompleteListener {
+                                    if (it.isSuccessful) {
                                         // Sign in success, update UI with the signed-in user's information
                                         Log.d("JKE", "signInWithCredential:success")
                                         guideUserHome()
                                     } else {
                                         // If sign in fails, display a message to the user.
                                         Log.w("JKE", "signInWithCredential:failure", task.exception)
-                                        Toast.makeText(this, "FAILED", Toast.LENGTH_LONG)
+                                        Toast.makeText(activity, "FAILED", Toast.LENGTH_LONG)
                                     }
                                 }
                     }

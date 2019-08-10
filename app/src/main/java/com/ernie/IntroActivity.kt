@@ -31,11 +31,18 @@ class IntroActivity : AppIntro() {
         backButtonVisibilityWithDone = true
 
         get_started.setOnClickListener {
-
+            val intent = Intent(this, AuthenticationActivity::class.java)
+            val bundle = Bundle()
+            bundle.putBoolean("shouldLaunchLogin", false) //Your id
+            intent.putExtras(bundle)
+            startActivity(intent)
         }
 
         log_in.setOnClickListener {
-            val intent = Intent(this, LoginActivity::class.java)
+            val intent = Intent(this, AuthenticationActivity::class.java)
+            val bundle = Bundle()
+            bundle.putBoolean("shouldLaunchLogin", true) //Your id
+            intent.putExtras(bundle)
             startActivity(intent)
         }
     }

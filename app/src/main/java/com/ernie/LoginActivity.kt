@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
 import android.util.Patterns
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -37,6 +36,13 @@ class LoginActivity : AppCompatActivity() {
                         Toast.makeText(this, "Error", Toast.LENGTH_LONG).show()
                     }
                 }
+            } else {
+                fieldPassword.error = null
+                if (userEmail.isBlank()) {
+                    fieldEmail.error = "Enter your email"
+                } else {
+                    fieldEmail.error = "Invalid email"
+                }
             }
         }
     }
@@ -63,9 +69,19 @@ class LoginActivity : AppCompatActivity() {
                             if (fireAuth.currentUser != null) {
                                 guideUserHome()
                             } else {
-                                invalidCredentialsTextView.visibility = View.VISIBLE
+                                fieldPassword.error = "Incorrect password"
                             }
                         }
+            } else {
+                if (userEmail.isBlank()) {
+                    fieldEmail.error = "Enter your email"
+                } else {
+                    fieldEmail.error = "Invalid email"
+                }
+
+                if (userPassword.isBlank()) {
+                    fieldPassword.error = "Enter your password"
+                }
             }
         }
     }

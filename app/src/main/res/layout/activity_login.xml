@@ -27,6 +27,7 @@
         android:layout_marginEnd="8dp"
         android:hint="@string/fui_idp_name_email"
         android:inputType="textEmailAddress"
+        android:textColorLink="#0090FF"
         android:textSize="20sp" />
 
     <EditText
@@ -39,17 +40,6 @@
         android:hint="@string/fui_password_hint"
         android:inputType="textPassword"
         android:textSize="20sp" />
-
-    <TextView
-        android:id="@+id/invalidCredentialsTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:text="Incorrect email or password"
-        android:textColor="@android:color/holo_red_dark"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:visibility="invisible" />
 
     <TextView
         android:id="@+id/forgotPasswordTextView"

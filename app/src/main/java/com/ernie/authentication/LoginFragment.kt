@@ -2,7 +2,6 @@ package com.ernie.authentication
 
 import android.content.Intent
 import android.os.Bundle
-import android.text.TextUtils
 import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
@@ -40,7 +39,7 @@ class LoginFragment : Fragment() {
     }
 
     private fun isValidEmail(target: CharSequence): Boolean {
-        return !TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches()
+        return target.isNotBlank() && Patterns.EMAIL_ADDRESS.matcher(target).matches()
     }
 
     private fun guideUserHome() {

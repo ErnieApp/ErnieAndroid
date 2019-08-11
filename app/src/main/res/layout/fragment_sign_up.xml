@@ -11,7 +11,6 @@
     tools:context=".authentication.SignUpFragment">
 
     <TextView
-        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -28,6 +27,19 @@
         android:layout_marginTop="24dp"
         android:layout_marginEnd="8dp"
         android:hint="@string/fui_idp_name_email"
+        android:inputType="textEmailAddress"
+        android:longClickable="false"
+        android:textColorLink="#0090FF"
+        android:textSize="20sp" />
+
+    <EditText
+        android:id="@+id/fieldConfirmEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:hint="@string/fui_email_link_confirm_email_header"
         android:inputType="textEmailAddress"
         android:longClickable="false"
         android:textColorLink="#0090FF"
@@ -79,7 +91,6 @@
         android:orientation="horizontal">
 
         <View
-            android:id="@+id/divider2"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_gravity="center_vertical"
@@ -87,7 +98,6 @@
             android:background="?android:attr/listDivider" />
 
         <TextView
-            android:id="@+id/textView4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
@@ -99,7 +109,6 @@
             android:textSize="16sp" />
 
         <View
-            android:id="@+id/divider3"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_gravity="center_vertical"

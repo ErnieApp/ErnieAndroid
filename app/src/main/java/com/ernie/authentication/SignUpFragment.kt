@@ -2,7 +2,6 @@ package com.ernie.authentication
 
 import android.content.Intent
 import android.os.Bundle
-import android.text.TextUtils
 import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
@@ -20,10 +19,10 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
-import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.android.synthetic.main.fragment_login.fieldEmail
 import kotlinx.android.synthetic.main.fragment_login.fieldPassword
 import kotlinx.android.synthetic.main.fragment_sign_up.*
+
 
 class SignUpFragment : Fragment() {
 
@@ -36,16 +35,18 @@ class SignUpFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-//        setupBtnSignUpListener()
-//        setupBtnGoogleSignUpListener()
-
-        //TODO: implement sign up buttons + a form to collect data
-
+        setupBtnSignUpListener()
+        setupBtnGoogleSignUpListener()
         setupExistingUserListener()
     }
 
     private fun isValidEmail(target: CharSequence): Boolean {
-        return !TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches()
+        return target.isNotBlank() && Patterns.EMAIL_ADDRESS.matcher(target).matches()
+    }
+
+    private fun isStrongPassword(target: CharSequence): Boolean {
+        val result = """^(?=.*[A-Z])(?=.*[^A-Za-z0-9])(?=.*[0-9])(?=.*[a-z]).{8,}$""".toRegex().matchEntire(target)?.groups?.get(0)?.value
+        return result != null
     }
 
     private fun guideUserHome() {
@@ -64,36 +65,54 @@ class SignUpFragment : Fragment() {
     }
 
     private fun setupBtnSignUpListener() {
-        btnLogin.setOnClickListener {
+        btnSignUp.setOnClickListener {
             val userEmail = fieldEmail.text.toString()
             val userPassword = fieldPassword.text.toString()
 
-            if (isValidEmail(userEmail) && userPassword.isNotBlank()) {
-                fireAuth.signInWithEmailAndPassword(userEmail, userPassword)
-                        .addOnCompleteListener {
-                            // Check if user has logged in successfully
-                            if (fireAuth.currentUser != null) {
-                                guideUserHome()
-                            } else {
-                                fieldPassword.error = "Incorrect password"
-                            }
-                        }
+            if (isValidEmail(userEmail) && isStrongPassword(userPassword) && doEmailFieldsMatch() && doPasswordFieldsMatch()) {
+                val fragmentManager: FragmentManager = activity!!.supportFragmentManager
+                val transaction = fragmentManager.beginTransaction()
+
+                val bundle = Bundle()
+                bundle.putBoolean("isGoogle", false)
+                bundle.putString("userEmail", userEmail)
+                bundle.putString("userPassword", userPassword)
+
+                val registrationFormFragment = RegistrationFormFragment()
+                registrationFormFragment.arguments = bundle
+
+                transaction.replace(R.id.authenticationFrame, registrationFormFragment)
+                transaction.commit()
             } else {
-                if (userEmail.isBlank()) {
-                    fieldEmail.error = "Enter your email"
-                } else {
+                if (!isValidEmail(userEmail)) {
                     fieldEmail.error = "Invalid email"
+                } else if (!doEmailFieldsMatch()) {
+                    fieldConfirmEmail.error = "Email doesn't match"
                 }
 
-                if (userPassword.isBlank()) {
-                    fieldPassword.error = "Enter your password"
+                if (!isStrongPassword(userPassword)) {
+                    fieldPassword.error = "Password must include:\n" +
+                            "- upper-case and lower-case letters\n" +
+                            "- a number\n" +
+                            "- a special character\n" +
+                            "- at least 8 characters\n"
+                } else if (!doPasswordFieldsMatch()) {
+                    fieldConfirmPassword.error = "Password doesn't match"
                 }
             }
         }
     }
 
+    private fun doEmailFieldsMatch(): Boolean {
+        return fieldEmail.text.toString().equals(fieldConfirmEmail.text.toString())
+    }
+
+    private fun doPasswordFieldsMatch(): Boolean {
+        return fieldPassword.text.toString().equals(fieldConfirmPassword.text.toString())
+    }
+
     private fun setupBtnGoogleSignUpListener() {
-        btnGoogleLogin.setOnClickListener {
+        btnGoogleSignUp.setOnClickListener {
             val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                     .requestIdToken(getString(R.string.default_web_client_id))
                     .requestEmail()
@@ -129,9 +148,21 @@ class SignUpFragment : Fragment() {
 
                         //TODO: Collect more data before creating their account
 
-                    } else {
-                        Log.e("TAG", "Is Old User!")
+                        val fragmentManager: FragmentManager = activity!!.supportFragmentManager
+                        val transaction = fragmentManager.beginTransaction()
 
+                        val bundle = Bundle()
+                        bundle.putBoolean("isGoogle", true)
+                        bundle.putParcelable("credential", credential)
+
+                        val registrationFormFragment = RegistrationFormFragment()
+                        registrationFormFragment.arguments = bundle
+
+                        transaction.replace(R.id.authenticationFrame, registrationFormFragment)
+                        transaction.commit()
+
+                    } else {
+                        Toast.makeText(activity, "Already have an account, logging in...", Toast.LENGTH_LONG)
                         fireAuth.signInWithCredential(credential)
                                 .addOnCompleteListener {
                                     if (it.isSuccessful) {
@@ -144,6 +175,7 @@ class SignUpFragment : Fragment() {
                                         Toast.makeText(activity, "FAILED", Toast.LENGTH_LONG)
                                     }
                                 }
+
                     }
                 }
     }

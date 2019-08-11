@@ -26,4 +26,5 @@ class AuthenticationActivity : AppCompatActivity() {
         }
         transaction.commit()
     }
+
 }

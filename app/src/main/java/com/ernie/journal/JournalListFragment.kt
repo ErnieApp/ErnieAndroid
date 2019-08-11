@@ -3,12 +3,16 @@ package com.ernie.journal
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.ernie.model.EntryData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
+import kotlinx.android.synthetic.main.fragment_journal_list.*
 import java.io.Serializable
 
 private const val TAG = "JournalListFragment"
@@ -31,9 +35,7 @@ class JournalListFragment : Fragment(), Serializable {
         journalFragment = jf
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         firestoreDB = FirebaseFirestore.getInstance()
 
 
@@ -58,9 +60,10 @@ class JournalListFragment : Fragment(), Serializable {
                     mAdapter = JournalListAdapter(entryList, activity, firestoreDB!!)
 
 
-                    recyclerView.adapter = mAdapter
+                    journalRecyclerView.adapter = mAdapter
                 })
 
+        return super.onCreateView(inflater, container, savedInstanceState)
     }
 
 

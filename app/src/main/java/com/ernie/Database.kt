@@ -19,7 +19,11 @@ class Database {
     val firestoreDB = FirebaseFirestore.getInstance()
     val currentFirebaseUser = FirebaseAuth.getInstance().currentUser
     var currentEntriesList = ArrayList<EntryData>()
+    var currentNumberOfEntries = 0
 
+    constructor() {
+        getAllEntries()
+    }
     //COMPLETE
     fun addUser(user: User) {
         // Create a new user store it in a hashmap
@@ -57,14 +61,15 @@ class Database {
         firestoreDB.collection(collectionPath)
                 .get()
                 .addOnSuccessListener { result ->
+
                     this.currentEntriesList.clear()
                     this.currentEntriesList.addAll(result.toObjects(EntryData::class.java))
 
+                    Log.d(TAG, "NUMBER OF ITEMS IN LIST" + currentEntriesList.size)
                 }
                 .addOnFailureListener { exception ->
                     Log.d(TAG, "Error getting documents: ", exception)
                 }
-
 
     }
 

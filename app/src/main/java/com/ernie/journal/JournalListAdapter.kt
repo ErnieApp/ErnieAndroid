@@ -9,14 +9,14 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.ernie.R
-import com.ernie.model.EntryData
+import com.ernie.model.Entry
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 
 private const val TAG = "JournalListAdapter"
 
-class JournalListAdapter(private val entryList: MutableList<EntryData>,
+class JournalListAdapter(private val entryList: MutableList<Entry>,
                          private val context: Context,
                          private val firestoreDB: FirebaseFirestore) : RecyclerView.Adapter<JournalListAdapter.ViewHolder>() {
 

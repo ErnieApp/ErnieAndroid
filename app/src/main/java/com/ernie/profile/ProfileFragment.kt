@@ -3,17 +3,12 @@ package com.ernie.profile
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.ernie.AppDatabase
-import com.ernie.Database
 import com.ernie.LoginActivity
 import com.ernie.R
-import com.ernie.model.User
 import com.firebase.ui.auth.AuthUI
 import kotlinx.android.synthetic.main.fragment_profile.*
 
@@ -36,10 +31,6 @@ class ProfileFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-
-        var database = Database()
-        database.getAllEntries()
-        Log.d(TAG, "CHECK NUMBER" + database.numberOfEntries())
         return inflater.inflate(R.layout.fragment_profile, container, false)
 
 
@@ -48,28 +39,6 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-        btnShowDatafromUserTable.setOnClickListener {
-            tvDisplayName.text = ""
-            val dbHandler = AppDatabase(this.activity!!, null)
-            val cursor = dbHandler.getAllUsers()
-            cursor!!.moveToFirst()
-            tvDisplayName.append((cursor.getString(cursor.getColumnIndex(AppDatabase.COLUMN_NAME))))
-            while (cursor.moveToNext()) {
-                tvDisplayName.append((cursor.getString(cursor.getColumnIndex(AppDatabase.COLUMN_NAME))))
-                tvDisplayName.append("\n")
-            }
-            cursor.close()
-        }
-
-        btnAddToUserTable.setOnClickListener {
-            val dbHandler = AppDatabase(this.activity!!, null)
-            val user = User(etName.text.toString(), etEmail.text.toString(), etPassword.text.toString(), etHourlyRate.text.toString(), etContractID.text.toString().toInt())
-            dbHandler.addUser(user)
-            Toast.makeText(this.activity!!, etName.text.toString() + "Added to database", Toast.LENGTH_LONG).show()
-
-
-        }
 
         btnLogOut.setOnClickListener {
             signOut()

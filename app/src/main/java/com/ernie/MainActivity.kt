@@ -6,7 +6,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import com.ernie.journal.JournalListAdapter
-import com.ernie.model.EntryData
+import com.ernie.model.Entry
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -17,7 +17,7 @@ private const val TAG = "MainActivity"
 class MainActivity : AppCompatActivity() {
 
     private var mAdapter: JournalListAdapter? = null
-    private var firestoreDB: FirebaseFirestore? = null
+    private var firestoreDB = FirebaseFirestore.getInstance()
     private val currentFirebaseUser = FirebaseAuth.getInstance().currentUser
 
 
@@ -46,6 +46,7 @@ class MainActivity : AppCompatActivity() {
 
         val fireAuth = FirebaseAuth.getInstance()
 
+
         if (fireAuth.currentUser == null) {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK))
@@ -63,18 +64,18 @@ class MainActivity : AppCompatActivity() {
         val collectionPath = "/users/" + currentFirebaseUser?.uid!! + "/entries"
 
 
-        firestoreDB!!.collection(collectionPath)
+        firestoreDB.collection(collectionPath)
                 .get()
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        val entryList = mutableListOf<EntryData>()
+                        val entryList = mutableListOf<Entry>()
 
                         for (doc in task.result!!) {
-                            val entry = doc.toObject<EntryData>(EntryData::class.java)
+                            val entry = doc.toObject<Entry>(Entry::class.java)
                             entryList.add(entry)
                         }
 
-                        mAdapter = JournalListAdapter(entryList, applicationContext, firestoreDB!!)
+                        mAdapter = JournalListAdapter(entryList, applicationContext, firestoreDB)
 
 
                     } else {

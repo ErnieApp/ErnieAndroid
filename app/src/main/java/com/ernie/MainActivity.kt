@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
-import com.ernie.journal.JournalListAdapter
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -14,11 +13,8 @@ private const val TAG = "MainActivity"
 
 class MainActivity : AppCompatActivity() {
 
-    private var mAdapter: JournalListAdapter? = null
     private var firestoreDB = FirebaseFirestore.getInstance()
     private val currentFirebaseUser = FirebaseAuth.getInstance().currentUser
-
-
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
@@ -52,36 +48,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-
-//        loadEntriesList()
-
     }
-
-//    private fun loadEntriesList() {
-//
-//        val collectionPath = "/users/" + currentFirebaseUser?.uid!! + "/entries"
-//
-//        val bundle = Bundle()
-//
-//        firestoreDB.collection(collectionPath)
-//                .get()
-//                .addOnCompleteListener { task ->
-//                    if (task.isSuccessful) {
-//                        val entryList = mutableListOf<Entry>()
-//
-//                        for (doc in task.result!!) {
-//                            val entry = doc.toObject<Entry>(Entry::class.java)
-//                            entryList.add(entry)
-//                        }
-//
-//                        mAdapter = JournalListAdapter(entryList, applicationContext, firestoreDB)
-//
-//                        bundle.("created", mAdapter)
-//                    } else {
-//                        Log.d(TAG, "Error getting documents: ", task.exception)
-//                    }
-//                }
-//    }
-
 
 }

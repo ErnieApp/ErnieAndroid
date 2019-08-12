@@ -16,10 +16,12 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 private const val TAG = "JournalListAdapter"
 
-class JournalListAdapter(private val entryList: MutableList<Entry>,
-                         private val context: Context,
-                         private val firestoreDB: FirebaseFirestore) : RecyclerView.Adapter<JournalListAdapter.ViewHolder>() {
+class JournalListAdapter(el: MutableList<Entry>, c: Context, fireStore: FirebaseFirestore) : RecyclerView.Adapter<JournalListAdapter.ViewHolder>() {
 
+
+    private var entryList: MutableList<Entry> = el
+    private val context: Context = c
+    private val firestoreDB: FirebaseFirestore = fireStore
 
     val currentFirebaseUser = FirebaseAuth.getInstance().currentUser
 
@@ -47,7 +49,7 @@ class JournalListAdapter(private val entryList: MutableList<Entry>,
     }
 
     override fun getItemCount(): Int {
-        Log.d(TAG, "NUMBER OF ITEM IN ADAPTER" + entryList.size)
+        Log.d("MERT", "NUMBER OF ITEM IN ADAPTER" + entryList.size)
         return entryList.size
     }
 
@@ -81,6 +83,10 @@ class JournalListAdapter(private val entryList: MutableList<Entry>,
                     notifyItemRangeChanged(position, entryList.size)
                     Toast.makeText(context, "Note has been deleted!", Toast.LENGTH_SHORT).show()
                 }
+    }
+
+    fun updateRecords(el: MutableList<Entry>) {
+        entryList = el
     }
 
 

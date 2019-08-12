@@ -11,6 +11,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.Switch
 import android.widget.TimePicker
 import androidx.fragment.app.Fragment
 import com.ernie.MainActivity
@@ -152,41 +154,7 @@ class RegistrationFormFragment : Fragment() {
 
                                 firestoreDB.collection("users").document(fireAuth.currentUser?.uid!!).set(firestoreUser)
 
-                                firestoreDB.collection("users").document(fireAuth.currentUser?.uid!!).collection("contract").document("Monday").set(hashMapOf(
-                                        "start" to if (monSwitch.isChecked) monStartTime.text.toString() else "",
-                                        "end" to if (monSwitch.isChecked) monEndTime.text.toString() else ""
-                                ))
-
-                                firestoreDB.collection("users").document(fireAuth.currentUser?.uid!!).collection("contract").document("Tuesday").set(hashMapOf(
-                                        "start" to if (tueSwitch.isChecked) tueStartTime.text.toString() else "",
-                                        "end" to if (tueSwitch.isChecked) tueEndTime.text.toString() else ""
-                                ))
-
-                                firestoreDB.collection("users").document(fireAuth.currentUser?.uid!!).collection("contract").document("Wednesday").set(hashMapOf(
-                                        "start" to if (wedSwitch.isChecked) wedStartTime.text.toString() else "",
-                                        "end" to if (wedSwitch.isChecked) wedEndTime.text.toString() else ""
-                                ))
-
-                                firestoreDB.collection("users").document(fireAuth.currentUser?.uid!!).collection("contract").document("Thursday").set(hashMapOf(
-                                        "start" to if (thuSwitch.isChecked) thuStartTime.text.toString() else "",
-                                        "end" to if (thuSwitch.isChecked) thuEndTime.text.toString() else ""
-                                ))
-
-                                firestoreDB.collection("users").document(fireAuth.currentUser?.uid!!).collection("contract").document("Friday").set(hashMapOf(
-                                        "start" to if (friSwitch.isChecked) friStartTime.text.toString() else "",
-                                        "end" to if (friSwitch.isChecked) friEndTime.text.toString() else ""
-                                ))
-
-                                firestoreDB.collection("users").document(fireAuth.currentUser?.uid!!).collection("contract").document("Saturday").set(hashMapOf(
-                                        "start" to if (satSwitch.isChecked) satStartTime.text.toString() else "",
-                                        "end" to if (satSwitch.isChecked) satEndTime.text.toString() else ""
-                                ))
-
-                                firestoreDB.collection("users").document(fireAuth.currentUser?.uid!!).collection("contract").document("Sunday").set(hashMapOf(
-                                        "start" to if (sunSwitch.isChecked) sunStartTime.text.toString() else "",
-                                        "end" to if (sunSwitch.isChecked) sunEndTime.text.toString() else ""
-                                ))
-
+                                updateContract(fireAuth)
                                 guideUserHome()
                             }
                 } else {
@@ -199,41 +167,7 @@ class RegistrationFormFragment : Fragment() {
 
                                 firestoreDB.collection("users").document(fireAuth.currentUser?.uid!!).set(firestoreUser)
 
-                                firestoreDB.collection("users").document(fireAuth.currentUser?.uid!!).collection("contract").document("Monday").set(hashMapOf(
-                                        "start" to if (monSwitch.isChecked) monStartTime.text.toString() else "",
-                                        "end" to if (monSwitch.isChecked) monEndTime.text.toString() else ""
-                                ))
-
-                                firestoreDB.collection("users").document(fireAuth.currentUser?.uid!!).collection("contract").document("Tuesday").set(hashMapOf(
-                                        "start" to if (tueSwitch.isChecked) tueStartTime.text.toString() else "",
-                                        "end" to if (tueSwitch.isChecked) tueEndTime.text.toString() else ""
-                                ))
-
-                                firestoreDB.collection("users").document(fireAuth.currentUser?.uid!!).collection("contract").document("Wednesday").set(hashMapOf(
-                                        "start" to if (wedSwitch.isChecked) wedStartTime.text.toString() else "",
-                                        "end" to if (wedSwitch.isChecked) wedEndTime.text.toString() else ""
-                                ))
-
-                                firestoreDB.collection("users").document(fireAuth.currentUser?.uid!!).collection("contract").document("Thursday").set(hashMapOf(
-                                        "start" to if (thuSwitch.isChecked) thuStartTime.text.toString() else "",
-                                        "end" to if (thuSwitch.isChecked) thuEndTime.text.toString() else ""
-                                ))
-
-                                firestoreDB.collection("users").document(fireAuth.currentUser?.uid!!).collection("contract").document("Friday").set(hashMapOf(
-                                        "start" to if (friSwitch.isChecked) friStartTime.text.toString() else "",
-                                        "end" to if (friSwitch.isChecked) friEndTime.text.toString() else ""
-                                ))
-
-                                firestoreDB.collection("users").document(fireAuth.currentUser?.uid!!).collection("contract").document("Saturday").set(hashMapOf(
-                                        "start" to if (satSwitch.isChecked) satStartTime.text.toString() else "",
-                                        "end" to if (satSwitch.isChecked) satEndTime.text.toString() else ""
-                                ))
-
-                                firestoreDB.collection("users").document(fireAuth.currentUser?.uid!!).collection("contract").document("Sunday").set(hashMapOf(
-                                        "start" to if (sunSwitch.isChecked) sunStartTime.text.toString() else "",
-                                        "end" to if (sunSwitch.isChecked) sunEndTime.text.toString() else ""
-                                ))
-
+                                updateContract(fireAuth)
                                 guideUserHome()
                             }
                 }
@@ -244,6 +178,23 @@ class RegistrationFormFragment : Fragment() {
                 }
             }, 3000)
         }
+    }
+
+    private fun updateContract(fireAuth: FirebaseAuth) {
+        updateContractDay("Monday", monSwitch, monStartTime, monEndTime, fireAuth)
+        updateContractDay("Tuesday", tueSwitch, tueStartTime, tueEndTime, fireAuth)
+        updateContractDay("Wednesday", wedSwitch, wedStartTime, wedEndTime, fireAuth)
+        updateContractDay("Thursday", thuSwitch, thuStartTime, thuEndTime, fireAuth)
+        updateContractDay("Friday", friSwitch, friStartTime, friEndTime, fireAuth)
+        updateContractDay("Satday", satSwitch, satStartTime, satEndTime, fireAuth)
+        updateContractDay("Sunday", sunSwitch, sunStartTime, sunEndTime, fireAuth)
+    }
+
+    private fun updateContractDay(day: String, switch: Switch, startTime: EditText, endTime: EditText, fireAuth: FirebaseAuth) {
+        firestoreDB.collection("users").document(fireAuth.currentUser?.uid!!).collection("contract").document(day).set(hashMapOf(
+                "start" to if (switch.isChecked) startTime.text.toString() else "",
+                "end" to if (switch.isChecked) endTime.text.toString() else ""
+        ))
     }
 
 

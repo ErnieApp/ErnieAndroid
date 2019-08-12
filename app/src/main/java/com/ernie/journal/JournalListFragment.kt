@@ -33,6 +33,7 @@ class JournalListFragment : Fragment(), Serializable {
         val activity = activity as Context
 
         recyclerView = view.findViewById(R.id.journalRecyclerView) as RecyclerView
+        recyclerView.adapter = JournalListAdapter(mutableListOf(), activity.applicationContext, firestoreDB)
         recyclerView.layoutManager = GridLayoutManager(activity, 1)
 
         return view
@@ -63,11 +64,7 @@ class JournalListFragment : Fragment(), Serializable {
                         entryList.add(entry)
                     }
 
-                    if (recyclerView.adapter == null) {
-                        recyclerView.adapter = JournalListAdapter(entryList, activity!!.applicationContext, firestoreDB)
-                    } else {
-                        (recyclerView.adapter as JournalListAdapter).updateRecords(entryList)
-                    }
+                    (recyclerView.adapter as JournalListAdapter).updateRecords(entryList)
                 })
 
     }

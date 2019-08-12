@@ -86,8 +86,8 @@ class JournalListAdapter(el: MutableList<Entry>, c: Context, fireStore: Firebase
     }
 
     fun updateRecords(el: MutableList<Entry>) {
+        Log.d("MERT", "updating records...")
         entryList = el
+        notifyDataSetChanged()
     }
-
-
 }

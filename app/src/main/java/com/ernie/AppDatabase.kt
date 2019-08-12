@@ -15,13 +15,15 @@ private const val TAG = "Database"
 class AppDatabase {
 
 
-    val firestoreDB = FirebaseFirestore.getInstance()
-    val currentFirebaseUser = FirebaseAuth.getInstance().currentUser
-    var currentEntriesList = ArrayList<Entry>()
-    var currentNumberOfEntries = 0
+    private var firestoreDB = FirebaseFirestore.getInstance()
+    private var currentFirebaseUser = FirebaseAuth.getInstance().currentUser
+    private val currentEntriesList = ArrayList<Entry>()
+
+
+    val currentNumberOfEntries = 0
 
     constructor() {
-        getAllEntries()
+        loadAllEntriesFromFireStore()
     }
 
     //COMPLETE
@@ -36,6 +38,7 @@ class AppDatabase {
         // Store user in the firestore user collection
         firestoreDB.collection("users").document(currentFirebaseUser?.uid!!).set(firestoreUser)
     }
+
 
 
     //COMPLETE
@@ -54,7 +57,7 @@ class AppDatabase {
     }
 
     //COMPLETE
-    fun getAllEntries() {
+    fun loadAllEntriesFromFireStore() {
 
         val collectionPath = "/users/" + currentFirebaseUser?.uid!! + "/entries"
 
@@ -65,7 +68,7 @@ class AppDatabase {
                     this.currentEntriesList.clear()
                     this.currentEntriesList.addAll(result.toObjects(Entry::class.java))
 
-                    Log.d(TAG, "NUMBER OF ITEMS IN LIST" + currentEntriesList.size)
+
                 }
                 .addOnFailureListener { exception ->
                     Log.d(TAG, "Error getting documents: ", exception)
@@ -73,8 +76,9 @@ class AppDatabase {
 
     }
 
-    fun numberOfEntries(): Int {
-        return currentEntriesList.size
+
+    fun getEntries(): ArrayList<Entry> {
+        return currentEntriesList
     }
 
     companion object {

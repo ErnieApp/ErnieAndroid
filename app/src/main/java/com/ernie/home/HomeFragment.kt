@@ -7,7 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.ernie.AppDatabase
 import com.ernie.R
+import com.ernie.model.Entry
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
@@ -26,6 +28,17 @@ private const val TAG = "HomeFragment"
 class HomeFragment : Fragment() {
 
 
+    private var currentListOfEntries: ArrayList<Entry>? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val appDatabase = AppDatabase.newInstance()
+        currentListOfEntries = appDatabase.getEntries()
+
+
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
@@ -37,13 +50,14 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setupPieChart()
+
     }
 
     private fun setupPieChart() {
 
         Log.d(TAG, "addDataSet started")
+
 
         val entries = ArrayList<PieEntry>()
 

@@ -41,11 +41,13 @@ class JournalListAdapter(private val entryList: MutableList<Entry>,
 
         viewHolder.itemView.setOnClickListener {
             Log.d(TAG, "CLICKED")
+
         }
 
     }
 
     override fun getItemCount(): Int {
+        Log.d(TAG, "NUMBER OF ITEM IN ADAPTER" + entryList.size)
         return entryList.size
     }
 

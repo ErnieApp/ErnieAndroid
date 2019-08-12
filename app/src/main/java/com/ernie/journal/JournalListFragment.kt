@@ -16,13 +16,13 @@ import java.io.Serializable
 private const val TAG = "JournalListFragment"
 
 
+class JournalListFragment(mAdapter: JournalListAdapter?) : Fragment(), Serializable {
 
-class JournalListFragment : Fragment(), Serializable {
 
-    private var mAdapter: JournalListAdapter? = null
     private var firestoreDB: FirebaseFirestore? = null
     private var firestoreListener: ListenerRegistration? = null
     private val currentFirebaseUser = FirebaseAuth.getInstance().currentUser
+    private var mAdapterr = mAdapter
 
 
 
@@ -58,10 +58,8 @@ class JournalListFragment : Fragment(), Serializable {
                         entryList.add(entry)
                     }
 
-                    mAdapter = JournalListAdapter(entryList, activity, firestoreDB!!)
-
-
-                    journalRecyclerView.adapter = mAdapter
+                    
+                    journalRecyclerView.adapter = mAdapterr
                 })
 
     }
@@ -73,15 +71,5 @@ class JournalListFragment : Fragment(), Serializable {
 
         firestoreListener!!.remove()
     }
-
-    companion object {
-
-        fun newInstance(): JournalListFragment {
-            return JournalListFragment()
-        }
-    }
-
-
-
 
 }

@@ -3,41 +3,19 @@ package com.ernie
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.ernie.home.HomeFragment
+import com.ernie.journal.JournalFragment
+import com.ernie.profile.ProfileFragment
+import com.github.paolorotolo.appintro.AppIntro
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_main.*
 
 private const val TAG = "MainActivity"
 
-class MainActivity : AppCompatActivity() {
-
-    private var firestoreDB = FirebaseFirestore.getInstance()
-    private val currentFirebaseUser = FirebaseAuth.getInstance().currentUser
-
-    private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
-        when (item.itemId) {
-            R.id.navigation_home -> {
-                findNavController(R.id.nav_host).navigate(R.id.home_dest)
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.navigation_journal -> {
-                findNavController(R.id.nav_host).navigate(R.id.journal_dest)
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.navigation_profile -> {
-                findNavController(R.id.nav_host).navigate(R.id.profile_dest)
-                return@OnNavigationItemSelectedListener true
-            }
-        }
-        false
-    }
+class MainActivity : AppIntro() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
         val fireAuth = FirebaseAuth.getInstance()
 
@@ -48,7 +26,28 @@ class MainActivity : AppCompatActivity() {
             finish()
         }
 
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+        addSlide(HomeFragment())
+        addSlide(JournalFragment())
+        addSlide(ProfileFragment())
+
+        showPagerIndicator(false)
+        showSkipButton(false)
+
+        home.setOnClickListener {
+            
+        }
+
+        journal.setOnClickListener {
+
+        }
+
+        profile.setOnClickListener {
+
+        }
+    }
+
+    override fun getLayoutId(): Int {
+        return R.layout.activity_main
     }
 
     override fun onPause() {

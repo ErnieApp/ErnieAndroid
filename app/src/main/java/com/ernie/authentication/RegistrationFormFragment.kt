@@ -1,6 +1,7 @@
 package com.ernie.authentication
 
 import android.app.TimePickerDialog
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.Selection
@@ -11,7 +12,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TimePicker
 import androidx.fragment.app.Fragment
+import com.ernie.MainActivity
 import com.ernie.R
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_registration_form.*
 
 
@@ -26,6 +31,8 @@ import kotlinx.android.synthetic.main.fragment_registration_form.*
  */
 class RegistrationFormFragment : Fragment() {
 
+    val firestoreDB = FirebaseFirestore.getInstance()
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -35,12 +42,6 @@ class RegistrationFormFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         val bundle = this.arguments
-
-        if (bundle!!.getBoolean("isGoogle")) {
-
-        } else {
-
-        }
 
         val contractHoursFields = listOf(monStartTime, monEndTime, tueStartTime, tueEndTime, wedStartTime, wedEndTime,
                 thuStartTime, thuEndTime, friStartTime, friEndTime, satStartTime, satEndTime, sunStartTime, sunEndTime)
@@ -132,8 +133,115 @@ class RegistrationFormFragment : Fragment() {
 
             if (hasUserFilledOutForm) {
                 //TODO: continue to main, create acc, pass data to firestore
-                System.out.println("YAS BITCH")
+
+                val fireAuth = FirebaseAuth.getInstance()
+
+                if (bundle!!.getBoolean("isGoogle")) {
+
+                    val userAccount = bundle.getParcelable<GoogleSignInAccount>("account")
+
+                    fireAuth.signInWithCredential(bundle.getParcelable("credential"))
+                            .addOnSuccessListener {
+                                val firestoreUser = hashMapOf(
+                                        "name" to userAccount.displayName,
+                                        "email" to userAccount.email,
+                                        "hour_rate" to hourlyRate.text.toString())
+
+                                firestoreDB.collection("users").document(fireAuth.currentUser?.uid!!).set(firestoreUser)
+
+                                firestoreDB.collection("users").document(fireAuth.currentUser?.uid!!).collection("contract").document("Monday").set(hashMapOf(
+                                        "start" to if (monSwitch.isChecked) monStartTime.text.toString() else "",
+                                        "end" to if (monSwitch.isChecked) monEndTime.text.toString() else ""
+                                ))
+
+                                firestoreDB.collection("users").document(fireAuth.currentUser?.uid!!).collection("contract").document("Tuesday").set(hashMapOf(
+                                        "start" to if (tueSwitch.isChecked) tueStartTime.text.toString() else "",
+                                        "end" to if (tueSwitch.isChecked) tueEndTime.text.toString() else ""
+                                ))
+
+                                firestoreDB.collection("users").document(fireAuth.currentUser?.uid!!).collection("contract").document("Wednesday").set(hashMapOf(
+                                        "start" to if (wedSwitch.isChecked) wedStartTime.text.toString() else "",
+                                        "end" to if (wedSwitch.isChecked) wedEndTime.text.toString() else ""
+                                ))
+
+                                firestoreDB.collection("users").document(fireAuth.currentUser?.uid!!).collection("contract").document("Thursday").set(hashMapOf(
+                                        "start" to if (thuSwitch.isChecked) thuStartTime.text.toString() else "",
+                                        "end" to if (thuSwitch.isChecked) thuEndTime.text.toString() else ""
+                                ))
+
+                                firestoreDB.collection("users").document(fireAuth.currentUser?.uid!!).collection("contract").document("Friday").set(hashMapOf(
+                                        "start" to if (friSwitch.isChecked) friStartTime.text.toString() else "",
+                                        "end" to if (friSwitch.isChecked) friEndTime.text.toString() else ""
+                                ))
+
+                                firestoreDB.collection("users").document(fireAuth.currentUser?.uid!!).collection("contract").document("Saturday").set(hashMapOf(
+                                        "start" to if (satSwitch.isChecked) satStartTime.text.toString() else "",
+                                        "end" to if (satSwitch.isChecked) satEndTime.text.toString() else ""
+                                ))
+
+                                firestoreDB.collection("users").document(fireAuth.currentUser?.uid!!).collection("contract").document("Sunday").set(hashMapOf(
+                                        "start" to if (sunSwitch.isChecked) sunStartTime.text.toString() else "",
+                                        "end" to if (sunSwitch.isChecked) sunEndTime.text.toString() else ""
+                                ))
+
+                                guideUserHome()
+                            }
+                } else {
+                    FirebaseAuth.getInstance().createUserWithEmailAndPassword(bundle.getString("userEmail"), bundle.getString("userPassword"))
+                            .addOnSuccessListener {
+                                val firestoreUser = hashMapOf(
+                                        "name" to bundle.getString("userName"),
+                                        "email" to bundle.getString("userEmail"),
+                                        "hour_rate" to hourlyRate.text.toString())
+
+                                firestoreDB.collection("users").document(fireAuth.currentUser?.uid!!).set(firestoreUser)
+
+                                firestoreDB.collection("users").document(fireAuth.currentUser?.uid!!).collection("contract").document("Monday").set(hashMapOf(
+                                        "start" to if (monSwitch.isChecked) monStartTime.text.toString() else "",
+                                        "end" to if (monSwitch.isChecked) monEndTime.text.toString() else ""
+                                ))
+
+                                firestoreDB.collection("users").document(fireAuth.currentUser?.uid!!).collection("contract").document("Tuesday").set(hashMapOf(
+                                        "start" to if (tueSwitch.isChecked) tueStartTime.text.toString() else "",
+                                        "end" to if (tueSwitch.isChecked) tueEndTime.text.toString() else ""
+                                ))
+
+                                firestoreDB.collection("users").document(fireAuth.currentUser?.uid!!).collection("contract").document("Wednesday").set(hashMapOf(
+                                        "start" to if (wedSwitch.isChecked) wedStartTime.text.toString() else "",
+                                        "end" to if (wedSwitch.isChecked) wedEndTime.text.toString() else ""
+                                ))
+
+                                firestoreDB.collection("users").document(fireAuth.currentUser?.uid!!).collection("contract").document("Thursday").set(hashMapOf(
+                                        "start" to if (thuSwitch.isChecked) thuStartTime.text.toString() else "",
+                                        "end" to if (thuSwitch.isChecked) thuEndTime.text.toString() else ""
+                                ))
+
+                                firestoreDB.collection("users").document(fireAuth.currentUser?.uid!!).collection("contract").document("Friday").set(hashMapOf(
+                                        "start" to if (friSwitch.isChecked) friStartTime.text.toString() else "",
+                                        "end" to if (friSwitch.isChecked) friEndTime.text.toString() else ""
+                                ))
+
+                                firestoreDB.collection("users").document(fireAuth.currentUser?.uid!!).collection("contract").document("Saturday").set(hashMapOf(
+                                        "start" to if (satSwitch.isChecked) satStartTime.text.toString() else "",
+                                        "end" to if (satSwitch.isChecked) satEndTime.text.toString() else ""
+                                ))
+
+                                firestoreDB.collection("users").document(fireAuth.currentUser?.uid!!).collection("contract").document("Sunday").set(hashMapOf(
+                                        "start" to if (sunSwitch.isChecked) sunStartTime.text.toString() else "",
+                                        "end" to if (sunSwitch.isChecked) sunEndTime.text.toString() else ""
+                                ))
+
+                                guideUserHome()
+                            }
+                }
             }
         }
+    }
+
+
+    private fun guideUserHome() {
+        val intent = Intent(activity, MainActivity::class.java)
+        startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK))
+        activity!!.finish()
     }
 }

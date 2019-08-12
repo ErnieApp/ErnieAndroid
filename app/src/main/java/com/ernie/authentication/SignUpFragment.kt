@@ -19,7 +19,6 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
-import kotlinx.android.synthetic.main.fragment_login.fieldEmail
 import kotlinx.android.synthetic.main.fragment_login.fieldPassword
 import kotlinx.android.synthetic.main.fragment_sign_up.*
 
@@ -66,15 +65,17 @@ class SignUpFragment : Fragment() {
 
     private fun setupBtnSignUpListener() {
         btnSignUp.setOnClickListener {
+            val userName = fieldName.text.toString()
             val userEmail = fieldEmail.text.toString()
             val userPassword = fieldPassword.text.toString()
 
-            if (isValidEmail(userEmail) && isStrongPassword(userPassword) && doEmailFieldsMatch() && doPasswordFieldsMatch()) {
+            if (fieldName.text.isNotBlank() && isValidEmail(userEmail) && isStrongPassword(userPassword) && doEmailFieldsMatch() && doPasswordFieldsMatch()) {
                 val fragmentManager: FragmentManager = activity!!.supportFragmentManager
                 val transaction = fragmentManager.beginTransaction()
 
                 val bundle = Bundle()
                 bundle.putBoolean("isGoogle", false)
+                bundle.putString("userName", userName)
                 bundle.putString("userEmail", userEmail)
                 bundle.putString("userPassword", userPassword)
 
@@ -84,6 +85,10 @@ class SignUpFragment : Fragment() {
                 transaction.replace(R.id.authenticationFrame, registrationFormFragment)
                 transaction.commit()
             } else {
+                if (fieldName.text.isBlank()) {
+                    fieldName.error = "Enter your name"
+                }
+
                 if (!isValidEmail(userEmail)) {
                     fieldEmail.error = "Invalid email"
                 } else if (!doEmailFieldsMatch()) {
@@ -154,6 +159,7 @@ class SignUpFragment : Fragment() {
                         val bundle = Bundle()
                         bundle.putBoolean("isGoogle", true)
                         bundle.putParcelable("credential", credential)
+                        bundle.putParcelable("account", acct)
 
                         val registrationFormFragment = RegistrationFormFragment()
                         registrationFormFragment.arguments = bundle

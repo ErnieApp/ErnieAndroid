@@ -2,6 +2,7 @@ package com.ernie.authentication
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
@@ -79,8 +80,23 @@ class LoginFragment : Fragment() {
         }
     }
 
+    private fun disableButtons() {
+        btnLogin.isEnabled = false
+        btnGoogleLogin.isEnabled = false
+    }
+
+    private fun enableButtonsAfterDelay(delayMillis: Long) {
+        Handler().postDelayed({
+            if (btnLogin != null && btnGoogleLogin != null) {
+                btnLogin.isEnabled = true
+                btnGoogleLogin.isEnabled = true
+            }
+        }, delayMillis)
+    }
+
     private fun setupBtnLoginListener() {
         btnLogin.setOnClickListener {
+            disableButtons()
             val userEmail = fieldEmail.text.toString()
             val userPassword = fieldPassword.text.toString()
 
@@ -105,11 +121,13 @@ class LoginFragment : Fragment() {
                     fieldPassword.error = "Enter your password"
                 }
             }
+            enableButtonsAfterDelay(2000)
         }
     }
 
     private fun setupBtnGoogleLoginListener() {
         btnGoogleLogin.setOnClickListener {
+            disableButtons()
             val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                     .requestIdToken(getString(R.string.default_web_client_id))
                     .requestEmail()
@@ -117,6 +135,7 @@ class LoginFragment : Fragment() {
 
             val signInIntent = GoogleSignIn.getClient(activity!!.application, gso).signInIntent
             startActivityForResult(signInIntent, RC_GOOGLE_SIGN_IN)
+            enableButtonsAfterDelay(2000)
         }
     }
 

@@ -3,6 +3,7 @@ package com.ernie.authentication
 import android.app.TimePickerDialog
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.text.Editable
 import android.text.Selection
 import android.text.TextWatcher
@@ -108,6 +109,8 @@ class RegistrationFormFragment : Fragment() {
         })
 
         btnSubmit.setOnClickListener {
+            btnSubmit.isEnabled = false
+
             var hasUserFilledOutForm = true
 
             for (i in 0 until switches.size) {
@@ -235,6 +238,11 @@ class RegistrationFormFragment : Fragment() {
                             }
                 }
             }
+            Handler().postDelayed({
+                if (btnSubmit != null) {
+                    btnSubmit.isEnabled = true
+                }
+            }, 2000)
         }
     }
 

@@ -26,4 +26,16 @@
     <string name="intro_begin_button_text">Get Started</string>
     <string name="intro_login_button_text">Log in</string>
 
+    <string name="login_title">Login</string>
+    <string name="forgot_password_text">Forgot password?\u00A0</string>
+    <string name="optional_or_text">OR</string>
+    <string name="new_user_text">New user? Create an account\u00A0</string>
+
+    <string name="sign_up_title">Sign up</string>
+    <string name="field_name_hint">Name</string>
+    <string name="field_confirm_password_hint">Confirm password</string>
+    <string name="sign_up_with_google_text">Sign up with Google</string>
+    <string name="existing_user_text">Already have an account? Log in\u00A0</string>
+    <string name="submit_button_text">Submit</string>
+
 </resources>

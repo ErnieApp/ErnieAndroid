@@ -1,21 +1,20 @@
 package com.ernie
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
-import com.ernie.journal.JournalListAddEntryFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_main.*
 
+private const val TAG = "MainActivity"
 
-class MainActivity : AppCompatActivity(), JournalListAddEntryFragment.OnFragmentInteractionListener {
+class MainActivity : AppCompatActivity() {
 
-
-//    private val sqliteDB = baseContext.openOrCreateDatabase("ernieApp-sqlite.db", Context.MODE_PRIVATE, null)
-
+    private var firestoreDB = FirebaseFirestore.getInstance()
+    private val currentFirebaseUser = FirebaseAuth.getInstance().currentUser
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
@@ -41,6 +40,7 @@ class MainActivity : AppCompatActivity(), JournalListAddEntryFragment.OnFragment
 
         val fireAuth = FirebaseAuth.getInstance()
 
+
         if (fireAuth.currentUser == null) {
             val intent = Intent(this, IntroActivity::class.java)
             startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK))
@@ -48,12 +48,6 @@ class MainActivity : AppCompatActivity(), JournalListAddEntryFragment.OnFragment
         }
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-
-
-    }
-
-    override fun onFragmentInteraction(uri: Uri) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
 }

@@ -1,12 +1,13 @@
 package com.ernie.journal
 
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.ernie.R
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_journal.*
 
 
@@ -17,6 +18,10 @@ class JournalFragment : Fragment() {
     private lateinit var journalListAddEntryFragment: JournalListAddEntryFragment
     private lateinit var journalListFragment: JournalListFragment
     private lateinit var journalListExpandedEntryFragment: JournalListExpandedEntryFragment
+
+    private var firestoreDB = FirebaseFirestore.getInstance()
+    private val currentFirebaseUser = FirebaseAuth.getInstance().currentUser
+
 
     companion object {
 
@@ -29,10 +34,9 @@ class JournalFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (savedInstanceState == null) {
-            journalListFragment = JournalListFragment.newInstance()
+            journalListFragment = JournalListFragment()
             journalListAddEntryFragment = JournalListAddEntryFragment.newInstance()
             journalListExpandedEntryFragment = JournalListExpandedEntryFragment.newInstance()
-            journalListFragment.setJournalFragment(this)
         } else {
             journalListFragment = savedInstanceState.get("entryList") as JournalListFragment
             journalListAddEntryFragment = savedInstanceState.get("entryAddForm") as JournalListAddEntryFragment
@@ -69,7 +73,6 @@ class JournalFragment : Fragment() {
         //Begin Transcation
 
     }
-
 
     protected fun displayFragmentA() {
         val ft = childFragmentManager.beginTransaction()
@@ -139,10 +142,5 @@ class JournalFragment : Fragment() {
         ft.commit()
     }
 
+
 }
-
-
-interface OnFragmentInteractionListener {
-    fun onFragmentInteraction(uri: Uri)
-}
-

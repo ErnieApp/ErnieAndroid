@@ -2,6 +2,7 @@ package com.ernie
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -48,6 +49,18 @@ class MainActivity : AppCompatActivity() {
         }
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        val fireAuth = FirebaseAuth.getInstance()
+        if (fireAuth.currentUser != null) {
+            Log.d("MERT", "reloading ...")
+            fireAuth.currentUser!!.reload().addOnFailureListener {
+                fireAuth.signOut()
+                finish()
+            }
+        }
     }
 
 }

@@ -121,7 +121,7 @@ class LoginFragment : Fragment() {
                     fieldPassword.error = "Enter your password"
                 }
             }
-            enableButtonsAfterDelay(2000)
+            enableButtonsAfterDelay(3000)
         }
     }
 
@@ -135,7 +135,7 @@ class LoginFragment : Fragment() {
 
             val signInIntent = GoogleSignIn.getClient(activity!!.application, gso).signInIntent
             startActivityForResult(signInIntent, RC_GOOGLE_SIGN_IN)
-            enableButtonsAfterDelay(2000)
+            enableButtonsAfterDelay(3000)
         }
     }
 

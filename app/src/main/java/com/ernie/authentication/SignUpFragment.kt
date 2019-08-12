@@ -70,12 +70,11 @@ class SignUpFragment : Fragment() {
             val userEmail = fieldEmail.text.toString()
             val userPassword = fieldPassword.text.toString()
 
-            fireAuth.fetchSignInMethodsForEmail(userEmail)
-                    .addOnCompleteListener { task ->
-                        val isNewUser = task.result!!.signInMethods!!.isEmpty()
-
-                        if (isNewUser) {
-                            if (fieldName.text.isNotBlank() && isValidEmail(userEmail) && isStrongPassword(userPassword) && doEmailFieldsMatch() && doPasswordFieldsMatch()) {
+            if (fieldName.text.isNotBlank() && isValidEmail(userEmail) && isStrongPassword(userPassword) && doEmailFieldsMatch() && doPasswordFieldsMatch()) {
+                fireAuth.fetchSignInMethodsForEmail(userEmail)
+                        .addOnCompleteListener { task ->
+                            val isNewUser = task.result!!.signInMethods!!.isEmpty()
+                            if (isNewUser) {
                                 val fragmentManager: FragmentManager = activity!!.supportFragmentManager
                                 val transaction = fragmentManager.beginTransaction()
 
@@ -91,31 +90,31 @@ class SignUpFragment : Fragment() {
                                 transaction.replace(R.id.authenticationFrame, registrationFormFragment)
                                 transaction.commit()
                             } else {
-                                if (fieldName.text.isBlank()) {
-                                    fieldName.error = "Enter your name"
-                                }
-
-                                if (!isValidEmail(userEmail)) {
-                                    fieldEmail.error = "Invalid email"
-                                } else if (!doEmailFieldsMatch()) {
-                                    fieldConfirmEmail.error = "Email doesn't match"
-                                }
-
-                                if (!isStrongPassword(userPassword)) {
-                                    fieldPassword.error = "Password must include:\n" +
-                                            "- upper-case and lower-case letters\n" +
-                                            "- a number\n" +
-                                            "- a special character\n" +
-                                            "- at least 8 characters\n"
-                                } else if (!doPasswordFieldsMatch()) {
-                                    fieldConfirmPassword.error = "Password doesn't match"
-                                }
+                                fieldEmail.error = "Account already exists"
                             }
-                        } else {
-                            fieldEmail.error = "Account already exists"
                         }
-                    }
-            enableButtonsAfterDelay(2000)
+            } else {
+                if (fieldName.text.isBlank()) {
+                    fieldName.error = "Enter your name"
+                }
+
+                if (!isValidEmail(userEmail)) {
+                    fieldEmail.error = "Invalid email"
+                } else if (!doEmailFieldsMatch()) {
+                    fieldConfirmEmail.error = "Email doesn't match"
+                }
+
+                if (!isStrongPassword(userPassword)) {
+                    fieldPassword.error = "Password must include:\n" +
+                            "- upper-case and lower-case letters\n" +
+                            "- a number\n" +
+                            "- a special character\n" +
+                            "- at least 8 characters\n"
+                } else if (!doPasswordFieldsMatch()) {
+                    fieldConfirmPassword.error = "Password doesn't match"
+                }
+            }
+            enableButtonsAfterDelay(3000)
         }
     }
 
@@ -151,7 +150,7 @@ class SignUpFragment : Fragment() {
 
             val signInIntent = GoogleSignIn.getClient(activity!!.application, gso).signInIntent
             startActivityForResult(signInIntent, RC_GOOGLE_SIGN_IN)
-            enableButtonsAfterDelay(2000)
+            enableButtonsAfterDelay(3000)
         }
     }
 

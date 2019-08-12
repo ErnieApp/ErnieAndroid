@@ -242,7 +242,7 @@ class RegistrationFormFragment : Fragment() {
                 if (btnSubmit != null) {
                     btnSubmit.isEnabled = true
                 }
-            }, 2000)
+            }, 3000)
         }
     }
 

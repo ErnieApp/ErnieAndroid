@@ -35,7 +35,8 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="14dp"
                 android:text="Hourly wage:"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/hourlyRate"

@@ -7,7 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.ernie.LoginActivity
+import com.ernie.AppDatabase
+import com.ernie.IntroActivity
 import com.ernie.R
 import com.firebase.ui.auth.AuthUI
 import kotlinx.android.synthetic.main.fragment_profile.*
@@ -52,7 +53,7 @@ class ProfileFragment : Fragment() {
         AuthUI.getInstance()
                 .signOut(activity!!.applicationContext)
                 .addOnCompleteListener {
-                    val intent = Intent(activity!!.applicationContext, LoginActivity::class.java)
+                    val intent = Intent(activity!!.applicationContext, IntroActivity::class.java)
                     startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK))
                 }
     }

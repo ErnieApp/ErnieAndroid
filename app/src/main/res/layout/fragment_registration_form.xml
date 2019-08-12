@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".authentication.RegistrationFormFragment">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:gravity="center_horizontal"
+        android:text="First we need some data"
+        android:textSize="32sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
+        android:background="?android:attr/listDivider" />
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="14dp"
+                android:text="Hourly wage:"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/hourlyRate"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="12dp"
+                android:inputType="numberDecimal"
+                android:text="7.50" />
+
+        </TableRow>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="12dp"
+            android:background="?android:attr/listDivider" />
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="14dp"
+                android:text="Monday"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/monStartTime"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="12dp"
+                android:focusable="false"
+                android:hint="Start" />
+
+            <EditText
+                android:id="@+id/monEndTime"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:hint="End" />
+
+            <Switch
+                android:id="@+id/monSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:checked="true" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="14dp"
+                android:text="Tuesday"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/tueStartTime"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="12dp"
+                android:focusable="false"
+                android:hint="Start" />
+
+            <EditText
+                android:id="@+id/tueEndTime"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:hint="End" />
+
+            <Switch
+                android:id="@+id/tueSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:checked="true" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="14dp"
+                android:text="Wednesday"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/wedStartTime"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="12dp"
+                android:focusable="false"
+                android:hint="Start" />
+
+            <EditText
+                android:id="@+id/wedEndTime"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:hint="End" />
+
+            <Switch
+                android:id="@+id/wedSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:checked="true" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="14dp"
+                android:text="Thursday"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/thuStartTime"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="12dp"
+                android:focusable="false"
+                android:hint="Start" />
+
+            <EditText
+                android:id="@+id/thuEndTime"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:hint="End" />
+
+            <Switch
+                android:id="@+id/thuSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:checked="true" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="14dp"
+                android:text="Friday"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/friStartTime"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="12dp"
+                android:focusable="false"
+                android:hint="Start" />
+
+            <EditText
+                android:id="@+id/friEndTime"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:hint="End" />
+
+            <Switch
+                android:id="@+id/friSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:checked="true" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="14dp"
+                android:text="Saturday"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/satStartTime"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="12dp"
+                android:focusable="false"
+                android:hint="Start"
+                android:visibility="invisible" />
+
+            <EditText
+                android:id="@+id/satEndTime"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:hint="End"
+                android:visibility="invisible" />
+
+            <Switch
+                android:id="@+id/satSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="14dp"
+                android:text="Sunday"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/sunStartTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="12dp"
+                android:focusable="false"
+                android:hint="Start"
+                android:visibility="invisible" />
+
+            <EditText
+                android:id="@+id/sunEndTime"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:hint="End"
+                android:visibility="invisible" />
+
+            <Switch
+                android:id="@+id/sunSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp" />
+        </TableRow>
+
+    </TableLayout>
+
+    <Button
+        android:id="@+id/btnSubmit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="@color/colorPositiveButton"
+        android:fontFamily="@font/roboto"
+        android:text="@string/submit_button_text"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+</LinearLayout>

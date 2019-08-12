@@ -4,15 +4,20 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
+import com.ernie.journal.JournalListAdapter
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_main.*
 
+private const val TAG = "MainActivity"
 
 class MainActivity : AppCompatActivity() {
 
+    private var mAdapter: JournalListAdapter? = null
+    private var firestoreDB = FirebaseFirestore.getInstance()
+    private val currentFirebaseUser = FirebaseAuth.getInstance().currentUser
 
-//    private val sqliteDB = baseContext.openOrCreateDatabase("ernieApp-sqlite.db", Context.MODE_PRIVATE, null)
 
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
@@ -39,6 +44,7 @@ class MainActivity : AppCompatActivity() {
 
         val fireAuth = FirebaseAuth.getInstance()
 
+
         if (fireAuth.currentUser == null) {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK))
@@ -47,8 +53,35 @@ class MainActivity : AppCompatActivity() {
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
+//        loadEntriesList()
 
     }
+
+//    private fun loadEntriesList() {
+//
+//        val collectionPath = "/users/" + currentFirebaseUser?.uid!! + "/entries"
+//
+//        val bundle = Bundle()
+//
+//        firestoreDB.collection(collectionPath)
+//                .get()
+//                .addOnCompleteListener { task ->
+//                    if (task.isSuccessful) {
+//                        val entryList = mutableListOf<Entry>()
+//
+//                        for (doc in task.result!!) {
+//                            val entry = doc.toObject<Entry>(Entry::class.java)
+//                            entryList.add(entry)
+//                        }
+//
+//                        mAdapter = JournalListAdapter(entryList, applicationContext, firestoreDB)
+//
+//                        bundle.("created", mAdapter)
+//                    } else {
+//                        Log.d(TAG, "Error getting documents: ", task.exception)
+//                    }
+//                }
+//    }
 
 
 }

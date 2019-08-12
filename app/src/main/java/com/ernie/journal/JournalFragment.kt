@@ -1,11 +1,16 @@
 package com.ernie.journal
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.ernie.R
+import com.ernie.model.Entry
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_journal.*
 
 
@@ -16,6 +21,11 @@ class JournalFragment : Fragment() {
     private lateinit var journalListAddEntryFragment: JournalListAddEntryFragment
     private lateinit var journalListFragment: JournalListFragment
     private lateinit var journalListExpandedEntryFragment: JournalListExpandedEntryFragment
+
+    private var mAdapter: JournalListAdapter? = null
+    private var firestoreDB = FirebaseFirestore.getInstance()
+    private val currentFirebaseUser = FirebaseAuth.getInstance().currentUser
+
 
     companion object {
 
@@ -28,7 +38,8 @@ class JournalFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (savedInstanceState == null) {
-            journalListFragment = JournalListFragment.newInstance()
+            loadEntriesList()
+            journalListFragment = JournalListFragment(mAdapter)
             journalListAddEntryFragment = JournalListAddEntryFragment.newInstance()
             journalListExpandedEntryFragment = JournalListExpandedEntryFragment.newInstance()
             journalListFragment.setJournalFragment(this)
@@ -37,6 +48,8 @@ class JournalFragment : Fragment() {
             journalListAddEntryFragment = savedInstanceState.get("entryAddForm") as JournalListAddEntryFragment
             journalListExpandedEntryFragment = savedInstanceState.get("entryExpanded") as JournalListExpandedEntryFragment
         }
+
+
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -136,6 +149,33 @@ class JournalFragment : Fragment() {
 
         // Commit changes
         ft.commit()
+    }
+
+
+    private fun loadEntriesList() {
+
+        val collectionPath = "/users/" + currentFirebaseUser?.uid!! + "/entries"
+
+        val activity = activity as Context
+
+        firestoreDB.collection(collectionPath)
+                .get()
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val entryList = mutableListOf<Entry>()
+
+                        for (doc in task.result!!) {
+                            val entry = doc.toObject<Entry>(Entry::class.java)
+                            entryList.add(entry)
+                        }
+
+                        mAdapter = JournalListAdapter(entryList, activity, firestoreDB)
+
+
+                    } else {
+                        Log.d(TAG, "Error getting documents: ", task.exception)
+                    }
+                }
     }
 
 }

@@ -17,6 +17,7 @@ import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import kotlinx.android.synthetic.main.fragment_home.*
+import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
@@ -26,10 +27,7 @@ private const val TAG = "HomeFragment"
 
 class HomeFragment : Fragment() {
 
-
     private var currentListOfEntries: ArrayList<Entry>? = null
-    private var isCancelled = false
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,8 +47,11 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpPayDayTimer()
+        setUpPayDayDate()
         setUpPieChart()
+
     }
+
 
     private fun setUpPayDayTimer() {
 
@@ -73,7 +74,6 @@ class HomeFragment : Fragment() {
     private fun timer(millisInFuture: Long, countDownInterval: Long): CountDownTimer {
         return object : CountDownTimer(millisInFuture, countDownInterval) {
             override fun onTick(millisUntilFinished: Long) {
-
                 val timeRemaining = timeString(millisUntilFinished)
                 days_left_textview.text = timeRemaining
             }
@@ -107,6 +107,14 @@ class HomeFragment : Fragment() {
                 days, hours, minutes, seconds
         )
     }
+
+
+    private fun setUpPayDayDate() {
+        val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
+        val currentDate = sdf.format(Date())
+        payday_date_textview.text = currentDate
+    }
+
 
 
     private fun setUpPieChart() {

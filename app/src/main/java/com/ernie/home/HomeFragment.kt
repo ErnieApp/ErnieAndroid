@@ -1,6 +1,7 @@
 package com.ernie.home
 
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -16,15 +17,8 @@ import com.github.mikephil.charting.data.PieEntry
 import kotlinx.android.synthetic.main.fragment_home.*
 
 
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-
 private const val TAG = "HomeFragment"
-/**
- * A simple [Fragment] subclass.
- *
- */
+
 class HomeFragment : Fragment() {
 
 
@@ -48,7 +42,6 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupPieChart()
-
     }
 
     private fun setupPieChart() {
@@ -56,23 +49,39 @@ class HomeFragment : Fragment() {
         Log.d(TAG, "addDataSet started")
 
 
-        val entries = ArrayList<PieEntry>()
+        // Piechart entries arraylist
+        val pieEntries = ArrayList<PieEntry>()
 
-        entries.add(PieEntry(8f, 0))
-        entries.add(PieEntry(2f, 1))
-        entries.add(PieEntry(5f, 2))
+        // Store pie entries in arraylist
+        pieEntries.add(PieEntry(8f, "Base Pay Earned"))
+        pieEntries.add(PieEntry(2f, "Commission Pay Earned"))
+        pieEntries.add(PieEntry(5f, "Tips Earned"))
 
-        val pieDataSet = PieDataSet(entries, "Cells")
+        // Set the piechart dataset to the arraylist
+        val pieDataSet = PieDataSet(pieEntries, "Entries")
 
-        val labels = ArrayList<String>()
 
-        labels.add("18-Jan")
-        labels.add("19-Jan")
-        labels.add("20-Jan")
-
+        //Set the piedata to the data that will be rendered to the view
         val data = PieData(pieDataSet)
-
         pieChart.data = data
+
+
+        //Create color palette
+        val MY_COLORS = intArrayOf(Color.rgb(192, 0, 0),
+                Color.rgb(255, 0, 0),
+                Color.rgb(255, 192, 0),
+                Color.rgb(127, 127, 127),
+                Color.rgb(146, 208, 80),
+                Color.rgb(0, 176, 80),
+                Color.rgb(79, 129, 189))
+
+        val colors = ArrayList<Int>()
+        for (c in MY_COLORS) colors.add(c)
+
+        // Set colors for piechart sections
+        pieDataSet.colors = colors
+
+        pieChart.animateXY(5000, 500)
 
 
     }

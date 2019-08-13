@@ -3,6 +3,7 @@ package com.ernie.home
 
 import android.graphics.Color
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -16,12 +17,17 @@ import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import kotlinx.android.synthetic.main.fragment_home.*
+import java.util.*
+import java.util.concurrent.TimeUnit
+import kotlin.collections.ArrayList
 
 
 class HomeFragment : Fragment() {
 
 
     private var currentListOfEntries: ArrayList<Entry>? = null
+    private var isCancelled = false
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,15 +40,74 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupPieChart()
+        setUpPayDayTimer()
+        setUpPieChart()
     }
 
-    private fun setupPieChart() {
+    private fun setUpPayDayTimer() {
+
+        // 60 seconds (1 minute)
+        val minute: Long = 1000 * 60 // 1000 milliseconds = 1 second
+
+        // 1 day 2 hours 35 minutes 50 seconds
+        val millisInFuture: Long = (minute * 0) + (minute * 0) + (1000 * 50)
+
+        // Count down interval 1 second
+        val countDownInterval: Long = 1000
+
+
+        timer(millisInFuture, countDownInterval).start()
+
+
+    }
+
+    // Method to configure and return an instance of CountDownTimer object
+    private fun timer(millisInFuture: Long, countDownInterval: Long): CountDownTimer {
+        return object : CountDownTimer(millisInFuture, countDownInterval) {
+            override fun onTick(millisUntilFinished: Long) {
+
+                val timeRemaining = timeString(millisUntilFinished)
+                days_left_textview.text = timeRemaining
+            }
+
+            override fun onFinish() {
+                days_left_textview.text = "Done"
+
+            }
+        }
+    }
+
+
+    // Method to get days hours minutes seconds from milliseconds
+    private fun timeString(millisUntilFinished: Long): String {
+        var millisUntilFinished: Long = millisUntilFinished
+        val days = TimeUnit.MILLISECONDS.toDays(millisUntilFinished)
+        millisUntilFinished -= TimeUnit.DAYS.toMillis(days)
+
+        val hours = TimeUnit.MILLISECONDS.toHours(millisUntilFinished)
+        millisUntilFinished -= TimeUnit.HOURS.toMillis(hours)
+
+        val minutes = TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished)
+        millisUntilFinished -= TimeUnit.MINUTES.toMillis(minutes)
+
+        val seconds = TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished)
+
+        // Format the string
+        return String.format(
+                Locale.getDefault(),
+                "%02d day: %02d hour: %02d min: %02d sec",
+                days, hours, minutes, seconds
+        )
+    }
+
+
+    private fun setUpPieChart() {
 
         Log.d(TAG, "addDataSet started")
 
         // Piechart entries arraylist
         val pieEntries = ArrayList<PieEntry>()
+
 
         // Store pie entries in arraylist
         pieEntries.add(PieEntry(8f, "Base Pay"))
@@ -61,7 +126,7 @@ class HomeFragment : Fragment() {
 
 
         // Hide values of the piechart
-        pieChart.data.dataSet.setDrawValues(false)
+//        pieChart.data.dataSet.setDrawValues(false)
         pieChart.setDrawEntryLabels(false)
 
         // Set key to be horizontal

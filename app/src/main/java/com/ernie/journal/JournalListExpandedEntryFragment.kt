@@ -33,9 +33,4 @@ class JournalListExpandedEntryFragment : Fragment(), Serializable {
         return inflater.inflate(R.layout.fragment_journal_list_expanded_entry, container, false)
     }
 
-    companion object {
-        fun newInstance(): JournalListExpandedEntryFragment {
-            return JournalListExpandedEntryFragment()
-        }
-    }
 }

@@ -9,18 +9,11 @@ import com.ernie.AppDatabase
 import com.ernie.R
 import com.ernie.model.Entry
 import kotlinx.android.synthetic.main.fragment_journal_list_add_entry.*
-import java.io.Serializable
-
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
 private const val TAG = "JournalListFragment"
 
 
-class JournalListAddEntryFragment : Fragment(), Serializable {
+class JournalListAddEntryFragment : Fragment() {
 
     private var appDatabase: AppDatabase? = null
 
@@ -43,13 +36,6 @@ class JournalListAddEntryFragment : Fragment(), Serializable {
         btnAddToEntryTable.setOnClickListener {
             val entry = Entry(entryStartTimeInputTextField.text.toString(), entryEndTimeInputTextField.text.toString(), entryBreakDurationInputTextField.text.toString().toInt(), entryEarnedInputTextField.text.toString().toInt())
             appDatabase?.addEntry(entry)
-        }
-
-
-    }
-    companion object {
-        fun newInstance(): JournalListAddEntryFragment {
-            return JournalListAddEntryFragment()
         }
     }
 }

@@ -93,6 +93,14 @@
         android:layout_above="@+id/bottom"
         android:background="?android:attr/listDivider" />
 
+    <SeekBar
+        android:id="@+id/seekBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/bottom"
+        android:layout_marginBottom="12dp"
+        android:progressDrawable="@color/fui_transparent" />
+
     <LinearLayout
         android:id="@+id/bottom"
         android:layout_width="match_parent"
@@ -107,12 +115,10 @@
             android:layout_height="match_parent"
             android:layout_gravity="end"
             android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
             android:layout_weight="1"
             android:fontFamily="@font/roboto"
             android:labelFor="@string/app_intro_done_button"
-            android:minWidth="100dp"
-            android:src="@drawable/ic_home_black_24dp"
+            android:src="@drawable/ic_home_blue_24dp"
             android:textAllCaps="false"
             android:textColor="@color/colorIntroText" />
 
@@ -123,11 +129,9 @@
             android:layout_height="match_parent"
             android:layout_gravity="end"
             android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
             android:layout_weight="1"
             android:fontFamily="@font/roboto"
             android:labelFor="@string/app_intro_done_button"
-            android:minWidth="100dp"
             android:src="@drawable/ic_dashboard_black_24dp"
             android:textAllCaps="false"
             android:textColor="@color/colorIntroText" />
@@ -139,11 +143,9 @@
             android:layout_height="match_parent"
             android:layout_gravity="end"
             android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
             android:layout_weight="1"
             android:fontFamily="@font/roboto"
             android:labelFor="@string/app_intro_done_button"
-            android:minWidth="100dp"
             android:src="@drawable/ic_notifications_black_24dp"
             android:textAllCaps="false"
             android:textColor="@color/colorIntroText" />

@@ -3,6 +3,7 @@ package com.ernie
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import androidx.viewpager.widget.ViewPager
 import com.ernie.home.HomeFragment
 import com.ernie.journal.JournalFragment
 import com.ernie.profile.ProfileFragment
@@ -50,6 +51,23 @@ class MainActivity : AppIntro() {
             profile.setImageResource(R.drawable.ic_notifications_blue_24dp)
             pager.setCurrentItem(2, true)
         }
+
+        pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+
+            override fun onPageScrollStateChanged(state: Int) {
+            }
+
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+                Log.d("MERT", "position = " + position)
+                Log.d("MERT", "positionOffset = " + positionOffset)
+            }
+
+            override fun onPageSelected(position: Int) {
+
+            }
+
+        })
+
     }
 
     private fun clearSelectedButton() {
@@ -66,7 +84,6 @@ class MainActivity : AppIntro() {
         super.onPause()
         val fireAuth = FirebaseAuth.getInstance()
         if (fireAuth.currentUser != null) {
-            Log.d("MERT", "reloading ...")
             fireAuth.currentUser!!.reload().addOnFailureListener {
                 fireAuth.signOut()
                 finish()

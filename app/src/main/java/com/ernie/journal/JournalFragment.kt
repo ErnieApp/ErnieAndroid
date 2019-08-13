@@ -6,8 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.ernie.R
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_journal.*
 
 
@@ -19,10 +17,6 @@ class JournalFragment : Fragment() {
     private lateinit var journalListFragment: JournalListFragment
     private lateinit var journalListExpandedEntryFragment: JournalListExpandedEntryFragment
 
-    private var firestoreDB = FirebaseFirestore.getInstance()
-    private val currentFirebaseUser = FirebaseAuth.getInstance().currentUser
-
-
     companion object {
 
         fun newInstance(): JournalFragment {
@@ -30,32 +24,17 @@ class JournalFragment : Fragment() {
         }
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (savedInstanceState == null) {
-            journalListFragment = JournalListFragment()
-            journalListAddEntryFragment = JournalListAddEntryFragment.newInstance()
-            journalListExpandedEntryFragment = JournalListExpandedEntryFragment.newInstance()
-        } else {
-            journalListFragment = savedInstanceState.get("entryList") as JournalListFragment
-            journalListAddEntryFragment = savedInstanceState.get("entryAddForm") as JournalListAddEntryFragment
-            journalListExpandedEntryFragment = savedInstanceState.get("entryExpanded") as JournalListExpandedEntryFragment
-        }
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putSerializable("entryList", journalListFragment)
-        outState.putSerializable("entryAddForm", journalListAddEntryFragment)
-        outState.putSerializable("entryExpanded", journalListExpandedEntryFragment)
+        journalListAddEntryFragment = JournalListAddEntryFragment()
+        journalListFragment = JournalListFragment()
+        journalListExpandedEntryFragment = JournalListExpandedEntryFragment()
     }
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view: View = inflater.inflate(R.layout.fragment_journal, container, false)
-
 
         displayFragmentA()
 
@@ -68,7 +47,11 @@ class JournalFragment : Fragment() {
 
 
         floatingActionButton.setOnClickListener { view ->
-            displayFragmentB()
+            if (journalListAddEntryFragment.isVisible) {
+                displayFragmentA()
+            } else {
+                displayFragmentB()
+            }
         }
         //Begin Transcation
 
@@ -141,6 +124,5 @@ class JournalFragment : Fragment() {
         // Commit changes
         ft.commit()
     }
-
 
 }

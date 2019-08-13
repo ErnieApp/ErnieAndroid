@@ -15,7 +15,6 @@ import com.ernie.MainActivity
 import com.ernie.R
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
@@ -143,13 +142,7 @@ class SignUpFragment : Fragment() {
     private fun setupBtnGoogleSignUpListener() {
         btnGoogleSignUp.setOnClickListener {
             disableButtons()
-            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestIdToken(getString(R.string.default_web_client_id))
-                    .requestEmail()
-                    .build()
-
-            val signInIntent = GoogleSignIn.getClient(activity!!.application, gso).signInIntent
-            startActivityForResult(signInIntent, RC_GOOGLE_SIGN_IN)
+            startActivityForResult(GoogleService.getSignInIntentWithDefaultSignInOptions(activity!!.application), RC_GOOGLE_SIGN_IN)
             enableButtonsAfterDelay(3000)
         }
     }

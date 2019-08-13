@@ -15,9 +15,13 @@ import android.widget.EditText
 import android.widget.Switch
 import android.widget.TimePicker
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
+import com.ernie.AppDatabase
 import com.ernie.MainActivity
 import com.ernie.R
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_registration_form.*
@@ -35,6 +39,13 @@ import kotlinx.android.synthetic.main.fragment_registration_form.*
 class RegistrationFormFragment : Fragment() {
 
     val firestoreDB = FirebaseFirestore.getInstance()
+    private var appDatabase: AppDatabase? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        appDatabase = AppDatabase.newInstance()
+    }
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -141,6 +152,8 @@ class RegistrationFormFragment : Fragment() {
 
                 val fireAuth = FirebaseAuth.getInstance()
 
+
+
                 if (bundle!!.getBoolean("isGoogle")) {
 
                     val userAccount = bundle.getParcelable<GoogleSignInAccount>("account")
@@ -150,7 +163,7 @@ class RegistrationFormFragment : Fragment() {
                                 val firestoreUser = hashMapOf(
                                         "name" to userAccount.displayName,
                                         "email" to userAccount.email,
-                                        "hour_rate" to hourlyRate.text.toString())
+                                        "hourly_rate" to hourlyRate.text.toString())
 
                                 firestoreDB.collection("users").document(fireAuth.currentUser?.uid!!).set(firestoreUser)
 
@@ -163,11 +176,12 @@ class RegistrationFormFragment : Fragment() {
                                 val firestoreUser = hashMapOf(
                                         "name" to bundle.getString("userName"),
                                         "email" to bundle.getString("userEmail"),
-                                        "hour_rate" to hourlyRate.text.toString())
+                                        "hourly_rate" to hourlyRate.text.toString())
 
                                 firestoreDB.collection("users").document(fireAuth.currentUser?.uid!!).set(firestoreUser)
 
                                 updateContract(fireAuth)
+                                appDatabase!!.addEntry("", "", 0, 0)
                                 guideUserHome()
                             }
                 }
@@ -202,5 +216,23 @@ class RegistrationFormFragment : Fragment() {
         val intent = Intent(activity, MainActivity::class.java)
         startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK))
         activity!!.finish()
+    }
+
+    companion object {
+        fun launchRegistrationFormWithGoogleAccount(activity: FragmentActivity, credential: AuthCredential, account: GoogleSignInAccount) {
+            val fragmentManager: FragmentManager = activity.supportFragmentManager
+            val transaction = fragmentManager.beginTransaction()
+
+            val bundle = Bundle()
+            bundle.putBoolean("isGoogle", true)
+            bundle.putParcelable("credential", credential)
+            bundle.putParcelable("account", account)
+
+            val registrationFormFragment = RegistrationFormFragment()
+            registrationFormFragment.arguments = bundle
+
+            transaction.replace(R.id.authenticationFrame, registrationFormFragment)
+            transaction.commit()
+        }
     }
 }

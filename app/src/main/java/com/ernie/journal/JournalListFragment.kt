@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.ernie.AppDatabase
 import com.ernie.R
 import com.ernie.model.Entry
 import com.google.firebase.auth.FirebaseAuth
@@ -23,11 +24,15 @@ class JournalListFragment : Fragment() {
     private val firestoreDB = FirebaseFirestore.getInstance()
     private lateinit var recyclerView: RecyclerView
 
+    private var appDatabase: AppDatabase? = null
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view: View = inflater.inflate(R.layout.fragment_journal_list, container, false)
 
+        appDatabase = AppDatabase.newInstance()
+
         recyclerView = view.findViewById(R.id.journalRecyclerView) as RecyclerView
-        recyclerView.adapter = JournalListAdapter(mutableListOf(), activity!!.applicationContext, firestoreDB)
+        recyclerView.adapter = JournalListAdapter(mutableListOf(), activity!!.applicationContext, appDatabase!!)
         recyclerView.layoutManager = LinearLayoutManager(activity)
         return view
     }

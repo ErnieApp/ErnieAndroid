@@ -37,5 +37,6 @@
     <string name="sign_up_with_google_text">Sign up with Google</string>
     <string name="existing_user_text">Already have an account? Log in\u00A0</string>
     <string name="submit_button_text">Submit</string>
+    <string name="default_web_client_">466256073929-49rse4t6dsbqt92oq9u07hidj8025u5i.apps.googleusercontent.com</string>
 
 </resources>

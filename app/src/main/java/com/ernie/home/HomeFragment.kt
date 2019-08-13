@@ -45,9 +45,9 @@ class HomeFragment : Fragment() {
         val pieEntries = ArrayList<PieEntry>()
 
         // Store pie entries in arraylist
-        pieEntries.add(PieEntry(8f, 1))
-        pieEntries.add(PieEntry(2f, 2))
-        pieEntries.add(PieEntry(5f, 2))
+        pieEntries.add(PieEntry(8f, "Base Pay"))
+        pieEntries.add(PieEntry(2f, "Commission Pay"))
+        pieEntries.add(PieEntry(5f, "Tip Pay"))
 
         // Set the piechart dataset to the arraylist
         val pieDataSet = PieDataSet(pieEntries, "")

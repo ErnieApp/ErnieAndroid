@@ -8,22 +8,19 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.ernie.AppDatabase
 import com.ernie.R
 import com.ernie.model.Entry
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 
 
 private const val TAG = "JournalListAdapter"
 
-class JournalListAdapter(el: MutableList<Entry>, c: Context, fireStore: FirebaseFirestore) : RecyclerView.Adapter<JournalListAdapter.ViewHolder>() {
+class JournalListAdapter(el: MutableList<Entry>, c: Context, appDatabase: AppDatabase) : RecyclerView.Adapter<JournalListAdapter.ViewHolder>() {
 
 
     private var entryList: MutableList<Entry> = el
     private val context: Context = c
-    private val firestoreDB: FirebaseFirestore = fireStore
-
-    val currentFirebaseUser = FirebaseAuth.getInstance().currentUser
+    private var appDatabase: AppDatabase = appDatabase
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -41,12 +38,23 @@ class JournalListAdapter(el: MutableList<Entry>, c: Context, fireStore: Firebase
         viewHolder.entryBreakHours.text = entry.break_duration.toString() + " minutes"
         viewHolder.entryEarned.text = "£" + entry.earned
 
+
         viewHolder.itemView.setOnClickListener {
             Log.d(TAG, "CLICKED")
+            Log.d(TAG, "CLICKED")
+            Log.d(TAG, "ADAPTER" + entry.id)
+            //TODO Implement vertical swipe for delete functionality and update firestore
+            appDatabase.deleteEntry(entry)
+            entryList.removeAt(position)
+            notifyItemRemoved(position)
+            notifyItemRangeChanged(position, entryList.size)
 
+            Toast.makeText(context, "Note has been deleted!", Toast.LENGTH_SHORT).show()
+            notifyDataSetChanged()
         }
 
     }
+
 
     override fun getItemCount(): Int {
         Log.d("MERT", "NUMBER OF ITEM IN ADAPTER" + entryList.size)
@@ -69,21 +77,6 @@ class JournalListAdapter(el: MutableList<Entry>, c: Context, fireStore: Firebase
         }
     }
 
-
-    private fun deleteNote(id: String, position: Int) {
-
-        val collectionPath = "/users/" + currentFirebaseUser?.uid!! + "/entries"
-
-        firestoreDB.collection(collectionPath)
-                .document(id)
-                .delete()
-                .addOnCompleteListener {
-                    entryList.removeAt(position)
-                    notifyItemRemoved(position)
-                    notifyItemRangeChanged(position, entryList.size)
-                    Toast.makeText(context, "Note has been deleted!", Toast.LENGTH_SHORT).show()
-                }
-    }
 
     fun updateRecords(el: MutableList<Entry>) {
         Log.d("MERT", "updating records...")

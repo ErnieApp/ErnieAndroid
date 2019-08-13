@@ -15,6 +15,7 @@ import android.widget.EditText
 import android.widget.Switch
 import android.widget.TimePicker
 import androidx.fragment.app.Fragment
+import com.ernie.AppDatabase
 import com.ernie.MainActivity
 import com.ernie.R
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -35,6 +36,13 @@ import kotlinx.android.synthetic.main.fragment_registration_form.*
 class RegistrationFormFragment : Fragment() {
 
     val firestoreDB = FirebaseFirestore.getInstance()
+    private var appDatabase: AppDatabase? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        appDatabase = AppDatabase.newInstance()
+    }
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -141,6 +149,8 @@ class RegistrationFormFragment : Fragment() {
 
                 val fireAuth = FirebaseAuth.getInstance()
 
+
+
                 if (bundle!!.getBoolean("isGoogle")) {
 
                     val userAccount = bundle.getParcelable<GoogleSignInAccount>("account")
@@ -150,11 +160,12 @@ class RegistrationFormFragment : Fragment() {
                                 val firestoreUser = hashMapOf(
                                         "name" to userAccount.displayName,
                                         "email" to userAccount.email,
-                                        "hour_rate" to hourlyRate.text.toString())
+                                        "hourly_rate" to hourlyRate.text.toString())
 
                                 firestoreDB.collection("users").document(fireAuth.currentUser?.uid!!).set(firestoreUser)
 
                                 updateContract(fireAuth)
+                                appDatabase!!.addEntry("", "", 0, 0)
                                 guideUserHome()
                             }
                 } else {
@@ -163,11 +174,12 @@ class RegistrationFormFragment : Fragment() {
                                 val firestoreUser = hashMapOf(
                                         "name" to bundle.getString("userName"),
                                         "email" to bundle.getString("userEmail"),
-                                        "hour_rate" to hourlyRate.text.toString())
+                                        "hourly_rate" to hourlyRate.text.toString())
 
                                 firestoreDB.collection("users").document(fireAuth.currentUser?.uid!!).set(firestoreUser)
 
                                 updateContract(fireAuth)
+                                appDatabase!!.addEntry("", "", 0, 0)
                                 guideUserHome()
                             }
                 }

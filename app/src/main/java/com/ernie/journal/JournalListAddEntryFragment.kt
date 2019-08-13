@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.ernie.AppDatabase
 import com.ernie.R
-import com.ernie.model.Entry
 import kotlinx.android.synthetic.main.fragment_journal_list_add_entry.*
 import java.io.Serializable
 
@@ -41,8 +40,7 @@ class JournalListAddEntryFragment : Fragment(), Serializable {
         super.onViewCreated(view, savedInstanceState)
 
         btnAddToEntryTable.setOnClickListener {
-            val entry = Entry(entryStartTimeInputTextField.text.toString(), entryEndTimeInputTextField.text.toString(), entryBreakDurationInputTextField.text.toString().toInt(), entryEarnedInputTextField.text.toString().toInt())
-            appDatabase?.addEntry(entry)
+            appDatabase?.addEntry(entryStartTimeInputTextField.text.toString(), entryEndTimeInputTextField.text.toString(), entryBreakDurationInputTextField.text.toString().toInt(), entryEarnedInputTextField.text.toString().toInt())
         }
 
 

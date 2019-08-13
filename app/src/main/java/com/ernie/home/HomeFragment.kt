@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import com.ernie.AppDatabase
 import com.ernie.R
 import com.ernie.model.Entry
+import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
@@ -48,23 +49,35 @@ class HomeFragment : Fragment() {
 
         Log.d(TAG, "addDataSet started")
 
-
         // Piechart entries arraylist
         val pieEntries = ArrayList<PieEntry>()
 
         // Store pie entries in arraylist
-        pieEntries.add(PieEntry(8f, "Base Pay Earned"))
-        pieEntries.add(PieEntry(2f, "Commission Pay Earned"))
-        pieEntries.add(PieEntry(5f, "Tips Earned"))
+        pieEntries.add(PieEntry(8f, 1))
+        pieEntries.add(PieEntry(2f, 2))
+        pieEntries.add(PieEntry(5f, 2))
 
         // Set the piechart dataset to the arraylist
-        val pieDataSet = PieDataSet(pieEntries, "Entries")
-
+        val pieDataSet = PieDataSet(pieEntries, "")
 
         //Set the piedata to the data that will be rendered to the view
         val data = PieData(pieDataSet)
         pieChart.data = data
 
+        //Set text size for values on piechart
+        pieChart.data.setValueTextSize(20f)
+
+
+        // Hide values of the piechart
+        pieChart.data.dataSet.setDrawValues(false)
+        pieChart.setDrawEntryLabels(false)
+
+        // Set key to be horizontal
+        val legend = pieChart.legend
+        legend.verticalAlignment = Legend.LegendVerticalAlignment.CENTER
+        legend.horizontalAlignment = Legend.LegendHorizontalAlignment.RIGHT
+        legend.orientation = Legend.LegendOrientation.VERTICAL
+        legend.setDrawInside(false)
 
         //Create color palette
         val MY_COLORS = intArrayOf(Color.rgb(192, 0, 0),
@@ -74,13 +87,22 @@ class HomeFragment : Fragment() {
                 Color.rgb(146, 208, 80),
                 Color.rgb(0, 176, 80),
                 Color.rgb(79, 129, 189))
-
         val colors = ArrayList<Int>()
         for (c in MY_COLORS) colors.add(c)
 
         // Set colors for piechart sections
         pieDataSet.colors = colors
 
+        // Set piechart center text
+        var currentTotalAmountEarned = 100
+        pieChart.centerText = "£" + currentTotalAmountEarned
+        pieChart.setCenterTextSize(14f)
+        pieChart.setCenterTextColor(Color.BLUE)
+
+        //Hide default description text
+        pieChart.description.isEnabled = false
+
+        //Set initial animation speed
         pieChart.animateXY(5000, 500)
 
 

@@ -26,7 +26,7 @@ class GoogleService {
             return getSignInIntent(context, getSignInOptions(context))
         }
 
-        fun getFireAuthCredentialFromAccount(account: GoogleSignInAccount): AuthCredential {
+        fun getAuthCredentialFromAccount(account: GoogleSignInAccount): AuthCredential {
             return GoogleAuthProvider.getCredential(account.idToken, null)
         }
     }

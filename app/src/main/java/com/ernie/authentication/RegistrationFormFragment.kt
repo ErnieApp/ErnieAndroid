@@ -234,5 +234,22 @@ class RegistrationFormFragment : Fragment() {
             transaction.replace(R.id.authenticationFrame, registrationFormFragment)
             transaction.commit()
         }
+
+        fun launchRegistrationFormWithNameAndEmailAndPassword(activity: FragmentActivity, userName: String, userEmail: String, userPassword: String) {
+            val fragmentManager: FragmentManager = activity.supportFragmentManager
+            val transaction = fragmentManager.beginTransaction()
+
+            val bundle = Bundle()
+            bundle.putBoolean("isGoogle", false)
+            bundle.putString("userName", userName)
+            bundle.putString("userEmail", userEmail)
+            bundle.putString("userPassword", userPassword)
+
+            val registrationFormFragment = RegistrationFormFragment()
+            registrationFormFragment.arguments = bundle
+
+            transaction.replace(R.id.authenticationFrame, registrationFormFragment)
+            transaction.commit()
+        }
     }
 }

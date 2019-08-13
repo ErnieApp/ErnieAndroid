@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import com.ernie.MainActivity
 import com.ernie.R
@@ -74,18 +75,23 @@ class LoginFragment : Fragment() {
 
     private fun setupNewUserListener() {
         newUserTextView.setOnClickListener {
-            val fragmentManager: FragmentManager = activity!!.supportFragmentManager
-            val transaction = fragmentManager.beginTransaction()
-            transaction.replace(R.id.authenticationFrame, SignUpFragment())
-            transaction.commit()
+            SignUpFragment.launchSignUp(activity!!)
         }
     }
 
     private fun signUserIntoFireAuthWithEmailAndPassword(userEmail: String, userPassword: String) {
         fireAuth.signInWithEmailAndPassword(userEmail, userPassword)
                 .addOnCompleteListener {
-                    if (fireAuth.currentUser != null) guideUserHome()
+                    if (fireAuth.currentUser != null) MainActivity.launchMainActivityAsFreshStart(activity!!)
                     else fieldPassword.error = "Incorrect password"
+                }
+    }
+
+    private fun signUserIntoFireAuthWithCredential(credential: AuthCredential) {
+        fireAuth.signInWithCredential(credential)
+                .addOnCompleteListener {
+                    if (it.isSuccessful) MainActivity.launchMainActivityAsFreshStart(activity!!)
+                    else Log.e(TAG, "signInWithCredential:failure + ", it.exception)
                 }
     }
 
@@ -115,12 +121,6 @@ class LoginFragment : Fragment() {
         }
     }
 
-    private fun guideUserHome() {
-        val intent = Intent(activity, MainActivity::class.java)
-        startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK))
-        activity!!.finish()
-    }
-
     private fun disableButtons() {
         btnLogin.isEnabled = false
         btnGoogleLogin.isEnabled = false
@@ -137,43 +137,37 @@ class LoginFragment : Fragment() {
 
     private fun handleGoogleSignInResult(completedTask: Task<GoogleSignInAccount>) {
         try {
-            val account = completedTask.getResult(ApiException::class.java)
-            signIntoFireAuthWithGoogleAccount(account!!)
+            val account: GoogleSignInAccount = completedTask.getResult(ApiException::class.java)!!
+            val credential = GoogleService.getAuthCredentialFromAccount(account)
+
+            fireAuth.fetchSignInMethodsForEmail(account.email!!)
+                    .addOnCompleteListener { task ->
+                        //TODO: Catch network exception which is thrown when there is no internet
+                        val isNewUser = task.result!!.signInMethods!!.isEmpty()
+
+                        if (isNewUser) {
+                            RegistrationFormFragment.launchRegistrationFormWithGoogleAccount(activity!!, credential, account)
+                        } else {
+                            signUserIntoFireAuthWithCredential(credential)
+                        }
+                    }
         } catch (e: ApiException) {
             Log.e(TAG, "Google sign in failed")
             Log.w(TAG, "signInResult: failed code =" + e.statusCode)
         }
-
-    }
-
-    private fun signIntoFireAuthWithGoogleAccount(account: GoogleSignInAccount) {
-        val credential = GoogleService.getFireAuthCredentialFromAccount(account)
-
-        fireAuth.fetchSignInMethodsForEmail(account.email!!)
-                .addOnCompleteListener { task ->
-                    //TODO: Catch network exception which is thrown when there is no internet
-                    val isNewUser = task.result!!.signInMethods!!.isEmpty()
-
-                    if (isNewUser) {
-                        RegistrationFormFragment.launchRegistrationFormWithGoogleAccount(activity!!, credential, account)
-                    } else {
-                        signUserIntoFireAuthWithCredential(credential)
-                    }
-                }
-    }
-
-    private fun signUserIntoFireAuthWithCredential(credential: AuthCredential) {
-        fireAuth.signInWithCredential(credential)
-                .addOnCompleteListener {
-                    if (it.isSuccessful) guideUserHome()
-                    else Log.e(TAG, "signInWithCredential:failure + ", it.exception)
-                }
     }
 
     companion object {
         private const val RC_GOOGLE_SIGN_IN = 444
-        private const val LOGIN_ATTEMPT_DELAY_MILLIS: Long = 5000
+        private const val LOGIN_ATTEMPT_DELAY_MILLIS: Long = 3000
         private const val TAG = "LoginFragment"
         private val fireAuth: FirebaseAuth = FirebaseAuth.getInstance()
+
+        fun launchLogin(activity: FragmentActivity) {
+            val fragmentManager: FragmentManager = activity.supportFragmentManager
+            val transaction = fragmentManager.beginTransaction()
+            transaction.replace(R.id.authenticationFrame, LoginFragment())
+            transaction.commit()
+        }
     }
 }

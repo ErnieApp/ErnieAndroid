@@ -1,5 +1,6 @@
 package com.ernie
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -88,6 +89,14 @@ class MainActivity : AppIntro() {
                 fireAuth.signOut()
                 finish()
             }
+        }
+    }
+
+    companion object {
+        fun launchMainActivityAsFreshStart(activity: Activity) {
+            val intent = Intent(activity, MainActivity::class.java)
+            activity.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK))
+            activity.finish()
         }
     }
 

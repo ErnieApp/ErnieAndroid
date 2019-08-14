@@ -2,14 +2,15 @@ package com.ernie.authentication
 
 
 import android.content.Intent
+import android.graphics.PorterDuff
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
@@ -22,6 +23,7 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_login.*
+
 class LoginFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -49,10 +51,11 @@ class LoginFragment : Fragment() {
             val userEmail = fieldEmail.text.toString()
             val userPassword = fieldPassword.text.toString()
 
-            if (isValidEmail(userEmail) && isPasswordBlank(userPassword)) {
+            if (isValidEmail(userEmail) && !isPasswordBlank(userPassword)) {
                 signUserIntoFireAuthWithEmailAndPassword(userEmail, userPassword)
+            } else {
+                enableButtons()
             }
-            enableButtonsAfterDelay(LOGIN_ATTEMPT_DELAY_MILLIS)
         }
     }
 
@@ -60,7 +63,6 @@ class LoginFragment : Fragment() {
         btnGoogleLogin.setOnClickListener {
             disableButtons()
             startActivityForResult(GoogleService.getSignInIntentWithDefaultSignInOptions(activity!!.application), RC_GOOGLE_SIGN_IN)
-            enableButtonsAfterDelay(LOGIN_ATTEMPT_DELAY_MILLIS)
         }
     }
 
@@ -83,7 +85,10 @@ class LoginFragment : Fragment() {
         fireAuth.signInWithEmailAndPassword(userEmail, userPassword)
                 .addOnCompleteListener {
                     if (fireAuth.currentUser != null) MainActivity.launchMainActivityAsFreshStart(activity!!)
-                    else fieldPassword.error = "Incorrect password"
+                    else {
+                        fieldPassword.error = "Incorrect password"
+                        enableButtons()
+                    }
                 }
     }
 
@@ -91,7 +96,10 @@ class LoginFragment : Fragment() {
         fireAuth.signInWithCredential(credential)
                 .addOnCompleteListener {
                     if (it.isSuccessful) MainActivity.launchMainActivityAsFreshStart(activity!!)
-                    else Log.e(TAG, "signInWithCredential:failure + ", it.exception)
+                    else {
+                        Log.e(TAG, "signInWithCredential:failure + ", it.exception)
+                        enableButtons()
+                    }
                 }
     }
 
@@ -123,16 +131,16 @@ class LoginFragment : Fragment() {
 
     private fun disableButtons() {
         btnLogin.isEnabled = false
+        btnLogin.background.setColorFilter(ContextCompat.getColor(activity!!, R.color.colorIntroUnselectedIndicator), PorterDuff.Mode.MULTIPLY)
         btnGoogleLogin.isEnabled = false
+        btnGoogleLogin.background.setColorFilter(ContextCompat.getColor(activity!!, R.color.colorIntroUnselectedIndicator), PorterDuff.Mode.MULTIPLY)
     }
 
-    private fun enableButtonsAfterDelay(delayMillis: Long) {
-        Handler().postDelayed({
-            if (btnLogin != null && btnGoogleLogin != null) {
-                btnLogin.isEnabled = true
-                btnGoogleLogin.isEnabled = true
-            }
-        }, delayMillis)
+    private fun enableButtons() {
+        btnLogin.isEnabled = true
+        btnLogin.background.clearColorFilter()
+        btnGoogleLogin.isEnabled = true
+        btnGoogleLogin.background.clearColorFilter()
     }
 
     private fun handleGoogleSignInResult(completedTask: Task<GoogleSignInAccount>) {
@@ -154,12 +162,12 @@ class LoginFragment : Fragment() {
         } catch (e: ApiException) {
             Log.e(TAG, "Google sign in failed")
             Log.w(TAG, "signInResult: failed code =" + e.statusCode)
+            enableButtons()
         }
     }
 
     companion object {
         private const val RC_GOOGLE_SIGN_IN = 444
-        private const val LOGIN_ATTEMPT_DELAY_MILLIS: Long = 3000
         private const val TAG = "LoginFragment"
         private val fireAuth: FirebaseAuth = FirebaseAuth.getInstance()
 

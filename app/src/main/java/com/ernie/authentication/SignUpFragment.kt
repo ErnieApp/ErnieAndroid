@@ -1,13 +1,14 @@
 package com.ernie.authentication
 
 import android.content.Intent
+import android.graphics.PorterDuff
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
@@ -35,6 +36,13 @@ class SignUpFragment : Fragment() {
         setupExistingUserListener()
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == RC_GOOGLE_SIGN_IN) {
+            handleGoogleSignInResult(GoogleSignIn.getSignedInAccountFromIntent(data))
+        }
+    }
+
     private fun setupBtnSignUpListener() {
         btnSignUp.setOnClickListener {
             disableButtons()
@@ -52,10 +60,12 @@ class SignUpFragment : Fragment() {
                                 RegistrationFormFragment.launchRegistrationFormWithNameAndEmailAndPassword(activity!!, userName, userEmail, userPassword)
                             } else {
                                 fieldEmail.error = "Account already exists"
+                                enableButtons()
                             }
                         }
+            } else {
+                enableButtons()
             }
-            enableButtonsAfterDelay(SIGN_UP_ATTEMPT_DELAY_MILLIS)
         }
     }
 
@@ -63,7 +73,6 @@ class SignUpFragment : Fragment() {
         btnGoogleSignUp.setOnClickListener {
             disableButtons()
             startActivityForResult(GoogleService.getSignInIntentWithDefaultSignInOptions(activity!!.application), RC_GOOGLE_SIGN_IN)
-            enableButtonsAfterDelay(SIGN_UP_ATTEMPT_DELAY_MILLIS)
         }
     }
 
@@ -130,16 +139,16 @@ class SignUpFragment : Fragment() {
 
     private fun disableButtons() {
         btnSignUp.isEnabled = false
+        btnSignUp.background.setColorFilter(ContextCompat.getColor(activity!!, R.color.colorIntroUnselectedIndicator), PorterDuff.Mode.MULTIPLY)
         btnGoogleSignUp.isEnabled = false
+        btnGoogleSignUp.background.setColorFilter(ContextCompat.getColor(activity!!, R.color.colorIntroUnselectedIndicator), PorterDuff.Mode.MULTIPLY)
     }
 
-    private fun enableButtonsAfterDelay(delayMillis: Long) {
-        Handler().postDelayed({
-            if (btnSignUp != null && btnGoogleSignUp != null) {
-                btnSignUp.isEnabled = true
-                btnGoogleSignUp.isEnabled = true
-            }
-        }, delayMillis)
+    private fun enableButtons() {
+        btnSignUp.isEnabled = true
+        btnSignUp.background.clearColorFilter()
+        btnGoogleSignUp.isEnabled = true
+        btnGoogleSignUp.background.clearColorFilter()
     }
 
     private fun handleGoogleSignInResult(completedTask: Task<GoogleSignInAccount>) {
@@ -161,6 +170,7 @@ class SignUpFragment : Fragment() {
         } catch (e: ApiException) {
             Log.e(TAG, "Google sign in failed")
             Log.w(TAG, "signInResult: failed code =" + e.statusCode)
+            enableButtons()
         }
     }
 
@@ -168,20 +178,15 @@ class SignUpFragment : Fragment() {
         fireAuth.signInWithCredential(credential)
                 .addOnCompleteListener {
                     if (it.isSuccessful) MainActivity.launchMainActivityAsFreshStart(activity!!)
-                    else Log.e(TAG, "signInWithCredential:failure + ", it.exception)
+                    else {
+                        Log.e(TAG, "signInWithCredential:failure + ", it.exception)
+                        enableButtons()
+                    }
                 }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == RC_GOOGLE_SIGN_IN) {
-            handleGoogleSignInResult(GoogleSignIn.getSignedInAccountFromIntent(data))
-        }
     }
 
     companion object {
         private const val RC_GOOGLE_SIGN_IN = 444
-        private const val SIGN_UP_ATTEMPT_DELAY_MILLIS: Long = 3000
         private const val TAG = "SignUpFragment"
         private val fireAuth: FirebaseAuth = FirebaseAuth.getInstance()
 

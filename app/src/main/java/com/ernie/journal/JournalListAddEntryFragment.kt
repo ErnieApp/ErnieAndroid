@@ -59,8 +59,11 @@ class JournalListAddEntryFragment : Fragment() {
         val calendar = Calendar.getInstance()
 
         val year = calendar.get(Calendar.YEAR).toString()
-        val month = calendar.get(Calendar.MONTH).toString()
-        val day = calendar.get(Calendar.DAY_OF_MONTH).toString()
+        var month = calendar.get(Calendar.MONTH).toString()
+        var day = calendar.get(Calendar.DAY_OF_MONTH).toString()
+        if (month.length == 1) month = "0$month"
+        if (day.length == 1) day = "0$day"
+
         dateUserInput.setText(day + "/" + month + "/" + year)
     }
 

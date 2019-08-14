@@ -13,17 +13,6 @@ import kotlinx.android.synthetic.main.fragment_journal.*
 
 class JournalFragment : Fragment() {
 
-    private lateinit var journalListAddEntryFragment: JournalListAddEntryFragment
-    private lateinit var journalListFragment: JournalListFragment
-    private lateinit var journalListExpandedEntryFragment: JournalListExpandedEntryFragment
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        journalListAddEntryFragment = JournalListAddEntryFragment()
-        journalListFragment = JournalListFragment()
-        journalListExpandedEntryFragment = JournalListExpandedEntryFragment()
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view: View = inflater.inflate(R.layout.fragment_journal, container, false)
         setupFloatingActionButtonListener(view.findViewById(R.id.floatingActionButton))
@@ -68,5 +57,8 @@ class JournalFragment : Fragment() {
 
     companion object {
         private const val TAG = "JournalFragment"
+        private val journalListAddEntryFragment = JournalListAddEntryFragment()
+        private val journalListFragment = JournalListFragment()
+        private val journalListExpandedEntryFragment = JournalListExpandedEntryFragment()
     }
 }

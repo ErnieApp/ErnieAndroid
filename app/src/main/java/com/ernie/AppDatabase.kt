@@ -13,6 +13,10 @@ class AppDatabase {
     private var firestoreDB = FirebaseFirestore.getInstance()
     private val currentEntriesList = ArrayList<Entry>()
 
+
+    constructor() {
+        loadAllEntriesFromFireStore()
+    }
     fun addUser(user: User) {
         val firestoreUser = hashMapOf(
                 "name" to user.name,
@@ -66,15 +70,18 @@ class AppDatabase {
 
         val collectionPath = "/users/" + fireAuth.currentUser?.uid!! + "/entries"
 
+
         firestoreDB.collection(collectionPath)
-                .get()
-                .addOnSuccessListener { result ->
+                .addSnapshotListener { value, e ->
+                    if (e != null) {
+                        Log.w(TAG, "Listen failed.", e)
+                        return@addSnapshotListener
+                    }
 
                     this.currentEntriesList.clear()
-                    this.currentEntriesList.addAll(result.toObjects(Entry::class.java))
-                }
-                .addOnFailureListener { exception ->
-                    Log.d(TAG, "Error getting documents: ", exception)
+                    this.currentEntriesList.addAll(value!!.toObjects(Entry::class.java))
+
+                    Log.d(TAG, "LoadAllEntries")
                 }
     }
 

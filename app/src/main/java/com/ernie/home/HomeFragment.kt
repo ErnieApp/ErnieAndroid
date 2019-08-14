@@ -3,7 +3,6 @@ package com.ernie.home
 
 import android.graphics.Color
 import android.os.Bundle
-import android.os.CountDownTimer
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -19,17 +18,25 @@ import com.github.mikephil.charting.data.PieEntry
 import kotlinx.android.synthetic.main.fragment_home.*
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
 
 
 class HomeFragment : Fragment() {
 
-    private var currentListOfEntries: ArrayList<Entry>? = null
+
+    private lateinit var currentListOfEntries: ArrayList<Entry>
+
+    // Piechart entries arraylist
+    private var pieEntries = ArrayList<PieEntry>()
+
+    private var previousPayDate = "Wed 11 August 2019"
+    private var upComingPayDate = "Tue 30 August 2019"
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         currentListOfEntries = appDatabase.getEntries()
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -47,19 +54,7 @@ class HomeFragment : Fragment() {
 
     private fun setUpPayDayTimer() {
 
-        // 60 seconds (1 minute)
-        val minute: Long = 1000 * 60 // 1000 milliseconds = 1 second
-
-        // 1 day 2 hours 35 minutes 50 seconds
-        val millisInFuture: Long = (minute * 0) + (minute * 0) + (1000 * 50)
-
-        // Count down interval 1 second
-        val countDownInterval: Long = 1000
-
-        timer(millisInFuture, countDownInterval).start()
-
     }
-
 
 
     private fun setUpPayDayDate() {
@@ -69,42 +64,32 @@ class HomeFragment : Fragment() {
     }
 
 
-
     private fun setUpPieChart() {
+        // SET UP DATA FOR PIECHART
+        setPieChartEntries()
 
-        Log.d(TAG, "addDataSet started")
-
-        // Piechart entries arraylist
-        val pieEntries = ArrayList<PieEntry>()
-
-
-        // Store pie entries in arraylist
-        pieEntries.add(PieEntry(8f, "Base Pay"))
-        pieEntries.add(PieEntry(2f, "Commission Pay"))
-        pieEntries.add(PieEntry(5f, "Tip Pay"))
-
-        // Set the piechart dataset to the arraylist
+        // Set the piechart dataset to the piechart entries that will be displayed
         val pieDataSet = PieDataSet(pieEntries, "")
 
         //Set the piedata to the data that will be rendered to the view
         val data = PieData(pieDataSet)
-        pieChart.data = data
 
+        pieChart.data = data
         //Set text size for values on piechart
         pieChart.data.setValueTextSize(20f)
-
 
         // Hide values of the piechart
 //        pieChart.data.dataSet.setDrawValues(false)
         pieChart.setDrawEntryLabels(false)
 
-        // Set key to be horizontal
+        // SET UP KEY FOR PIECHART
         val legend = pieChart.legend
         legend.verticalAlignment = Legend.LegendVerticalAlignment.CENTER
         legend.horizontalAlignment = Legend.LegendHorizontalAlignment.RIGHT
         legend.orientation = Legend.LegendOrientation.VERTICAL
         legend.setDrawInside(false)
 
+        // SET UP VIEW FOR PIECHART
         //Create color palette
         val MY_COLORS = intArrayOf(Color.rgb(192, 0, 0),
                 Color.rgb(255, 0, 0),
@@ -134,50 +119,65 @@ class HomeFragment : Fragment() {
 
     }
 
+    private fun setPieChartEntries() {
+
+
+        // Format previouspaydate and upcomingpaydate to GMT
+        val dateFormat = SimpleDateFormat("EEE dd MMMM yyyy")
+        val formatPreviousPayDate = dateFormat.parse(previousPayDate)
+        val formatUpComingPayDate = dateFormat.parse(upComingPayDate)
+
+
+        // Create collection of dates between previouspaydate and upcomingpaydate
+        var lastDate = Calendar.getInstance()
+        lastDate.time = formatUpComingPayDate
+        lastDate.add(Calendar.DATE, -1)
+
+        var cal = Calendar.getInstance()
+        cal.time = formatPreviousPayDate
+
+        val applicableDates = ArrayList<Date>(25)
+
+        while (cal.before(lastDate)) {
+            cal.add(Calendar.DATE, 1)
+            applicableDates.add(cal.time)
+        }
+
+
+        // Create collection of data entries that coincide the dates between previouspaydate and upcomingpaydate
+        var entriesBetweenDates = ArrayList<Entry>()
+
+        for (entry in currentListOfEntries) {
+            val formattedEntryDate = dateFormat.parse(entry.date_recorded!!)
+            for (date in applicableDates) {
+                if (formattedEntryDate.equals(date)) {
+                    entriesBetweenDates.add(entry)
+                    Log.d(TAG, " FOR1 " + entry.earned!!.toFloat())
+                }
+            }
+        }
+
+        //Calculate the total base pay for these entries
+        var totalBasePay = 0f
+
+        for (entry in entriesBetweenDates) {
+            totalBasePay = totalBasePay + entry.earned!!.toFloat()
+        }
+
+        // Create pie entries using 'total base pay' calculated as an entry
+        pieEntries.add(PieEntry(totalBasePay, "Base Pay"))
+        pieEntries.add(PieEntry(2f, "Commission Pay"))
+        pieEntries.add(PieEntry(5f, "Tip Pay"))
+
+    }
+
+
     companion object {
         private const val TAG = "HomeFragment"
         private val appDatabase = AppDatabase()
     }
 
-    //Utility function
+    //Ultities method
 
-
-    // Method to configure and return an instance of CountDownTimer object
-    private fun timer(millisInFuture: Long, countDownInterval: Long): CountDownTimer {
-        return object : CountDownTimer(millisInFuture, countDownInterval) {
-            override fun onTick(millisUntilFinished: Long) {
-                val timeRemaining = timeString(millisUntilFinished)
-                days_left_textview.text = timeRemaining
-            }
-
-            override fun onFinish() {
-                days_left_textview.text = "Done"
-
-            }
-        }
-    }
-
-
-    // Method to get days hours minutes seconds from milliseconds
-    private fun timeString(millisUntilFinished: Long): String {
-        var millisUntilFinished: Long = millisUntilFinished
-        val days = TimeUnit.MILLISECONDS.toDays(millisUntilFinished)
-        millisUntilFinished -= TimeUnit.DAYS.toMillis(days)
-
-        val hours = TimeUnit.MILLISECONDS.toHours(millisUntilFinished)
-        millisUntilFinished -= TimeUnit.HOURS.toMillis(hours)
-
-        val minutes = TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished)
-        millisUntilFinished -= TimeUnit.MINUTES.toMillis(minutes)
-
-        val seconds = TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished)
-
-        // Format the string
-        return String.format(
-                Locale.getDefault(),
-                "%02d day: %02d hour: %02d min: %02d sec",
-                days, hours, minutes, seconds
-        )
-    }
 
 }

@@ -1,17 +1,19 @@
 package com.ernie.authentication
 
 import android.app.TimePickerDialog
+import android.graphics.PorterDuff
 import android.os.Bundle
-import android.os.Handler
 import android.text.Editable
 import android.text.Selection
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Switch
 import android.widget.TimePicker
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
@@ -47,7 +49,8 @@ class RegistrationFormFragment : Fragment() {
         setupHourlyRateFieldFormatter()
 
         btnSubmit.setOnClickListener {
-            btnSubmit.isEnabled = false
+            disableSubmitButton()
+
             val fireAuth = FirebaseAuth.getInstance()
 
             if (hasUserFilledOutForm(contractDaySwitches, contractHourFields)) {
@@ -56,12 +59,10 @@ class RegistrationFormFragment : Fragment() {
                 } else {
                     addUserToFireAuthWithEmailAndPassword(fireAuth, bundle)
                 }
+            } else {
+                enableSubmitButton()
             }
-            Handler().postDelayed({
-                if (btnSubmit != null) {
-                    btnSubmit.isEnabled = true
-                }
-            }, REGISTER_ATTEMPT_DELAY_MILLIS)
+
         }
     }
 
@@ -71,6 +72,10 @@ class RegistrationFormFragment : Fragment() {
                     appDatabase.addUser(User(bundle.getString("userName")!!, bundle.getString("userEmail")!!, hourlyRate.text.toString()))
                     updateContract()
                     MainActivity.launchMainActivityAsFreshStart(activity!!)
+                }
+                .addOnFailureListener {
+                    enableSubmitButton()
+                    Log.e(TAG, "signing in with email/pass failed: " + it.localizedMessage)
                 }
     }
 
@@ -83,6 +88,20 @@ class RegistrationFormFragment : Fragment() {
                     updateContract()
                     MainActivity.launchMainActivityAsFreshStart(activity!!)
                 }
+                .addOnFailureListener {
+                    enableSubmitButton()
+                    Log.e(TAG, "signing in with google failed: " + it.localizedMessage)
+                }
+    }
+
+    private fun disableSubmitButton() {
+        btnSubmit.isEnabled = false
+        btnSubmit.background.setColorFilter(ContextCompat.getColor(activity!!, R.color.colorIntroUnselectedIndicator), PorterDuff.Mode.MULTIPLY)
+    }
+
+    private fun enableSubmitButton() {
+        btnSubmit.isEnabled = true
+        btnSubmit.background.clearColorFilter()
     }
 
     private fun hasUserFilledOutForm(contractDaySwitches: List<Switch>, contractHourFields: List<EditText>): Boolean {
@@ -176,8 +195,8 @@ class RegistrationFormFragment : Fragment() {
     }
 
     companion object {
-        private const val REGISTER_ATTEMPT_DELAY_MILLIS: Long = 3000
         private val appDatabase: AppDatabase = AppDatabase()
+        private const val TAG = "RegistrationFormFrag..."
 
         fun launchRegistrationFormWithGoogleAccount(activity: FragmentActivity, credential: AuthCredential, account: GoogleSignInAccount) {
             val bundle = Bundle()

@@ -35,8 +35,7 @@ class JournalFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-        floatingActionButton.setOnClickListener { view ->
+        floatingActionButton.setOnClickListener {
             if (journalListAddEntryFragment.isVisible) {
                 displayFragmentA()
             } else {
@@ -49,8 +48,6 @@ class JournalFragment : Fragment() {
                 floatingActionButton.rotation -= floatingActionButton.rotation
             }
         }
-        //Begin Transcation
-
     }
 
     protected fun displayFragmentA() {

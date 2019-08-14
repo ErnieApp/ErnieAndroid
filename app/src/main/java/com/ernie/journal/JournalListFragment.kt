@@ -16,7 +16,6 @@ import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 
-private const val TAG = "JournalListFragment"
 private lateinit var snapShotListenerRegistration: ListenerRegistration
 
 class JournalListFragment : Fragment() {
@@ -24,15 +23,11 @@ class JournalListFragment : Fragment() {
     private val firestoreDB = FirebaseFirestore.getInstance()
     private lateinit var recyclerView: RecyclerView
 
-    private var appDatabase: AppDatabase? = null
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view: View = inflater.inflate(R.layout.fragment_journal_list, container, false)
 
-        appDatabase = AppDatabase()
-
         recyclerView = view.findViewById(R.id.journalRecyclerView) as RecyclerView
-        recyclerView.adapter = JournalListAdapter(mutableListOf(), activity!!.applicationContext, appDatabase!!)
+        recyclerView.adapter = JournalListAdapter(mutableListOf(), appDatabase!!)
         recyclerView.layoutManager = LinearLayoutManager(activity)
         return view
     }
@@ -58,5 +53,10 @@ class JournalListFragment : Fragment() {
                         (recyclerView.adapter as JournalListAdapter).updateRecords(documents!!.toObjects(Entry::class.java))
                     }
                 })
+    }
+
+    companion object {
+        private const val TAG = "JournalListFragment"
+        private val appDatabase: AppDatabase? = AppDatabase()
     }
 }

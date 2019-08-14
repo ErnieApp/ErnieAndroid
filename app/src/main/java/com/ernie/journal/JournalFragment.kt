@@ -8,21 +8,11 @@ import androidx.fragment.app.Fragment
 import com.ernie.R
 import kotlinx.android.synthetic.main.fragment_journal.*
 
-
-private const val TAG = "JournalFragment"
-
 class JournalFragment : Fragment() {
 
     private lateinit var journalListAddEntryFragment: JournalListAddEntryFragment
     private lateinit var journalListFragment: JournalListFragment
     private lateinit var journalListExpandedEntryFragment: JournalListExpandedEntryFragment
-
-    companion object {
-
-        fun newInstance(): JournalFragment {
-            return JournalFragment()
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +41,12 @@ class JournalFragment : Fragment() {
                 displayFragmentA()
             } else {
                 displayFragmentB()
+            }
+
+            if (floatingActionButton.rotation != 45f) {
+                floatingActionButton.rotation += 45
+            } else {
+                floatingActionButton.rotation -= floatingActionButton.rotation
             }
         }
         //Begin Transcation
@@ -123,6 +119,10 @@ class JournalFragment : Fragment() {
 
         // Commit changes
         ft.commit()
+    }
+
+    companion object {
+        private const val TAG = "JournalFragment"
     }
 
 }

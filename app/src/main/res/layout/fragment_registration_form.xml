@@ -33,7 +33,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dp"
                 android:layout_marginRight="14dp"
+                android:layout_marginEnd="14dp"
                 android:text="Hourly wage:"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -43,7 +45,8 @@
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="12dp"
-                android:inputType="numberDecimal"
+                android:layout_marginEnd="12dp"
+                android:inputType="number"
                 android:text="7.50" />
 
         </TableRow>

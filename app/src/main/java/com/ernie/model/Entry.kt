@@ -5,6 +5,6 @@ data class Entry(
         val start_time: String? = null,
         val end_time: String? = null,
         val break_duration: Int = 0,
-        val earned: Int = 0,
+        val earned: String? = null,
         val date_recorded: String? = null
 )

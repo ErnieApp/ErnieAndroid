@@ -1,15 +1,12 @@
 package com.ernie
 
 
-import android.text.format.DateFormat
 import android.util.Log
 import com.ernie.model.Contract
 import com.ernie.model.Entry
 import com.ernie.model.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import java.util.*
-import kotlin.collections.ArrayList
 
 class AppDatabase {
 
@@ -34,25 +31,19 @@ class AppDatabase {
         }
     }
 
-    fun addEntry(userInputStartTime: String, userInputEndTime: String, userInputBreakDuration: Int, userInputEarned: Int) {
+    fun addEntry(entry: Entry) {
         // Create a new document in firestore
         val newDocument = firestoreDB.collection("users").document(fireAuth.currentUser?.uid!!).collection("entries").document()
         val newDocumentId = newDocument.id
 
-        //Create a a timestamp
-        val currentDate = DateFormat.format("EEE dd MMMM yyyy", Date()).toString()
-
-        //Create an entry object
-        val newEntry = Entry(newDocumentId, userInputStartTime, userInputEndTime, userInputBreakDuration, userInputEarned, currentDate)
-
         // Create a new entry store it in a hashmap
         val firestoreEntry = hashMapOf(
-                "id" to newEntry.id,
-                "start_time" to newEntry.start_time,
-                "end_time" to newEntry.end_time,
-                "break_duration" to newEntry.break_duration,
-                "earned" to newEntry.earned,
-                "date_recorded" to newEntry.date_recorded
+                "id" to newDocumentId,
+                "start_time" to entry.start_time,
+                "end_time" to entry.end_time,
+                "break_duration" to entry.break_duration,
+                "earned" to entry.earned,
+                "date_recorded" to entry.date_recorded
         )
 
         // Store entry in the firestore entry collection

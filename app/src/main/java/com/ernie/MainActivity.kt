@@ -77,7 +77,7 @@ class MainActivity : AppIntro() {
 
     override fun onBackPressed() {
         if (slides[pager.currentItem] == journalFragment && (journalFragment.isAddEntryFormVisible() || journalFragment.isExpandedEntryVisible())) {
-            journalFragment.showEntryList()
+            journalFragment.clickFloatingActionButton()
         } else {
             super.onBackPressed()
         }

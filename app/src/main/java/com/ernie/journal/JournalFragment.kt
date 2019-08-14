@@ -36,11 +36,11 @@ class JournalFragment : Fragment() {
         }
     }
 
-    fun showEntryList() {
+    private fun showEntryList() {
         replaceCurrentFragment(R.id.journalFrameContainer, journalListFragment)
     }
 
-    fun showEntryAddForm() {
+    private fun showEntryAddForm() {
         replaceCurrentFragment(R.id.journalFrameContainer, journalListAddEntryFragment)
     }
 
@@ -61,6 +61,10 @@ class JournalFragment : Fragment() {
 
     fun isExpandedEntryVisible(): Boolean {
         return journalListExpandedEntryFragment.isVisible
+    }
+
+    fun clickFloatingActionButton() {
+        floatingActionButton.callOnClick()
     }
 
     companion object {

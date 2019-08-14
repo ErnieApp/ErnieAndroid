@@ -20,7 +20,7 @@ class AppDatabase {
         val firestoreUser = hashMapOf(
                 "name" to user.name,
                 "email" to user.email,
-                "hour_rate" to user.hourly_rate
+                "hourly_rate" to user.hourly_rate
         )
         firestoreDB.collection("users").document(fireAuth.currentUser?.uid!!).set(firestoreUser)
     }
@@ -34,9 +34,6 @@ class AppDatabase {
         }
     }
 
-
-
-    //COMPLETE
     fun addEntry(userInputStartTime: String, userInputEndTime: String, userInputBreakDuration: Int, userInputEarned: Int) {
         // Create a new document in firestore
         val newDocument = firestoreDB.collection("users").document(fireAuth.currentUser?.uid!!).collection("entries").document()
@@ -60,22 +57,18 @@ class AppDatabase {
 
         // Store entry in the firestore entry collection
         firestoreDB.collection("users").document(fireAuth.currentUser?.uid!!).collection("entries").document(newDocumentId).set(firestoreEntry)
-
     }
 
-
     fun deleteEntry(entry: Entry) {
-
         val collectionPath = "/users/" + fireAuth.currentUser?.uid!! + "/entries/"
 
         Log.d(TAG, "hello" + entry.id.toString())
         firestoreDB.collection(collectionPath)
-                .document(entry.id)
+                .document(entry.id!!)
                 .delete()
                 .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully deleted!") }
                 .addOnFailureListener { e -> Log.w(TAG, "Error deleting document", e) }
     }
-
 
     //COMPLETE
     fun loadAllEntriesFromFireStore() {
@@ -88,13 +81,10 @@ class AppDatabase {
 
                     this.currentEntriesList.clear()
                     this.currentEntriesList.addAll(result.toObjects(Entry::class.java))
-
-
                 }
                 .addOnFailureListener { exception ->
                     Log.d(TAG, "Error getting documents: ", exception)
                 }
-
     }
 
 
@@ -107,5 +97,3 @@ class AppDatabase {
         private const val TAG = "AppDatabase"
     }
 }
-
-

@@ -13,7 +13,7 @@ class AuthenticationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_authentication)
 
-        val bundle = intent.extras
+        val bundle = intent.extras!!
         val shouldLaunchLogin = bundle.getBoolean("shouldLaunchLogin")
 
         val fragmentManager: FragmentManager = supportFragmentManager

@@ -4,7 +4,7 @@ class Contract {
     private val contractedDays: HashMap<Day, ContractedDay> = hashMapOf()
 
     fun addContractedDay(contractedDay: ContractedDay) {
-        contractedDays[contractedDay.getDay()] = contractedDay
+        contractedDays[contractedDay.day] = contractedDay
     }
 
     fun getContractedDays(): HashMap<Day, ContractedDay> {

@@ -36,15 +36,15 @@ class JournalFragment : Fragment() {
         }
     }
 
-    private fun showEntryList() {
+    fun showEntryList() {
         replaceCurrentFragment(R.id.journalFrameContainer, journalListFragment)
     }
 
-    private fun showEntryAddForm() {
+    fun showEntryAddForm() {
         replaceCurrentFragment(R.id.journalFrameContainer, journalListAddEntryFragment)
     }
 
-    private fun showExpandedEntry() {
+    fun showExpandedEntry() {
         replaceCurrentFragment(R.id.journalFrameContainer, journalListExpandedEntryFragment)
     }
 
@@ -53,6 +53,14 @@ class JournalFragment : Fragment() {
         val transaction = fragmentManager.beginTransaction()
         transaction.replace(containerViewId, fragment)
         transaction.commit()
+    }
+
+    fun isAddEntryFormVisible(): Boolean {
+        return journalListAddEntryFragment.isVisible
+    }
+
+    fun isExpandedEntryVisible(): Boolean {
+        return journalListExpandedEntryFragment.isVisible
     }
 
     companion object {

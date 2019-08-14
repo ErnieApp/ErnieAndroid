@@ -24,9 +24,9 @@ class MainActivity : AppIntro() {
             finish()
         }
 
-        addSlide(HomeFragment())
-        addSlide(JournalFragment())
-        addSlide(ProfileFragment())
+        addSlide(homeFragment)
+        addSlide(journalFragment)
+        addSlide(profileFragment)
 
         showPagerIndicator(false)
         showSkipButton(false)
@@ -40,13 +40,13 @@ class MainActivity : AppIntro() {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
 
             override fun onPageSelected(position: Int) {
-                if (position == 0) {
+                if (slides[position] == homeFragment) {
                     clearSelectedButton()
                     home.setImageResource(R.drawable.ic_home_blue_24dp)
-                } else if (position == 1) {
+                } else if (slides[position] == journalFragment) {
                     clearSelectedButton()
                     journal.setImageResource(R.drawable.ic_dashboard_blue_24dp)
-                } else if (position == 2) {
+                } else if (slides[position] == profileFragment) {
                     clearSelectedButton()
                     profile.setImageResource(R.drawable.ic_notifications_blue_24dp)
                 }
@@ -75,8 +75,19 @@ class MainActivity : AppIntro() {
         }
     }
 
+    override fun onBackPressed() {
+        if (slides[pager.currentItem] == journalFragment && (journalFragment.isAddEntryFormVisible() || journalFragment.isExpandedEntryVisible())) {
+            journalFragment.showEntryList()
+        } else {
+            super.onBackPressed()
+        }
+    }
+
     companion object {
         private const val TAG = "MainActivity"
+        private val homeFragment = HomeFragment()
+        private val journalFragment = JournalFragment()
+        private val profileFragment = ProfileFragment()
 
         fun launchMainActivityAsFreshStart(activity: Activity) {
             val intent = Intent(activity, MainActivity::class.java)
@@ -84,5 +95,4 @@ class MainActivity : AppIntro() {
             activity.finish()
         }
     }
-
 }

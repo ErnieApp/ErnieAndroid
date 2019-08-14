@@ -31,23 +31,9 @@ class MainActivity : AppIntro() {
         showPagerIndicator(false)
         showSkipButton(false)
 
-        home.setOnClickListener {
-            clearSelectedButton()
-            home.setImageResource(R.drawable.ic_home_blue_24dp)
-            pager.setCurrentItem(0, true)
-        }
-
-        journal.setOnClickListener {
-            clearSelectedButton()
-            journal.setImageResource(R.drawable.ic_dashboard_blue_24dp)
-            pager.setCurrentItem(1, true)
-        }
-
-        profile.setOnClickListener {
-            clearSelectedButton()
-            profile.setImageResource(R.drawable.ic_notifications_blue_24dp)
-            pager.setCurrentItem(2, true)
-        }
+        home.setOnClickListener { pager.setCurrentItem(0, true) }
+        journal.setOnClickListener { pager.setCurrentItem(1, true) }
+        profile.setOnClickListener { pager.setCurrentItem(2, true) }
 
         pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {}

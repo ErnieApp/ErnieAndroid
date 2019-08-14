@@ -15,16 +15,6 @@ import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import kotlinx.android.synthetic.main.fragment_home.*
 
-
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-
-private const val TAG = "HomeFragment"
-/**
- * A simple [Fragment] subclass.
- *
- */
 class HomeFragment : Fragment() {
 
 
@@ -32,30 +22,21 @@ class HomeFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val appDatabase = AppDatabase()
         currentListOfEntries = appDatabase.getEntries()
-
-
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupPieChart()
-
     }
 
     private fun setupPieChart() {
 
         Log.d(TAG, "addDataSet started")
-
-
         val entries = ArrayList<PieEntry>()
 
         entries.add(PieEntry(8f, 0))
@@ -73,9 +54,10 @@ class HomeFragment : Fragment() {
         val data = PieData(pieDataSet)
 
         pieChart.data = data
-
-
     }
 
-
+    companion object {
+        private const val TAG = "HomeFragment"
+        private val appDatabase = AppDatabase()
+    }
 }

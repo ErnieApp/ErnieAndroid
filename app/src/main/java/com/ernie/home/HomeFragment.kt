@@ -64,49 +64,10 @@ class HomeFragment : Fragment() {
         // Count down interval 1 second
         val countDownInterval: Long = 1000
 
-
         timer(millisInFuture, countDownInterval).start()
 
-
     }
 
-    // Method to configure and return an instance of CountDownTimer object
-    private fun timer(millisInFuture: Long, countDownInterval: Long): CountDownTimer {
-        return object : CountDownTimer(millisInFuture, countDownInterval) {
-            override fun onTick(millisUntilFinished: Long) {
-                val timeRemaining = timeString(millisUntilFinished)
-                days_left_textview.text = timeRemaining
-            }
-
-            override fun onFinish() {
-                days_left_textview.text = "Done"
-
-            }
-        }
-    }
-
-
-    // Method to get days hours minutes seconds from milliseconds
-    private fun timeString(millisUntilFinished: Long): String {
-        var millisUntilFinished: Long = millisUntilFinished
-        val days = TimeUnit.MILLISECONDS.toDays(millisUntilFinished)
-        millisUntilFinished -= TimeUnit.DAYS.toMillis(days)
-
-        val hours = TimeUnit.MILLISECONDS.toHours(millisUntilFinished)
-        millisUntilFinished -= TimeUnit.HOURS.toMillis(hours)
-
-        val minutes = TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished)
-        millisUntilFinished -= TimeUnit.MINUTES.toMillis(minutes)
-
-        val seconds = TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished)
-
-        // Format the string
-        return String.format(
-                Locale.getDefault(),
-                "%02d day: %02d hour: %02d min: %02d sec",
-                days, hours, minutes, seconds
-        )
-    }
 
 
     private fun setUpPayDayDate() {
@@ -181,5 +142,46 @@ class HomeFragment : Fragment() {
 
     }
 
+
+    //Utility function
+
+
+    // Method to configure and return an instance of CountDownTimer object
+    private fun timer(millisInFuture: Long, countDownInterval: Long): CountDownTimer {
+        return object : CountDownTimer(millisInFuture, countDownInterval) {
+            override fun onTick(millisUntilFinished: Long) {
+                val timeRemaining = timeString(millisUntilFinished)
+                days_left_textview.text = timeRemaining
+            }
+
+            override fun onFinish() {
+                days_left_textview.text = "Done"
+
+            }
+        }
+    }
+
+
+    // Method to get days hours minutes seconds from milliseconds
+    private fun timeString(millisUntilFinished: Long): String {
+        var millisUntilFinished: Long = millisUntilFinished
+        val days = TimeUnit.MILLISECONDS.toDays(millisUntilFinished)
+        millisUntilFinished -= TimeUnit.DAYS.toMillis(days)
+
+        val hours = TimeUnit.MILLISECONDS.toHours(millisUntilFinished)
+        millisUntilFinished -= TimeUnit.HOURS.toMillis(hours)
+
+        val minutes = TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished)
+        millisUntilFinished -= TimeUnit.MINUTES.toMillis(minutes)
+
+        val seconds = TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished)
+
+        // Format the string
+        return String.format(
+                Locale.getDefault(),
+                "%02d day: %02d hour: %02d min: %02d sec",
+                days, hours, minutes, seconds
+        )
+    }
 
 }

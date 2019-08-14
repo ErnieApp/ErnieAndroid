@@ -33,7 +33,7 @@ class HomeFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val appDatabase = AppDatabase.newInstance()
+        val appDatabase = AppDatabase()
         currentListOfEntries = appDatabase.getEntries()
 
 

@@ -19,7 +19,7 @@ class JournalListAddEntryFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        appDatabase = AppDatabase.newInstance()
+        appDatabase = AppDatabase()
 
     }
 

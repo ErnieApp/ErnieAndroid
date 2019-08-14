@@ -29,7 +29,7 @@ class JournalListFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view: View = inflater.inflate(R.layout.fragment_journal_list, container, false)
 
-        appDatabase = AppDatabase.newInstance()
+        appDatabase = AppDatabase()
 
         recyclerView = view.findViewById(R.id.journalRecyclerView) as RecyclerView
         recyclerView.adapter = JournalListAdapter(mutableListOf(), activity!!.applicationContext, appDatabase!!)

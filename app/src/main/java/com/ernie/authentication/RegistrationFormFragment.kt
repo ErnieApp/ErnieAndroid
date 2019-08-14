@@ -29,8 +29,6 @@ import kotlinx.android.synthetic.main.fragment_registration_form.*
 
 class RegistrationFormFragment : Fragment() {
 
-    private val appDatabase: AppDatabase = AppDatabase.newInstance()
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_registration_form, container, false)
     }
@@ -179,6 +177,7 @@ class RegistrationFormFragment : Fragment() {
 
     companion object {
         private const val REGISTER_ATTEMPT_DELAY_MILLIS: Long = 3000
+        private val appDatabase: AppDatabase = AppDatabase()
 
         fun launchRegistrationFormWithGoogleAccount(activity: FragmentActivity, credential: AuthCredential, account: GoogleSignInAccount) {
             val bundle = Bundle()

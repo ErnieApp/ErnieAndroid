@@ -3,7 +3,6 @@ package com.ernie
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.viewpager.widget.ViewPager
 import com.ernie.home.HomeFragment
 import com.ernie.journal.JournalFragment
@@ -12,15 +11,12 @@ import com.github.paolorotolo.appintro.AppIntro
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
 
-private const val TAG = "MainActivity"
-
 class MainActivity : AppIntro() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val fireAuth = FirebaseAuth.getInstance()
-
 
         if (fireAuth.currentUser == null) {
             val intent = Intent(this, IntroActivity::class.java)
@@ -54,21 +50,22 @@ class MainActivity : AppIntro() {
         }
 
         pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-
-            override fun onPageScrollStateChanged(state: Int) {
-            }
-
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-                Log.d("MERT", "position = " + position)
-                Log.d("MERT", "positionOffset = " + positionOffset)
-            }
+            override fun onPageScrollStateChanged(state: Int) {}
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
 
             override fun onPageSelected(position: Int) {
-
+                if (position == 0) {
+                    clearSelectedButton()
+                    home.setImageResource(R.drawable.ic_home_blue_24dp)
+                } else if (position == 1) {
+                    clearSelectedButton()
+                    journal.setImageResource(R.drawable.ic_dashboard_blue_24dp)
+                } else if (position == 2) {
+                    clearSelectedButton()
+                    profile.setImageResource(R.drawable.ic_notifications_blue_24dp)
+                }
             }
-
         })
-
     }
 
     private fun clearSelectedButton() {
@@ -93,6 +90,8 @@ class MainActivity : AppIntro() {
     }
 
     companion object {
+        private const val TAG = "MainActivity"
+
         fun launchMainActivityAsFreshStart(activity: Activity) {
             val intent = Intent(activity, MainActivity::class.java)
             activity.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK))

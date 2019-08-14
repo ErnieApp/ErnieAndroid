@@ -6,24 +6,15 @@ import com.ernie.model.Contract
 import com.ernie.model.Entry
 import com.ernie.model.User
 import com.google.firebase.Timestamp
-
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.*
 import kotlin.collections.ArrayList
 
-
-private const val TAG = "Database"
-
 class AppDatabase {
 
-
     private var firestoreDB = FirebaseFirestore.getInstance()
-    private var fireAuth = FirebaseAuth.getInstance()
     private val currentEntriesList = ArrayList<Entry>()
-
-
-    val currentNumberOfEntries = 0
 
     fun addUser(user: User) {
         val firestoreUser = hashMapOf(
@@ -31,13 +22,12 @@ class AppDatabase {
                 "email" to user.getEmail(),
                 "hour_rate" to user.getHourlyRate()
         )
-        // Store user in the firestore user collection
         firestoreDB.collection("users").document(fireAuth.currentUser?.uid!!).set(firestoreUser)
     }
 
     fun setContract(contract: Contract) {
         for (contractedDay in contract.getContractedDays().values) {
-            firestoreDB.collection("users").document(fireAuth.currentUser?.uid!!).collection("contract").document(contractedDay.getDay()).set(hashMapOf(
+            firestoreDB.collection("users").document(fireAuth.currentUser?.uid!!).collection("contract").document(contractedDay.getDay().toString()).set(hashMapOf(
                     "start" to contractedDay.getStartTime(),
                     "end" to contractedDay.getEndTime()
             ))
@@ -116,9 +106,8 @@ class AppDatabase {
     }
 
     companion object {
-        fun newInstance(): AppDatabase {
-            return AppDatabase()
-        }
+        private val fireAuth = FirebaseAuth.getInstance()
+        private const val TAG = "AppDatabase"
     }
 }
 

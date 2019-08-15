@@ -29,14 +29,18 @@ class HomeFragment : Fragment() {
     // Piechart entries arraylist
     private var pieEntries = ArrayList<PieEntry>()
 
-    private var previousPayDate = "Wed 11 August 2019"
-    private var upcomingPayDate = "Tue 30 August 2019"
+    private var previousPayDate = ""
+    private var upcomingPayDate = ""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         currentListOfEntries = appDatabase.getEntries()
+        previousPayDate = appDatabase.getPreviousPayDate()
+        upcomingPayDate = appDatabase.getUpcomingPayDate()
 
+        Log.d(TAG, previousPayDate)
+        Log.d(TAG, upcomingPayDate)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -65,8 +69,14 @@ class HomeFragment : Fragment() {
 
 
     private fun setUpPieChart() {
-        // SET UP DATA FOR PIECHART
-        setPieChartEntries()
+
+        if (previousPayDate == "" && upcomingPayDate == "") {
+            setUpPieChart0()
+        } else {
+            // SET UP DATA FOR PIECHART
+            setPieChartEntries1()
+        }
+
 
         // Set the piechart dataset to the piechart entries that will be displayed
         val pieDataSet = PieDataSet(pieEntries, "")
@@ -119,8 +129,19 @@ class HomeFragment : Fragment() {
 
     }
 
-    private fun setPieChartEntries() {
 
+    private fun setUpPieChart0() {
+        //Calculate the total base pay for these entries
+        var totalBasePay = 0f
+
+        // Create pie entries using 'total base pay' calculated as an entry
+        pieEntries.add(PieEntry(totalBasePay, "Base Pay"))
+        pieEntries.add(PieEntry(2f, "Commission Pay"))
+        pieEntries.add(PieEntry(5f, "Tip Pay"))
+
+    }
+
+    private fun setPieChartEntries1() {
         // Format previouspaydate and upcomingpaydate to GMT
         val dateFormat = SimpleDateFormat("EEE dd MMMM yyyy")
         val formatPreviousPayDate = dateFormat.parse(previousPayDate)

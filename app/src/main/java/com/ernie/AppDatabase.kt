@@ -11,11 +11,14 @@ import com.google.firebase.firestore.FirebaseFirestore
 class AppDatabase {
 
     private var firestoreDB = FirebaseFirestore.getInstance()
-    private val currentEntriesList = ArrayList<Entry>()
-
+    private var currentEntriesList = ArrayList<Entry>()
+    private var previousPayDateCached = ""
+    private var upcomingPayDateCached = ""
 
     constructor() {
-        loadAllEntriesFromFireStore()
+//        loadEntriesFromFireStore()
+//        loadPreviousPayDateFromFireStore()
+//        loadUpcomingPayDateFromFireStore()
     }
 
     fun addUser(user: User) {
@@ -80,7 +83,8 @@ class AppDatabase {
 
 
     //COMPLETE
-    fun loadAllEntriesFromFireStore() {
+    fun loadEntriesFromFireStore() {
+
 
         val collectionPath = "/users/" + fireAuth.currentUser?.uid!! + "/entries"
 
@@ -100,8 +104,61 @@ class AppDatabase {
     }
 
 
+    fun loadPreviousPayDateFromFireStore() {
+
+        val collectionPath = "/users/" + fireAuth.currentUser?.uid!!
+
+
+        firestoreDB.document(collectionPath)
+                .addSnapshotListener { value, e ->
+                    if (e != null) {
+                        Log.w(TAG, "Listen failed.", e)
+                        return@addSnapshotListener
+                    }
+
+                    if (value?.getString("previous_pay_date") != null) {
+                        this.previousPayDateCached = value.getString("previous_pay_date")!!
+                    }
+
+                    Log.d(TAG, previousPayDateCached)
+                }
+
+    }
+
+
+    fun loadUpcomingPayDateFromFireStore() {
+
+        val collectionPath = "/users/" + fireAuth.currentUser?.uid!!
+
+        firestoreDB.document(collectionPath)
+                .addSnapshotListener { value, e ->
+                    Log.d(TAG, "I am in loadUpcomingPayDateFromFireStore() ")
+                    if (e != null) {
+                        Log.w(TAG, "Listen failed.", e)
+                        return@addSnapshotListener
+                    }
+
+                    if (value?.getString("previous_pay_date") != null) {
+                        this.upcomingPayDateCached = value.getString("upcoming_pay_date")!!
+                    }
+
+                }
+
+    }
+    
     fun getEntries(): ArrayList<Entry> {
+        loadEntriesFromFireStore()
         return currentEntriesList
+    }
+
+    fun getPreviousPayDate(): String {
+        loadPreviousPayDateFromFireStore()
+        return previousPayDateCached
+    }
+
+    fun getUpcomingPayDate(): String {
+        loadUpcomingPayDateFromFireStore()
+        return upcomingPayDateCached
     }
 
 

@@ -90,6 +90,10 @@ class AppDatabase {
         return currentEntriesList
     }
 
+    fun addPayDates(toString: String, toString1: String) {
+
+    }
+
     companion object {
         private val fireAuth = FirebaseAuth.getInstance()
         private const val TAG = "AppDatabase"

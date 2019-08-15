@@ -30,7 +30,7 @@ class HomeFragment : Fragment() {
     private var pieEntries = ArrayList<PieEntry>()
 
     private var previousPayDate = "Wed 11 August 2019"
-    private var upComingPayDate = "Tue 30 August 2019"
+    private var upcomingPayDate = "Tue 30 August 2019"
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -125,12 +125,11 @@ class HomeFragment : Fragment() {
         // Format previouspaydate and upcomingpaydate to GMT
         val dateFormat = SimpleDateFormat("EEE dd MMMM yyyy")
         val formatPreviousPayDate = dateFormat.parse(previousPayDate)
-        val formatUpComingPayDate = dateFormat.parse(upComingPayDate)
-
+        val formatUpcomingPayDate = dateFormat.parse(upcomingPayDate)
 
         // Create collection of dates between previouspaydate and upcomingpaydate
         var lastDate = Calendar.getInstance()
-        lastDate.time = formatUpComingPayDate
+        lastDate.time = formatUpcomingPayDate
         lastDate.add(Calendar.DATE, -1)
 
         var cal = Calendar.getInstance()

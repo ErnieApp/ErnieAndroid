@@ -40,6 +40,12 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        btnAddToPayDates.setOnClickListener {
+            appDatabase?.addPayDates(previousPayDateEditTextField.text.toString(), upcomingPayDateEditTextField.text.toString())
+            clearFields()
+            activity!!.onBackPressed()
+        }
+
 
         btnLogOut.setOnClickListener {
             signOut()
@@ -58,6 +64,17 @@ class ProfileFragment : Fragment() {
                 }
     }
 
+
+    private fun clearFields() {
+        upcomingPayDateEditTextField.text.clear()
+        previousPayDateEditTextField.text.clear()
+
+    }
+
+    companion object {
+        private const val TAG = "ProfileFragment"
+        private val appDatabase: AppDatabase? = AppDatabase()
+    }
 
 
 

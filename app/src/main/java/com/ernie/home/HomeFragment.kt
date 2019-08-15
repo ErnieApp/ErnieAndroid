@@ -121,7 +121,6 @@ class HomeFragment : Fragment() {
 
     private fun setPieChartEntries() {
 
-
         // Format previouspaydate and upcomingpaydate to GMT
         val dateFormat = SimpleDateFormat("EEE dd MMMM yyyy")
         val formatPreviousPayDate = dateFormat.parse(previousPayDate)

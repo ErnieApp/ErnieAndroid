@@ -17,6 +17,7 @@ class AppDatabase {
     constructor() {
         loadAllEntriesFromFireStore()
     }
+
     fun addUser(user: User) {
         val firestoreUser = hashMapOf(
                 "name" to user.name,
@@ -65,6 +66,19 @@ class AppDatabase {
                 .addOnFailureListener { e -> Log.w(TAG, "Error deleting document", e) }
     }
 
+
+    fun addPayDates(previousPayDateUserInput: String, upcomingPayDateUserInput: String) {
+        Log.d(TAG, "Stored previous paydate in firestore")
+        val firestorePayDates = hashMapOf(
+                "previous_pay_date" to previousPayDateUserInput,
+                "upcoming_pay_date" to upcomingPayDateUserInput
+        )
+        // Store entry in the firestore entry collection
+        firestoreDB.collection("users").document(fireAuth.currentUser?.uid!!).set(firestorePayDates)
+
+    }
+
+
     //COMPLETE
     fun loadAllEntriesFromFireStore() {
 
@@ -90,12 +104,37 @@ class AppDatabase {
         return currentEntriesList
     }
 
-    fun addPayDates(toString: String, toString1: String) {
-
-    }
 
     companion object {
         private val fireAuth = FirebaseAuth.getInstance()
         private const val TAG = "AppDatabase"
     }
+
+
+    //    fun addPreviousPayDate(previousPayDateUserInput: String) {
+//
+//
+//        val currentUpComingDate = firestoreDB.collection("users").document(fireAuth.currentUser?.uid!!).get("upcoming_pay_date")
+//
+//        // Create a new entry store it in a hashmap
+//        val firestorePreviousPayDates = hashMapOf(
+//                "previous_pay_date" to previousPayDateUserInput
+//                "upcoming_pay_date" to
+//        )
+//        // Store entry in the firestore entry collection
+//        firestoreDB.collection("users").document(fireAuth.currentUser?.uid!!).set(firestorePreviousPayDates)
+//        Log.d(TAG, "Stored previous paydate in firestore")
+//    }
+//
+//    fun addUpcomingPayDate(upcomingPayDateUserInput: String) {
+//        // Create a new entry store it in a hashmap
+//        val firestoreUpcomingPayDates = hashMapOf(
+//                "upcoming_pay_date" to upcomingPayDateUserInput
+//        )
+//        // Store entry in the firestore entry collection
+//        firestoreDB.collection("users").document(fireAuth.currentUser?.uid!!).
+//
+//                set(firestoreUpcomingPayDates)
+//        Log.d(TAG, "Stored upcoming paydate in firestore")
+//    }
 }

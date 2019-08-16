@@ -51,6 +51,6 @@ class JournalListAdapter(private var entryList: MutableList<Entry>, private val 
     }
 
     companion object {
-        private const val TAG = "JournalListAdapter"
+        private val TAG = JournalListAdapter::class.simpleName
     }
 }

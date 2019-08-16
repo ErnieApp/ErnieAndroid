@@ -187,7 +187,7 @@ class SignUpFragment : Fragment() {
 
     companion object {
         private const val RC_GOOGLE_SIGN_IN = 444
-        private const val TAG = "SignUpFragment"
+        private val TAG = SignUpFragment::class.simpleName
         private val fireAuth: FirebaseAuth = FirebaseAuth.getInstance()
 
         fun launchSignUp(activity: FragmentActivity) {

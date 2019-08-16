@@ -137,7 +137,7 @@ class JournalListAddEntryFragment : Fragment() {
     }
 
     companion object {
-        private const val TAG = "JournalListAddEntryFragment"
+        private val TAG = JournalListAddEntryFragment::class.simpleName
         private val appDatabase: AppDatabase? = AppDatabase()
     }
 }

@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.ernie.AppDatabase
 import com.ernie.IntroActivity
 import com.ernie.R
 import com.firebase.ui.auth.AuthUI
@@ -23,7 +22,7 @@ private const val ARG_PARAM2 = "param2"
  * A simple [Fragment] subclass.
  *
  */
-private const val TAG = "ProfileFragment"
+private val TAG = ProfileFragment::class.simpleName
 
 
 

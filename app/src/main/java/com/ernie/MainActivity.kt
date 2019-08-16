@@ -84,7 +84,7 @@ class MainActivity : AppIntro() {
     }
 
     companion object {
-        private const val TAG = "MainActivity"
+        private val TAG = MainActivity::class.simpleName
         private val homeFragment = HomeFragment()
         private val journalFragment = JournalFragment()
         private val profileFragment = ProfileFragment()

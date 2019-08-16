@@ -85,6 +85,6 @@ class AppDatabase {
 
     companion object {
         private val fireAuth = FirebaseAuth.getInstance()
-        private const val TAG = "AppDatabase"
+        private val TAG = AppDatabase::class.simpleName
     }
 }

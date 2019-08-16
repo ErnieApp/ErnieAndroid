@@ -68,7 +68,7 @@ class JournalFragment : Fragment() {
     }
 
     companion object {
-        private const val TAG = "JournalFragment"
+        private val TAG = JournalFragment::class.simpleName
         private val journalListAddEntryFragment = JournalListAddEntryFragment()
         private val journalListFragment = JournalListFragment()
         private val journalListExpandedEntryFragment = JournalListExpandedEntryFragment()

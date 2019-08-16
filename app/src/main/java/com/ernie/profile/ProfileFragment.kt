@@ -121,9 +121,11 @@ class ProfileFragment : Fragment() {
 
     @SuppressLint("SimpleDateFormat")
     private fun formatDate(date: String): String {
-        val formatTo = SimpleDateFormat("EEE dd MMMM yyyy")
+
         val formatFrom = SimpleDateFormat("dd/MM/yyyy")
         val formattedFromDate = formatFrom.parse(date)
+
+        val formatTo = SimpleDateFormat("EEE dd MMMM yyyy")
         val formattedToDate = formatTo.format(formattedFromDate)
 
         return formattedToDate

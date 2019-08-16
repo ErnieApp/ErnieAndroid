@@ -30,7 +30,7 @@ class HomeFragment : Fragment() {
 
     // Piechart entries arraylist
     private var pieEntries = ArrayList<PieEntry>()
-    
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         currentListOfEntries = appDatabase.getEntries()
@@ -55,14 +55,32 @@ class HomeFragment : Fragment() {
 
 
     private fun setUpPayDayTimer() {
+        val myFormat = SimpleDateFormat("EEE dd MMMM yyyy")
+
+        try {
+            val dateBefore = myFormat.parse(previousPayDate)
+            val dateAfter = myFormat.parse(upcomingPayDate)
+            val difference = dateAfter.time - dateBefore.time
+            val daysBetween = (difference / (1000 * 60 * 60 * 24)).toString()
+            /* You can also convert the milliseconds to days using this method
+                * float daysBetween =
+                *         TimeUnit.DAYS.convert(difference, TimeUnit.MILLISECONDS)
+                */
+            val stringToSet = daysBetween + " days left"
+
+            days_left_textview.text = stringToSet
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+
+
 
     }
 
 
     private fun setUpPayDayDate() {
-        val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
-        val currentDate = sdf.format(Date())
-        payday_date_textview.text = currentDate
+        payday_date_textview.text = upcomingPayDate
     }
 
 

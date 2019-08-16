@@ -1,7 +1,6 @@
 package com.ernie.profile
 
 
-import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
@@ -63,7 +62,6 @@ class ProfileFragment : Fragment() {
     }
 
 
-    @SuppressLint("SimpleDateFormat")
     private fun setupDateFieldOnClickListener() {
 
         previousPayDateEditTextField.setOnClickListener {

@@ -25,7 +25,9 @@ class AppDatabase {
         val firestoreUser = hashMapOf(
                 "name" to user.name,
                 "email" to user.email,
-                "hourly_rate" to user.hourly_rate
+                "hourly_rate" to user.hourly_rate,
+                "previous_pay_date" to user.previousPayDate,
+                "upcoming_pay_date" to user.upcomingPayDate
         )
         firestoreDB.collection("users").document(fireAuth.currentUser?.uid!!).set(firestoreUser)
     }
@@ -145,7 +147,7 @@ class AppDatabase {
                 }
 
     }
-    
+
     fun getEntries(): ArrayList<Entry> {
         loadEntriesFromFireStore()
         return currentEntriesList

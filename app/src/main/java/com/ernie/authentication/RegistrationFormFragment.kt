@@ -1,5 +1,6 @@
 package com.ernie.authentication
 
+import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.graphics.PorterDuff
 import android.os.Bundle
@@ -10,6 +11,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.DatePicker
 import android.widget.EditText
 import android.widget.Switch
 import android.widget.TimePicker
@@ -28,6 +30,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_registration_form.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 class RegistrationFormFragment : Fragment() {
 
@@ -39,9 +43,10 @@ class RegistrationFormFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         val bundle = this.arguments
 
+        setupPayDateFieldOnClickListener()
+
         val contractHourFields = listOf(monStartTime, monEndTime, tueStartTime, tueEndTime, wedStartTime, wedEndTime,
                 thuStartTime, thuEndTime, friStartTime, friEndTime, satStartTime, satEndTime, sunStartTime, sunEndTime)
-
         val contractDaySwitches = listOf(monSwitch, tueSwitch, wedSwitch, thuSwitch, friSwitch, satSwitch, sunSwitch)
 
         setupContractHourFieldsListeners(contractHourFields)
@@ -69,7 +74,9 @@ class RegistrationFormFragment : Fragment() {
     private fun addUserToFireAuthWithEmailAndPassword(fireAuth: FirebaseAuth, bundle: Bundle) {
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(bundle.getString("userEmail")!!, bundle.getString("userPassword")!!)
                 .addOnSuccessListener {
-                    appDatabase.addUser(User(bundle.getString("userName")!!, bundle.getString("userEmail")!!, hourlyRate.text.toString()))
+                    val previousPayDate = formatDate(previousPayDateRegistrationEditText.text.toString())
+                    val upcomingPayDate = formatDate(upcomingPayDateRegistrationEditText.text.toString())
+                    appDatabase.addUser(User(bundle.getString("userName")!!, bundle.getString("userEmail")!!, hourlyRate.text.toString(), previousPayDate, upcomingPayDate))
                     updateContract()
                     MainActivity.launchMainActivityAsFreshStart(activity!!)
                 }
@@ -84,7 +91,9 @@ class RegistrationFormFragment : Fragment() {
 
         fireAuth.signInWithCredential(bundle.getParcelable("credential")!!)
                 .addOnSuccessListener {
-                    appDatabase.addUser(User(userAccount.displayName!!, userAccount.email!!, hourlyRate.text.toString()))
+                    val previousPayDate = formatDate(previousPayDateRegistrationEditText.text.toString())
+                    val upcomingPayDate = formatDate(upcomingPayDateRegistrationEditText.text.toString())
+                    appDatabase.addUser(User(userAccount.displayName!!, userAccount.email!!, hourlyRate.text.toString(), previousPayDate, upcomingPayDate))
                     updateContract()
                     MainActivity.launchMainActivityAsFreshStart(activity!!)
                 }
@@ -107,6 +116,11 @@ class RegistrationFormFragment : Fragment() {
     private fun hasUserFilledOutForm(contractDaySwitches: List<Switch>, contractHourFields: List<EditText>): Boolean {
         var hasUserFilledOutForm = true
 
+        if (previousPayDateRegistrationEditText.text.toString() == "" && upcomingPayDateRegistrationEditText.text.toString() == "") {
+            hasUserFilledOutForm = false
+            return hasUserFilledOutForm
+        }
+
         for (i in 0 until contractDaySwitches.size) {
             if (contractDaySwitches[i].isChecked) {
                 if (contractHourFields[i * 2].text.isBlank()) {
@@ -122,6 +136,47 @@ class RegistrationFormFragment : Fragment() {
         }
         return hasUserFilledOutForm
     }
+
+
+    private fun setupPayDateFieldOnClickListener() {
+
+        previousPayDateRegistrationEditText.setOnClickListener {
+            // Launch Date Picker Dialog
+            val calendar = Calendar.getInstance()
+
+            val datePickerDialog1 = DatePickerDialog(activity!!,
+                    DatePickerDialog.OnDateSetListener { _: DatePicker, year: Int, monthOfYear: Int, dayOfMonth: Int ->
+                        var month = monthOfYear.toString()
+                        var day = dayOfMonth.toString()
+
+                        if (month.length == 1) month = "0$month"
+                        if (day.length == 1) day = "0$day"
+
+                        previousPayDateRegistrationEditText.setText(day + "/" + month + "/" + year.toString())
+                    }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
+            datePickerDialog1.show()
+        }
+
+        upcomingPayDateRegistrationEditText.setOnClickListener {
+            // Launch Date Picker Dialog
+            val calendar = Calendar.getInstance()
+
+            val datePickerDialog2 = DatePickerDialog(activity!!,
+                    DatePickerDialog.OnDateSetListener { _: DatePicker, year: Int, monthOfYear: Int, dayOfMonth: Int ->
+                        var month = monthOfYear.toString()
+                        var day = dayOfMonth.toString()
+
+                        if (month.length == 1) month = "0$month"
+                        if (day.length == 1) day = "0$day"
+
+                        upcomingPayDateRegistrationEditText.setText(day + "/" + month + "/" + year.toString())
+                    }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
+            datePickerDialog2.show()
+        }
+
+
+    }
+
 
     private fun setupContractHourFieldsListeners(contractHourFields: List<EditText>) {
         for (field in contractHourFields) {
@@ -192,6 +247,16 @@ class RegistrationFormFragment : Fragment() {
         if (satSwitch.isChecked) contract.addContractedDay(ContractedDay(Day.Saturday, satStartTime.text.toString(), satEndTime.text.toString()))
         if (sunSwitch.isChecked) contract.addContractedDay(ContractedDay(Day.Sunday, sunStartTime.text.toString(), sunEndTime.text.toString()))
         appDatabase.setContract(contract)
+    }
+
+
+    private fun formatDate(date: String): String {
+        val formatTo = SimpleDateFormat("EEE dd MMMM yyyy")
+        val formatFrom = SimpleDateFormat("dd/MM/yyyy")
+        val formattedFromDate = formatFrom.parse(date)
+        val formattedToDate = formatTo.format(formattedFromDate)
+
+        return formattedToDate
     }
 
     companion object {

@@ -24,8 +24,6 @@ import kotlin.collections.ArrayList
 
 class HomeFragment : Fragment() {
 
-
-    private var counter = 0
     private lateinit var previousPayDate: String
     private lateinit var upcomingPayDate: String
     private lateinit var currentListOfEntries: ArrayList<Entry>
@@ -57,12 +55,13 @@ class HomeFragment : Fragment() {
 
     //COMPLETE
     private fun setUpPayDayTimer() {
-        val myFormat = SimpleDateFormat("EEE dd MMMM yyyy")
+        val formatter = SimpleDateFormat("EEE dd MMMM yyyy")
 
         try {
+            //Create date objects
+            val dateBefore = formatter.parse(previousPayDate)
+            val dateAfter = formatter.parse(upcomingPayDate)
             //Calculate the number of days before the dates
-            val dateBefore = myFormat.parse(previousPayDate)
-            val dateAfter = myFormat.parse(upcomingPayDate)
             val difference = dateAfter.time - dateBefore.time
             val daysBetween = (difference / (1000 * 60 * 60 * 24)).toString()
 
@@ -73,9 +72,6 @@ class HomeFragment : Fragment() {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-
-        counter++
-        Log.d(TAG, "How many times am i called? " + counter)
 
     }
 

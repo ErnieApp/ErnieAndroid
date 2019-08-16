@@ -30,7 +30,7 @@ private const val ARG_PARAM2 = "param2"
  */
 private const val TAG = "ProfileFragment"
 
-
+@SuppressLint("SimpleDateFormat")
 class ProfileFragment : Fragment() {
 
 
@@ -50,9 +50,12 @@ class ProfileFragment : Fragment() {
         setupDateFieldOnClickListener()
 
         btnAddToPayDates.setOnClickListener {
-            appDatabase.updatePayDates(previousPayDateProfileEditText.text.toString(), upcomingPayDateProfileEditText.text.toString())
+            if (isFormValid()) {
+                appDatabase.updatePayDates(previousPayDateProfileEditText.text.toString(), upcomingPayDateProfileEditText.text.toString())
+            } else {
+                previousPayDateProfileEditText.error = "This field is incorrect."
 
-            activity!!.onBackPressed()
+            }
         }
 
 
@@ -67,6 +70,7 @@ class ProfileFragment : Fragment() {
     private fun setupDateFieldOnClickListener() {
 
         previousPayDateProfileEditText.setOnClickListener {
+            previousPayDateProfileEditText.error = null
             // Launch Date Picker Dialog
             val calendar = Calendar.getInstance()
 
@@ -79,14 +83,13 @@ class ProfileFragment : Fragment() {
                         if (day.length == 1) day = "0$day"
 
                         val formattedPreviousPayDate = formatDate(day + "/" + month + "/" + year.toString())
-
-
                         previousPayDateProfileEditText.setText(formattedPreviousPayDate)
                     }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
             datePickerDialog1.show()
         }
 
         upcomingPayDateProfileEditText.setOnClickListener {
+
             // Launch Date Picker Dialog
             val calendar = Calendar.getInstance()
 
@@ -99,13 +102,10 @@ class ProfileFragment : Fragment() {
                         if (day.length == 1) day = "0$day"
 
                         val formattedPreviousPayDate = formatDate(day + "/" + month + "/" + year.toString())
-
                         upcomingPayDateProfileEditText.setText(formattedPreviousPayDate)
                     }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
             datePickerDialog2.show()
         }
-
-
     }
 
 
@@ -119,7 +119,6 @@ class ProfileFragment : Fragment() {
     }
 
 
-    @SuppressLint("SimpleDateFormat")
     private fun formatDate(date: String): String {
 
         val formatFrom = SimpleDateFormat("dd/MM/yyyy")
@@ -131,6 +130,31 @@ class ProfileFragment : Fragment() {
         return formattedToDate
     }
 
+
+    private fun calcNumDaysBetweenDates(previousPayDate: String, upcomingPayDate: String): Long {
+
+        val formatter = SimpleDateFormat("EEE dd MMMM yyyy")
+
+        try {
+            //Create date objects
+            val dateBefore = formatter.parse(previousPayDate)
+            val dateAfter = formatter.parse(upcomingPayDate)
+            //Calculate the number of days before the dates
+            val difference = dateAfter.time - dateBefore.time
+            val daysBetween = (difference / (1000 * 60 * 60 * 24))
+
+            return daysBetween
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return 0
+
+    }
+
+    private fun isFormValid(): Boolean {
+        return calcNumDaysBetweenDates(previousPayDateProfileEditText.text.toString(), upcomingPayDateProfileEditText.text.toString()) > 0
+    }
 
     companion object {
         private const val TAG = "ProfileFragment"

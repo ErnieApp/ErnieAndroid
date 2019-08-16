@@ -163,32 +163,4 @@ class AppDatabase {
         private val fireAuth = FirebaseAuth.getInstance()
         private const val TAG = "AppDatabase"
     }
-
-
-    //    fun addPreviousPayDate(previousPayDateUserInput: String) {
-//
-//
-//        val currentUpComingDate = firestoreDB.collection("users").document(fireAuth.currentUser?.uid!!).get("upcoming_pay_date")
-//
-//        // Create a new entry store it in a hashmap
-//        val firestorePreviousPayDates = hashMapOf(
-//                "previous_pay_date" to previousPayDateUserInput
-//                "upcoming_pay_date" to
-//        )
-//        // Store entry in the firestore entry collection
-//        firestoreDB.collection("users").document(fireAuth.currentUser?.uid!!).set(firestorePreviousPayDates)
-//        Log.d(TAG, "Stored previous paydate in firestore")
-//    }
-//
-//    fun addUpcomingPayDate(upcomingPayDateUserInput: String) {
-//        // Create a new entry store it in a hashmap
-//        val firestoreUpcomingPayDates = hashMapOf(
-//                "upcoming_pay_date" to upcomingPayDateUserInput
-//        )
-//        // Store entry in the firestore entry collection
-//        firestoreDB.collection("users").document(fireAuth.currentUser?.uid!!).
-//
-//                set(firestoreUpcomingPayDates)
-//        Log.d(TAG, "Stored upcoming paydate in firestore")
-//    }
 }

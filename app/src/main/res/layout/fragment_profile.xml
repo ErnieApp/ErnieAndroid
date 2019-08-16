@@ -24,7 +24,7 @@
             android:layout_height="wrap_content" />
 
         <EditText
-            android:id="@+id/previousPayDateEditTextField"
+            android:id="@+id/previousPayDateProfileEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -35,7 +35,7 @@
             android:textSize="20sp" />
 
         <EditText
-            android:id="@+id/upcomingPayDateEditTextField"
+            android:id="@+id/upcomingPayDateProfileEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"

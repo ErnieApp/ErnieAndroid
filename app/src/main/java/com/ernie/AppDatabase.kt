@@ -16,9 +16,9 @@ class AppDatabase {
     private var upcomingPayDateCached = ""
 
     constructor() {
-//        loadEntriesFromFireStore()
-//        loadPreviousPayDateFromFireStore()
-//        loadUpcomingPayDateFromFireStore()
+        loadEntriesFromFireStore()
+        loadPreviousPayDateFromFireStore()
+        loadUpcomingPayDateFromFireStore()
     }
 
     fun addUser(user: User) {
@@ -72,7 +72,7 @@ class AppDatabase {
     }
 
 
-    fun addPayDates(previousPayDateUserInput: String, upcomingPayDateUserInput: String) {
+    fun updatePayDates(previousPayDateUserInput: String, upcomingPayDateUserInput: String) {
         val userEntryFieldsRef = firestoreDB.collection("users").document(fireAuth.currentUser?.uid!!)
 
         userEntryFieldsRef
@@ -133,7 +133,6 @@ class AppDatabase {
 
         firestoreDB.document(collectionPath)
                 .addSnapshotListener { value, e ->
-                    Log.d(TAG, "I am in loadUpcomingPayDateFromFireStore() ")
                     if (e != null) {
                         Log.w(TAG, "Listen failed.", e)
                         return@addSnapshotListener
@@ -148,17 +147,14 @@ class AppDatabase {
     }
 
     fun getEntries(): ArrayList<Entry> {
-        loadEntriesFromFireStore()
         return currentEntriesList
     }
 
     fun getPreviousPayDate(): String {
-        loadPreviousPayDateFromFireStore()
         return previousPayDateCached
     }
 
     fun getUpcomingPayDate(): String {
-        loadUpcomingPayDateFromFireStore()
         return upcomingPayDateCached
     }
 

@@ -24,15 +24,13 @@ import kotlin.collections.ArrayList
 class HomeFragment : Fragment() {
 
 
+    private lateinit var previousPayDate: String
+    private lateinit var upcomingPayDate: String
     private lateinit var currentListOfEntries: ArrayList<Entry>
 
     // Piechart entries arraylist
     private var pieEntries = ArrayList<PieEntry>()
-
-    private var previousPayDate = ""
-    private var upcomingPayDate = ""
-
-
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         currentListOfEntries = appDatabase.getEntries()

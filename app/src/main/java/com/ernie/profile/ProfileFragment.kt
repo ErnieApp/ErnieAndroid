@@ -1,6 +1,7 @@
 package com.ernie.profile
 
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
@@ -43,13 +44,14 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        previousPayDateProfileEditText.setText(appDatabase!!.getPreviousPayDate())
+        upcomingPayDateProfileEditText.setText(appDatabase.getUpcomingPayDate())
+
         setupDateFieldOnClickListener()
 
         btnAddToPayDates.setOnClickListener {
-            val previousPayDate = previousPayDateEditTextField.text.toString()
-            val upcomingPayDate = upcomingPayDateEditTextField.text.toString()
-            appDatabase!!.addPayDates(formatDate(previousPayDate), formatDate(upcomingPayDate))
-            clearFields()
+            appDatabase.updatePayDates(previousPayDateProfileEditText.text.toString(), upcomingPayDateProfileEditText.text.toString())
+
             activity!!.onBackPressed()
         }
 
@@ -64,7 +66,7 @@ class ProfileFragment : Fragment() {
 
     private fun setupDateFieldOnClickListener() {
 
-        previousPayDateEditTextField.setOnClickListener {
+        previousPayDateProfileEditText.setOnClickListener {
             // Launch Date Picker Dialog
             val calendar = Calendar.getInstance()
 
@@ -76,14 +78,15 @@ class ProfileFragment : Fragment() {
                         if (month.length == 1) month = "0$month"
                         if (day.length == 1) day = "0$day"
 
+                        val formattedPreviousPayDate = formatDate(day + "/" + month + "/" + year.toString())
 
 
-                        previousPayDateEditTextField.setText(day + "/" + month + "/" + year.toString())
+                        previousPayDateProfileEditText.setText(formattedPreviousPayDate)
                     }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
             datePickerDialog1.show()
         }
 
-        upcomingPayDateEditTextField.setOnClickListener {
+        upcomingPayDateProfileEditText.setOnClickListener {
             // Launch Date Picker Dialog
             val calendar = Calendar.getInstance()
 
@@ -95,8 +98,9 @@ class ProfileFragment : Fragment() {
                         if (month.length == 1) month = "0$month"
                         if (day.length == 1) day = "0$day"
 
-                        upcomingPayDateEditTextField.setText(day + "/" + month + "/" + year.toString())
+                        val formattedPreviousPayDate = formatDate(day + "/" + month + "/" + year.toString())
 
+                        upcomingPayDateProfileEditText.setText(formattedPreviousPayDate)
                     }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
             datePickerDialog2.show()
         }
@@ -115,12 +119,7 @@ class ProfileFragment : Fragment() {
     }
 
 
-    private fun clearFields() {
-        upcomingPayDateEditTextField.text.clear()
-        previousPayDateEditTextField.text.clear()
-
-    }
-
+    @SuppressLint("SimpleDateFormat")
     private fun formatDate(date: String): String {
         val formatTo = SimpleDateFormat("EEE dd MMMM yyyy")
         val formatFrom = SimpleDateFormat("dd/MM/yyyy")

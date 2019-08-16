@@ -25,6 +25,7 @@ import kotlin.collections.ArrayList
 class HomeFragment : Fragment() {
 
 
+    private var counter = 0
     private lateinit var previousPayDate: String
     private lateinit var upcomingPayDate: String
     private lateinit var currentListOfEntries: ArrayList<Entry>
@@ -38,9 +39,6 @@ class HomeFragment : Fragment() {
         previousPayDate = appDatabase.getPreviousPayDate()
         upcomingPayDate = appDatabase.getUpcomingPayDate()
 
-        for (item in currentListOfEntries) {
-            Log.d(TAG, item.id + " is created")
-        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -49,6 +47,8 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        pieEntries.clear()
         setUpPayDayTimer()
         setUpPayDayDate()
         setUpPieChart()
@@ -74,10 +74,14 @@ class HomeFragment : Fragment() {
             e.printStackTrace()
         }
 
+        counter++
+        Log.d(TAG, "How many times am i called? " + counter)
+
     }
 
     //COMPLETE
     private fun setUpPayDayDate() {
+
         payday_date_textview.text = upcomingPayDate
     }
 
@@ -93,16 +97,16 @@ class HomeFragment : Fragment() {
         //Set the piedata to the data that will be rendered to the view
         val data = PieData(pieDataSet)
 
-        pieChart.data = data
+        pie_chart_view.data = data
         //Set text size for values on piechart
-        pieChart.data.setValueTextSize(20f)
+        pie_chart_view.data.setValueTextSize(20f)
 
         // Hide values of the piechart
 //        pieChart.data.dataSet.setDrawValues(false)
-        pieChart.setDrawEntryLabels(false)
+        pie_chart_view.setDrawEntryLabels(false)
 
         // SET UP KEY FOR PIECHART
-        val legend = pieChart.legend
+        val legend = pie_chart_view.legend
         legend.verticalAlignment = Legend.LegendVerticalAlignment.CENTER
         legend.horizontalAlignment = Legend.LegendHorizontalAlignment.RIGHT
         legend.orientation = Legend.LegendOrientation.VERTICAL
@@ -125,22 +129,22 @@ class HomeFragment : Fragment() {
 
         // Set piechart center text
         var currentTotalAmountEarned = 100
-        pieChart.centerText = "£" + currentTotalAmountEarned
-        pieChart.setCenterTextSize(14f)
-        pieChart.setCenterTextColor(Color.BLUE)
+        pie_chart_view.centerText = "£" + currentTotalAmountEarned
+        pie_chart_view.setCenterTextSize(14f)
+        pie_chart_view.setCenterTextColor(Color.BLUE)
 
         //Hide default description text
-        pieChart.description.isEnabled = false
+        pie_chart_view.description.isEnabled = false
 
         //Set initial animation speed
-        pieChart.animateXY(5000, 500)
+//        pie_chart_view.animateXY(5000, 500)
 
 
     }
 
     @SuppressLint("SimpleDateFormat")
     private fun setPieChartEntries() {
-        // Format previouspaydate and upcomingpaydate to GMT
+        // Create date objects from the previous/upcoming dates strings
         val dateFormat = SimpleDateFormat("EEE dd MMMM yyyy")
         val formatPreviousPayDate = dateFormat.parse(previousPayDate)
         val formatUpcomingPayDate = dateFormat.parse(upcomingPayDate)
@@ -179,7 +183,7 @@ class HomeFragment : Fragment() {
 
         for (entry in entriesBetweenDates) {
             totalBasePay += entry.earned!!.toFloat()
-            
+
         }
 
         // Create pie entries using 'total base pay' calculated as an entry
@@ -189,13 +193,17 @@ class HomeFragment : Fragment() {
 
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+
+        Log.d(TAG, "View is broke")
+
+    }
 
     companion object {
         private const val TAG = "HomeFragment"
         private val appDatabase = AppDatabase()
     }
-
-    //Ultities method
 
 
 }

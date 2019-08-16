@@ -84,7 +84,7 @@ class AppDatabase {
 
 
     //COMPLETE
-    fun loadEntriesFromFireStore() {
+    private fun loadEntriesFromFireStore() {
 
 
         val collectionPath = "/users/" + fireAuth.currentUser?.uid!! + "/entries"
@@ -105,7 +105,7 @@ class AppDatabase {
     }
 
 
-    fun loadPreviousPayDateFromFireStore() {
+    private fun loadPreviousPayDateFromFireStore() {
 
         val collectionPath = "/users/" + fireAuth.currentUser?.uid!!
 
@@ -127,7 +127,7 @@ class AppDatabase {
     }
 
 
-    fun loadUpcomingPayDateFromFireStore() {
+    private fun loadUpcomingPayDateFromFireStore() {
 
         val collectionPath = "/users/" + fireAuth.currentUser?.uid!!
 

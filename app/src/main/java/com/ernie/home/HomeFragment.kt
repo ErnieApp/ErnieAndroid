@@ -1,6 +1,7 @@
 package com.ernie.home
 
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -37,8 +38,9 @@ class HomeFragment : Fragment() {
         previousPayDate = appDatabase.getPreviousPayDate()
         upcomingPayDate = appDatabase.getUpcomingPayDate()
 
-        Log.d(TAG, previousPayDate)
-        Log.d(TAG, upcomingPayDate)
+        for (item in currentListOfEntries) {
+            Log.d(TAG, item.id + " is created")
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -53,32 +55,28 @@ class HomeFragment : Fragment() {
 
     }
 
-
+    //COMPLETE
     private fun setUpPayDayTimer() {
         val myFormat = SimpleDateFormat("EEE dd MMMM yyyy")
 
         try {
+            //Calculate the number of days before the dates
             val dateBefore = myFormat.parse(previousPayDate)
             val dateAfter = myFormat.parse(upcomingPayDate)
             val difference = dateAfter.time - dateBefore.time
             val daysBetween = (difference / (1000 * 60 * 60 * 24)).toString()
-            /* You can also convert the milliseconds to days using this method
-                * float daysBetween =
-                *         TimeUnit.DAYS.convert(difference, TimeUnit.MILLISECONDS)
-                */
-            val stringToSet = daysBetween + " days left"
 
+            //Set the string to pass to the view
+            val stringToSet = daysBetween + " days left"
             days_left_textview.text = stringToSet
+
         } catch (e: Exception) {
             e.printStackTrace()
         }
 
-
-
-
     }
 
-
+    //COMPLETE
     private fun setUpPayDayDate() {
         payday_date_textview.text = upcomingPayDate
     }
@@ -86,13 +84,8 @@ class HomeFragment : Fragment() {
 
     private fun setUpPieChart() {
 
-        if (previousPayDate == "" && upcomingPayDate == "") {
-            setUpPieChart0()
-        } else {
-            // SET UP DATA FOR PIECHART
-            setPieChartEntries1()
-        }
-
+        // SET UP DATA FOR PIECHART
+        setPieChartEntries()
 
         // Set the piechart dataset to the piechart entries that will be displayed
         val pieDataSet = PieDataSet(pieEntries, "")
@@ -145,19 +138,8 @@ class HomeFragment : Fragment() {
 
     }
 
-
-    private fun setUpPieChart0() {
-        //Calculate the total base pay for these entries
-        var totalBasePay = 0f
-
-        // Create pie entries using 'total base pay' calculated as an entry
-        pieEntries.add(PieEntry(totalBasePay, "Base Pay"))
-        pieEntries.add(PieEntry(2f, "Commission Pay"))
-        pieEntries.add(PieEntry(5f, "Tip Pay"))
-
-    }
-
-    private fun setPieChartEntries1() {
+    @SuppressLint("SimpleDateFormat")
+    private fun setPieChartEntries() {
         // Format previouspaydate and upcomingpaydate to GMT
         val dateFormat = SimpleDateFormat("EEE dd MMMM yyyy")
         val formatPreviousPayDate = dateFormat.parse(previousPayDate)
@@ -196,7 +178,8 @@ class HomeFragment : Fragment() {
         var totalBasePay = 0f
 
         for (entry in entriesBetweenDates) {
-            totalBasePay = totalBasePay + entry.earned!!.toFloat()
+            totalBasePay += entry.earned!!.toFloat()
+            
         }
 
         // Create pie entries using 'total base pay' calculated as an entry

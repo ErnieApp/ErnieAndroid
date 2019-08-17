@@ -118,7 +118,7 @@ class AppDatabase(fireAuth: FirebaseAuth) : Serializable {
     }
 
     companion object {
-        private const val TAG = "AppDatabase"
+        private val TAG = AppDatabase::class.simpleName
         private var firebaseAuth: FirebaseAuth? = null
         private var firestoreDB = FirebaseFirestore.getInstance()
 

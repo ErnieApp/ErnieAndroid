@@ -96,7 +96,7 @@ class MainActivity : AppIntro() {
     }
 
     companion object {
-        private const val TAG = "MainActivity"
+        private val TAG = MainActivity::class.simpleName
         private var firebaseAuth: FirebaseAuth? = null
         private var appDatabase: AppDatabase? = null
         private var homeFragment: HomeFragment? = null

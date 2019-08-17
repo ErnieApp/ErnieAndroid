@@ -245,7 +245,7 @@ class HomeFragment(private val appDatabase: AppDatabase) : Fragment() {
     }
 
     companion object {
-        private const val TAG = "HomeFragment"
+        private val TAG = HomeFragment::class.simpleName
     }
 
 

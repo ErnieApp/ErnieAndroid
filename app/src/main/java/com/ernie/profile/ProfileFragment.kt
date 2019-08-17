@@ -11,14 +11,12 @@ import android.view.ViewGroup
 import android.widget.DatePicker
 import android.widget.EditText
 import androidx.fragment.app.Fragment
-import com.ernie.AppDatabase
 import com.ernie.IntroActivity
 import com.ernie.R
 import com.firebase.ui.auth.AuthUI
 import kotlinx.android.synthetic.main.fragment_profile.*
 import java.text.SimpleDateFormat
 import java.util.*
-
 
 @SuppressLint("SimpleDateFormat")
 class ProfileFragment(private val appDatabase: AppDatabase) : Fragment() {
@@ -144,7 +142,7 @@ class ProfileFragment(private val appDatabase: AppDatabase) : Fragment() {
     }
 
     companion object {
-        private const val TAG = "ProfileFragment"
+        private val TAG = ProfileFragment::class.simpleName
     }
 
 

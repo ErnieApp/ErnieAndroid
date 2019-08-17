@@ -300,7 +300,7 @@ class RegistrationFormFragment : Fragment() {
     }
 
     companion object {
-        private const val TAG = "RegistrationFormFrag..."
+        private val TAG = RegistrationFormFragment::class.simpleName
 
         fun launchRegistrationFormWithGoogleAccount(activity: FragmentActivity, credential: AuthCredential, account: GoogleSignInAccount) {
             val bundle = Bundle()

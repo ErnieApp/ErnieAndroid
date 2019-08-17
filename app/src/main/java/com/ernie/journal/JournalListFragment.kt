@@ -5,6 +5,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
+import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -14,6 +16,7 @@ import com.ernie.model.Entry
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
+import kotlinx.android.synthetic.main.fragment_journal_list.*
 
 private lateinit var snapShotListenerRegistration: ListenerRegistration
 
@@ -28,6 +31,17 @@ class JournalListFragment(private val appDatabase: AppDatabase) : Fragment() {
         recyclerView = view.findViewById(R.id.journalRecyclerView) as RecyclerView
         recyclerView.adapter = JournalListAdapter(mutableListOf(), appDatabase)
         recyclerView.layoutManager = LinearLayoutManager(activity)
+
+        val selectAllCheckBox = view.findViewById(R.id.selectAllCheckBox) as CheckBox
+        selectAllCheckBox.setOnClickListener {
+            (recyclerView.adapter as JournalListAdapter).setSelectAllEntries(selectAllCheckBox.isChecked)
+        }
+
+        val deleteButton = view.findViewById(R.id.deleteIcon) as ImageView
+        deleteButton.setOnClickListener {
+            (recyclerView.adapter as JournalListAdapter).deleteSelectedEntries()
+        }
+
         return view
     }
 
@@ -54,7 +68,20 @@ class JournalListFragment(private val appDatabase: AppDatabase) : Fragment() {
                 })
     }
 
+    fun setSelectionModeContainerVisibility(value: Int) {
+        selectionModeContainer.visibility = value
+    }
+
+    fun updateSelectionCountText(count: Int) {
+        selectionCount.text = count.toString() + " selected"
+    }
+
+    fun setSelectedAllCheckBoxStatus(value: Boolean) {
+        (activity!!.findViewById(R.id.selectAllCheckBox) as CheckBox).isChecked = value
+    }
+
     companion object {
-        private const val TAG = "JournalListFragment"
+        private val TAG = JournalListFragment::class.simpleName
     }
 }
+

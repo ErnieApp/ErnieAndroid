@@ -114,11 +114,27 @@ class RegistrationFormFragment : Fragment() {
     }
 
     private fun hasUserFilledOutForm(contractDaySwitches: List<Switch>, contractHourFields: List<EditText>): Boolean {
+
+        val formatter = SimpleDateFormat("EEE dd MMMM yyyy")
         var hasUserFilledOutForm = true
 
-        if (previousPayDateRegistrationEditText.text.toString() == "" && upcomingPayDateRegistrationEditText.text.toString() == "") {
-            hasUserFilledOutForm = false
-            return hasUserFilledOutForm
+        try {
+            //Create date objects
+            val dateBefore = formatter.parse(previousPayDateRegistrationEditText.text.toString())
+            val dateAfter = formatter.parse(upcomingPayDateRegistrationEditText.text.toString())
+            //Calculate the number of days before the dates
+            val difference = dateAfter.time - dateBefore.time
+            val daysBetween = (difference / (1000 * 60 * 60 * 24))
+
+            Log.d(TAG, "Number of days inbetween: " + daysBetween)
+            if (daysBetween <= 0) {
+                hasUserFilledOutForm = false
+                previousPayDateRegistrationEditText.error = "This field is incorrect."
+            }
+
+
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
 
         for (i in 0 until contractDaySwitches.size) {
@@ -141,6 +157,7 @@ class RegistrationFormFragment : Fragment() {
     private fun setupPayDateFieldOnClickListener() {
 
         previousPayDateRegistrationEditText.setOnClickListener {
+            previousPayDateRegistrationEditText.error = null
             // Launch Date Picker Dialog
             val calendar = Calendar.getInstance()
 
@@ -152,7 +169,8 @@ class RegistrationFormFragment : Fragment() {
                         if (month.length == 1) month = "0$month"
                         if (day.length == 1) day = "0$day"
 
-                        previousPayDateRegistrationEditText.setText(day + "/" + month + "/" + year.toString())
+                        val formattedPreviousPayDate = formatDate(day + "/" + month + "/" + year.toString())
+                        previousPayDateRegistrationEditText.setText(formattedPreviousPayDate)
                     }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
             datePickerDialog1.show()
         }
@@ -169,12 +187,11 @@ class RegistrationFormFragment : Fragment() {
                         if (month.length == 1) month = "0$month"
                         if (day.length == 1) day = "0$day"
 
-                        upcomingPayDateRegistrationEditText.setText(day + "/" + month + "/" + year.toString())
+                        val formattedPreviousPayDate = formatDate(day + "/" + month + "/" + year.toString())
+                        upcomingPayDateRegistrationEditText.setText(formattedPreviousPayDate)
                     }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
             datePickerDialog2.show()
         }
-
-
     }
 
 

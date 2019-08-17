@@ -16,9 +16,9 @@ class AppDatabase {
     private var upcomingPayDateCached = ""
 
     constructor() {
-        loadEntriesFromFireStore()
-        loadPreviousPayDateFromFireStore()
-        loadUpcomingPayDateFromFireStore()
+//        loadEntriesFromFireStore()
+//        loadPreviousPayDateFromFireStore()
+//        loadUpcomingPayDateFromFireStore()
     }
 
     fun addUser(user: User) {

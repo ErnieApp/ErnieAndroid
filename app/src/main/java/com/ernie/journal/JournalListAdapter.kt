@@ -26,7 +26,7 @@ class JournalListAdapter(private var entryList: MutableList<Entry>, private val 
 
         viewHolder.itemView.setOnClickListener {
             //TODO Implement vertical swipe for delete functionality and update firestore
-            appDatabase.deleteEntry(entry)
+            AppDatabase.deleteEntry(entry)
             entryList.removeAt(position)
             notifyItemRemoved(position)
             notifyItemRangeChanged(position, entryList.size)

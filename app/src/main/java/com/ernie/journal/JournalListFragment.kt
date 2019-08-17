@@ -11,14 +11,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ernie.AppDatabase
 import com.ernie.R
 import com.ernie.model.Entry
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 
 private lateinit var snapShotListenerRegistration: ListenerRegistration
 
-class JournalListFragment : Fragment() {
+class JournalListFragment(private val appDatabase: AppDatabase) : Fragment() {
 
     private val firestoreDB = FirebaseFirestore.getInstance()
     private lateinit var recyclerView: RecyclerView
@@ -27,7 +26,7 @@ class JournalListFragment : Fragment() {
         val view: View = inflater.inflate(R.layout.fragment_journal_list, container, false)
 
         recyclerView = view.findViewById(R.id.journalRecyclerView) as RecyclerView
-        recyclerView.adapter = JournalListAdapter(mutableListOf(), appDatabase!!)
+        recyclerView.adapter = JournalListAdapter(mutableListOf(), appDatabase)
         recyclerView.layoutManager = LinearLayoutManager(activity)
         return view
     }
@@ -43,7 +42,7 @@ class JournalListFragment : Fragment() {
     }
 
     private fun addSnapshotListener() {
-        val collectionPath = "/users/" + FirebaseAuth.getInstance().currentUser?.uid + "/entries"
+        val collectionPath = "/users/" + appDatabase.getFireAuthInstance()!!.currentUser?.uid + "/entries"
         snapShotListenerRegistration = firestoreDB.collection(collectionPath)
                 .addSnapshotListener(EventListener { documents, e ->
                     if (e != null) {
@@ -57,6 +56,5 @@ class JournalListFragment : Fragment() {
 
     companion object {
         private const val TAG = "JournalListFragment"
-        private val appDatabase: AppDatabase? = AppDatabase()
     }
 }

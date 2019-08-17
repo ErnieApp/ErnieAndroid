@@ -8,6 +8,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.ernie.AppDatabase
 import com.ernie.R
@@ -16,17 +18,21 @@ import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
+import com.google.firebase.firestore.EventListener
+import com.google.firebase.firestore.ListenerRegistration
 import kotlinx.android.synthetic.main.fragment_home.*
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
 
-class HomeFragment : Fragment() {
+class HomeFragment(private val appDatabase: AppDatabase) : Fragment() {
 
-    private lateinit var previousPayDate: String
-    private lateinit var upcomingPayDate: String
-    private lateinit var currentListOfEntries: ArrayList<Entry>
+    private var previousPayDate: String = ""
+    private var upcomingPayDate: String = ""
+    private var currentListOfEntries: ArrayList<Entry>? = null
+    private lateinit var entriesSnapshotListener: ListenerRegistration
+    private lateinit var userSnapshotListener: ListenerRegistration
 
     // Piechart entries arraylist
     private var pieEntries = ArrayList<PieEntry>()
@@ -34,9 +40,7 @@ class HomeFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         currentListOfEntries = appDatabase.getEntries()
-        previousPayDate = appDatabase.getPreviousPayDate()
-        upcomingPayDate = appDatabase.getUpcomingPayDate()
-
+        addListeners()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -45,12 +49,57 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        if (previousPayDate.isNotBlank() && upcomingPayDate.isNotBlank()) {
+            pieEntries.clear()
+            setUpPayDayTimer()
+            setUpPayDayDate()
+            setUpPieChart()
+        } else {
+            Toast.makeText(activity!!, "NO INTERNET - GET LOST", Toast.LENGTH_LONG).show()
+        }
+    }
 
-        pieEntries.clear()
-        setUpPayDayTimer()
-        setUpPayDayDate()
-        setUpPieChart()
+    fun removeListeners() {
+        entriesSnapshotListener.remove()
+        userSnapshotListener.remove()
+    }
 
+    fun addListeners() {
+        addUserListener()
+        addEntriesLisener()
+    }
+
+    private fun addUserListener() {
+        userSnapshotListener = appDatabase.getUserDocumentReference().addSnapshotListener(EventListener { userDoc, e ->
+            if (e != null) {
+                Log.e(TAG, "Snapshot listener failed")
+                Toast.makeText(activity!!, "NO INTERNET - GET LOST", Toast.LENGTH_LONG).show()
+                return@EventListener
+            }
+            previousPayDate = userDoc!!.getString("previous_pay_date")!!
+            upcomingPayDate = userDoc.getString("upcoming_pay_date")!!
+            redrawView()
+        })
+    }
+
+    fun addEntriesLisener() {
+        entriesSnapshotListener = appDatabase.getEntriesCollectionReference().addSnapshotListener(EventListener { entries, e ->
+            if (e != null) {
+                Log.e(TAG, "Snapshot listener failed")
+                Toast.makeText(activity!!, "NO INTERNET - GET LOST", Toast.LENGTH_LONG).show()
+                return@EventListener
+            }
+            redrawView()
+        })
+    }
+
+    private fun redrawView() {
+        if (view != null) {
+            pieEntries.clear()
+            setUpPayDayTimer()
+            setUpPayDayDate()
+            setUpPieChart()
+        }
     }
 
     //COMPLETE
@@ -77,8 +126,7 @@ class HomeFragment : Fragment() {
 
     //COMPLETE
     private fun setUpPayDayDate() {
-
-        payday_date_textview.text = upcomingPayDate
+        view!!.findViewById<TextView>(R.id.payday_date_textview).text = upcomingPayDate
     }
 
 
@@ -164,7 +212,7 @@ class HomeFragment : Fragment() {
         // Create collection of data entries that coincide the dates between previouspaydate and upcomingpaydate
         var entriesBetweenDates = ArrayList<Entry>()
 
-        for (entry in currentListOfEntries) {
+        for (entry in this.currentListOfEntries!!) {
             val formattedEntryDate = dateFormat.parse(entry.date_recorded!!)
             for (date in applicableDates) {
                 if (formattedEntryDate.equals(date)) {
@@ -198,7 +246,6 @@ class HomeFragment : Fragment() {
 
     companion object {
         private const val TAG = "HomeFragment"
-        private val appDatabase = AppDatabase()
     }
 
 

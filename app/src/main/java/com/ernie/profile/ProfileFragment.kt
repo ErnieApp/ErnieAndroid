@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.DatePicker
+import android.widget.EditText
 import androidx.fragment.app.Fragment
 import com.ernie.AppDatabase
 import com.ernie.IntroActivity
@@ -20,7 +21,7 @@ import java.util.*
 
 
 @SuppressLint("SimpleDateFormat")
-class ProfileFragment : Fragment() {
+class ProfileFragment(private val appDatabase: AppDatabase) : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -30,8 +31,8 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        previousPayDateProfileEditText.setText(appDatabase!!.getPreviousPayDate())
-        upcomingPayDateProfileEditText.setText(appDatabase.getUpcomingPayDate())
+        view.findViewById<EditText>(R.id.previousPayDateProfileEditText).setText(appDatabase.getPreviousPayDate())
+        view.findViewById<EditText>(R.id.upcomingPayDateProfileEditText).setText(appDatabase.getUpcomingPayDate())
 
         setupDateFieldOnClickListener()
 
@@ -144,7 +145,6 @@ class ProfileFragment : Fragment() {
 
     companion object {
         private const val TAG = "ProfileFragment"
-        private val appDatabase: AppDatabase? = AppDatabase()
     }
 
 

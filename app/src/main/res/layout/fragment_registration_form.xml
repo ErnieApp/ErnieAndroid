@@ -72,7 +72,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginEnd="14dp"
                 android:layout_marginRight="14dp"
-                android:text="Previous Pay Date:"
+                android:text="Prev. pay date:"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
@@ -96,7 +96,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginEnd="14dp"
                 android:layout_marginRight="14dp"
-                android:text="Upcoming Pay Date:"
+                android:text="Next pay date:"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 

@@ -56,13 +56,13 @@ class RegistrationFormFragment : Fragment() {
         btnSubmit.setOnClickListener {
             disableSubmitButton()
 
-            val fireAuth = FirebaseAuth.getInstance()
+            val fireAuth = AppDatabase.getAuthInstance()
 
             if (hasUserFilledOutForm(contractDaySwitches, contractHourFields)) {
                 if (bundle!!.getBoolean("isGoogle")) {
-                    addUserToFireAuthWithCredential(fireAuth, bundle)
+                    addUserToFireAuthWithCredential(fireAuth!!, bundle)
                 } else {
-                    addUserToFireAuthWithEmailAndPassword(fireAuth, bundle)
+                    addUserToFireAuthWithEmailAndPassword(fireAuth!!, bundle)
                 }
             } else {
                 enableSubmitButton()
@@ -72,13 +72,21 @@ class RegistrationFormFragment : Fragment() {
     }
 
     private fun addUserToFireAuthWithEmailAndPassword(fireAuth: FirebaseAuth, bundle: Bundle) {
-        FirebaseAuth.getInstance().createUserWithEmailAndPassword(bundle.getString("userEmail")!!, bundle.getString("userPassword")!!)
+        AppDatabase.getAuthInstance()!!.createUserWithEmailAndPassword(bundle.getString("userEmail")!!, bundle.getString("userPassword")!!)
                 .addOnSuccessListener {
-                    val previousPayDate = formatDate(previousPayDateRegistrationEditText.text.toString())
-                    val upcomingPayDate = formatDate(upcomingPayDateRegistrationEditText.text.toString())
-                    appDatabase.addUser(User(bundle.getString("userName")!!, bundle.getString("userEmail")!!, hourlyRate.text.toString(), previousPayDate, upcomingPayDate))
-                    updateContract()
-                    MainActivity.launchMainActivityAsFreshStart(activity!!)
+                    val previousPayDate = previousPayDateRegistrationEditText.text.toString()
+                    val upcomingPayDate = upcomingPayDateRegistrationEditText.text.toString()
+
+                    Log.d(TAG, "prevDate = " + previousPayDate + ", upcomingDate" + upcomingPayDate)
+
+                    AppDatabase.addUser(User(bundle.getString("userName")!!, bundle.getString("userEmail")!!, hourlyRate.text.toString(), previousPayDate, upcomingPayDate)).addOnSuccessListener {
+                        Log.d(TAG, "succeeded")
+                        updateContract()
+                        MainActivity.launchMainActivityAsFreshStart(activity!!)
+                    }
+                            .addOnFailureListener {
+                                //TODO: tell user to connect to internet
+                            }
                 }
                 .addOnFailureListener {
                     enableSubmitButton()
@@ -91,11 +99,19 @@ class RegistrationFormFragment : Fragment() {
 
         fireAuth.signInWithCredential(bundle.getParcelable("credential")!!)
                 .addOnSuccessListener {
-                    val previousPayDate = formatDate(previousPayDateRegistrationEditText.text.toString())
-                    val upcomingPayDate = formatDate(upcomingPayDateRegistrationEditText.text.toString())
-                    appDatabase.addUser(User(userAccount.displayName!!, userAccount.email!!, hourlyRate.text.toString(), previousPayDate, upcomingPayDate))
-                    updateContract()
-                    MainActivity.launchMainActivityAsFreshStart(activity!!)
+                    val previousPayDate = previousPayDateRegistrationEditText.text.toString()
+                    val upcomingPayDate = upcomingPayDateRegistrationEditText.text.toString()
+
+                    Log.d(TAG, "prevDate = " + previousPayDate + ", upcomingDate" + upcomingPayDate)
+
+                    AppDatabase.addUser(User(userAccount.displayName!!, userAccount.email!!, hourlyRate.text.toString(), previousPayDate, upcomingPayDate)).addOnSuccessListener {
+                        Log.d(TAG, "succeeded")
+                        updateContract()
+                        MainActivity.launchMainActivityAsFreshStart(activity!!)
+                    }
+                            .addOnFailureListener {
+                                //TODO: tell user to connect to internet
+                            }
                 }
                 .addOnFailureListener {
                     enableSubmitButton()
@@ -177,7 +193,7 @@ class RegistrationFormFragment : Fragment() {
                         if (month.length == 1) month = "0$month"
                         if (day.length == 1) day = "0$day"
 
-                        val formattedPreviousPayDate = formatDate(day + "/" + month + "/" + year.toString())
+                        val formattedPreviousPayDate = formatDate(day.toInt(), month.toInt(), year)
                         previousPayDateRegistrationEditText.setText(formattedPreviousPayDate)
                     }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
             datePickerDialog1.show()
@@ -195,7 +211,7 @@ class RegistrationFormFragment : Fragment() {
                         if (month.length == 1) month = "0$month"
                         if (day.length == 1) day = "0$day"
 
-                        val formattedPreviousPayDate = formatDate(day + "/" + month + "/" + year.toString())
+                        val formattedPreviousPayDate = formatDate(day.toInt(), month.toInt(), year)
                         upcomingPayDateRegistrationEditText.setText(formattedPreviousPayDate)
                     }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
             datePickerDialog2.show()
@@ -271,21 +287,19 @@ class RegistrationFormFragment : Fragment() {
         if (friSwitch.isChecked) contract.addContractedDay(ContractedDay(Day.Friday, friStartTime.text.toString(), friEndTime.text.toString()))
         if (satSwitch.isChecked) contract.addContractedDay(ContractedDay(Day.Saturday, satStartTime.text.toString(), satEndTime.text.toString()))
         if (sunSwitch.isChecked) contract.addContractedDay(ContractedDay(Day.Sunday, sunStartTime.text.toString(), sunEndTime.text.toString()))
-        appDatabase.setContract(contract)
+        AppDatabase.setContract(contract)
     }
 
 
-    private fun formatDate(date: String): String {
+    private fun formatDate(day: Int, month: Int, year: Int): String {
+        val calendar = Calendar.getInstance()
+        calendar.set(year, month, day)
         val formatTo = SimpleDateFormat("EEE dd MMMM yyyy")
-        val formatFrom = SimpleDateFormat("dd/MM/yyyy")
-        val formattedFromDate = formatFrom.parse(date)
-        val formattedToDate = formatTo.format(formattedFromDate)
-
+        val formattedToDate = formatTo.format(calendar.time)
         return formattedToDate
     }
 
     companion object {
-        private val appDatabase: AppDatabase = AppDatabase()
         private const val TAG = "RegistrationFormFrag..."
 
         fun launchRegistrationFormWithGoogleAccount(activity: FragmentActivity, credential: AuthCredential, account: GoogleSignInAccount) {

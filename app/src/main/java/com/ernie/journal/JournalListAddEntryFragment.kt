@@ -21,7 +21,7 @@ import kotlinx.android.synthetic.main.fragment_journal_list_add_entry.*
 import java.util.*
 
 
-class JournalListAddEntryFragment : Fragment() {
+class JournalListAddEntryFragment(private val appDatabase: AppDatabase) : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_journal_list_add_entry, container, false)
@@ -39,7 +39,7 @@ class JournalListAddEntryFragment : Fragment() {
             //Create a a timestamp
             val currentDate = DateFormat.format("EEE dd MMMM yyyy", calendar).toString()
 
-            appDatabase?.addEntry(Entry(null,
+            AppDatabase.addEntry(Entry(null,
                     startTimeUserInput.text.toString(),
                     endTimeUserInput.text.toString(),
                     breakDurationUserInput.text.toString().toInt(),
@@ -138,6 +138,5 @@ class JournalListAddEntryFragment : Fragment() {
 
     companion object {
         private const val TAG = "JournalListAddEntryFragment"
-        private val appDatabase: AppDatabase? = AppDatabase()
     }
 }

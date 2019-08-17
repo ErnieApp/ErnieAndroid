@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
+import com.ernie.AppDatabase
 import com.ernie.MainActivity
 import com.ernie.R
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -19,9 +20,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthCredential
-import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_sign_up.*
-
 
 class SignUpFragment : Fragment() {
 
@@ -51,7 +50,7 @@ class SignUpFragment : Fragment() {
             val userPassword = fieldPassword.text.toString()
 
             if (!isNameBlank() && isValidEmail(userEmail) && doEmailFieldsMatch() && isStrongPassword(userPassword) && doPasswordFieldsMatch()) {
-                fireAuth.fetchSignInMethodsForEmail(userEmail)
+                AppDatabase.getAuthInstance()!!.fetchSignInMethodsForEmail(userEmail)
                         .addOnCompleteListener { task ->
                             //TODO: Catch network exception which is thrown when there is no internet
                             val isNewUser = task.result!!.signInMethods!!.isEmpty()
@@ -156,7 +155,7 @@ class SignUpFragment : Fragment() {
             val account: GoogleSignInAccount = completedTask.getResult(ApiException::class.java)!!
             val credential = GoogleService.getAuthCredentialFromAccount(account)
 
-            fireAuth.fetchSignInMethodsForEmail(account.email!!)
+            AppDatabase.getAuthInstance()!!.fetchSignInMethodsForEmail(account.email!!)
                     .addOnCompleteListener { task ->
                         //TODO: Catch network exception which is thrown when there is no internet
                         val isNewUser = task.result!!.signInMethods!!.isEmpty()
@@ -175,7 +174,7 @@ class SignUpFragment : Fragment() {
     }
 
     private fun signUserIntoFireAuthWithCredential(credential: AuthCredential) {
-        fireAuth.signInWithCredential(credential)
+        AppDatabase.getAuthInstance()!!.signInWithCredential(credential)
                 .addOnCompleteListener {
                     if (it.isSuccessful) MainActivity.launchMainActivityAsFreshStart(activity!!)
                     else {
@@ -188,7 +187,6 @@ class SignUpFragment : Fragment() {
     companion object {
         private const val RC_GOOGLE_SIGN_IN = 444
         private const val TAG = "SignUpFragment"
-        private val fireAuth: FirebaseAuth = FirebaseAuth.getInstance()
 
         fun launchSignUp(activity: FragmentActivity) {
             val fragmentManager: FragmentManager = activity.supportFragmentManager

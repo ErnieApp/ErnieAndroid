@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ernie.AppDatabase
 import com.ernie.R
-import com.ernie.model.Entry
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
@@ -29,7 +28,7 @@ class JournalListFragment(private val appDatabase: AppDatabase) : Fragment() {
         val view: View = inflater.inflate(R.layout.fragment_journal_list, container, false)
 
         recyclerView = view.findViewById(R.id.journalRecyclerView) as RecyclerView
-        recyclerView.adapter = JournalListAdapter(mutableListOf(), appDatabase)
+        recyclerView.adapter = JournalListAdapter(appDatabase.getEntries(), appDatabase, this)
         recyclerView.layoutManager = LinearLayoutManager(activity)
 
         val selectAllCheckBox = view.findViewById(R.id.selectAllCheckBox) as CheckBox
@@ -63,7 +62,7 @@ class JournalListFragment(private val appDatabase: AppDatabase) : Fragment() {
                         Log.e(TAG, "Snapshot listener failed")
                         return@EventListener
                     } else {
-                        (recyclerView.adapter as JournalListAdapter).updateRecords(documents!!.toObjects(Entry::class.java))
+                        (recyclerView.adapter as JournalListAdapter).notifyEntryListChanged()
                     }
                 })
     }

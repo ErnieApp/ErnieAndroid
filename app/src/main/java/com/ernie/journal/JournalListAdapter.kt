@@ -11,7 +11,7 @@ import com.ernie.AppDatabase
 import com.ernie.R
 import com.ernie.model.Entry
 
-class JournalListAdapter(private var entryList: MutableList<Entry>, private val appDatabase: AppDatabase, private val journalListFragment: JournalListFragment) : RecyclerView.Adapter<JournalListAdapter.ViewHolder>() {
+class JournalListAdapter(private var entryList: ArrayList<Entry>, private val appDatabase: AppDatabase, private val journalListFragment: JournalListFragment) : RecyclerView.Adapter<JournalListAdapter.ViewHolder>() {
     private lateinit var recyclerView: RecyclerView
     private val selectedEntryViewHolders: MutableSet<ViewHolder> = mutableSetOf()
     private var isSelectionMode = false
@@ -89,8 +89,7 @@ class JournalListAdapter(private var entryList: MutableList<Entry>, private val 
         var checkBox: CheckBox = view.findViewById(R.id.checkBox)
     }
 
-    fun updateRecords(el: MutableList<Entry>) {
-        entryList = el
+    fun notifyEntryListChanged() {
         notifyDataSetChanged()
     }
 
@@ -116,7 +115,8 @@ class JournalListAdapter(private var entryList: MutableList<Entry>, private val 
     fun deleteSelectedEntries() {
         var i = 0
         selectedEntryViewHolders.forEach { vh ->
-            appDatabase.deleteEntry(entryList.removeAt(vh.positionInList - i))
+            //TODO: improve this, it crashes when it tries to index at -1 => likely when deleting the first entry
+            AppDatabase.deleteEntry(entryList.removeAt(vh.positionInList - i))
             i++
         }
         toggleSelectionMode()

@@ -1,6 +1,5 @@
 package com.ernie.profile
 
-
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Intent
@@ -11,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.DatePicker
 import android.widget.EditText
 import androidx.fragment.app.Fragment
+import com.ernie.AppDatabase
 import com.ernie.IntroActivity
 import com.ernie.R
 import com.firebase.ui.auth.AuthUI

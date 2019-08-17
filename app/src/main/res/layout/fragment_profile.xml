@@ -24,82 +24,34 @@
             android:layout_height="wrap_content" />
 
         <EditText
-            android:id="@+id/etName"
+            android:id="@+id/previousPayDateProfileEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:text="Name" />
+            android:longClickable="false"
+            android:textSize="20sp" />
 
         <EditText
-            android:id="@+id/etEmail"
+            android:id="@+id/upcomingPayDateProfileEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
-            android:ems="10"
-            android:text="Email" />
-
-        <EditText
-            android:id="@+id/etPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"
-            android:ems="10"
-            android:text="Password" />
-
-        <EditText
-            android:id="@+id/etHourlyRate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:text="HourlyRate" />
-
-        <EditText
-            android:id="@+id/etContractID"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:text="ContractID" />
+            android:longClickable="false"
+            android:textSize="20sp" />
     </LinearLayout>
 
     <Button
-        android:id="@+id/btnAddToUserTable"
+        android:id="@+id/btnAddToPayDates"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="12dp"
         android:text="Add to database"
         app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
-        app:layout_constraintEnd_toStartOf="@+id/btnLogOut"
-        app:layout_constraintStart_toEndOf="@+id/btnShowDatafromUserTable" />
-
-    <Button
-        android:id="@+id/btnShowDatafromUserTable"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="12dp"
-        android:layout_marginBottom="12dp"
-        android:text="Show Data"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toStartOf="@+id/btnLogOut" />
 
     <Button
         android:id="@+id/btnLogOut"
@@ -111,4 +63,6 @@
         android:text="Log out"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

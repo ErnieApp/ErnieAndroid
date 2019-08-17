@@ -4,14 +4,36 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".home.HomeFragment">
-    <TextView
+
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="home page" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/days_left_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/payday_date_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
 
 
     <com.github.mikephil.charting.charts.PieChart
-        android:id="@+id/pieChart"
+        android:id="@+id/pie_chart_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </FrameLayout>

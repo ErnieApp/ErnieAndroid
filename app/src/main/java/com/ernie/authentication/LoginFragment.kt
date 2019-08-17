@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
+import com.ernie.AppDatabase
 import com.ernie.MainActivity
 import com.ernie.R
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -21,7 +22,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthCredential
-import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_login.*
 
 class LoginFragment : Fragment() {
@@ -82,9 +82,9 @@ class LoginFragment : Fragment() {
     }
 
     private fun signUserIntoFireAuthWithEmailAndPassword(userEmail: String, userPassword: String) {
-        fireAuth.signInWithEmailAndPassword(userEmail, userPassword)
+        AppDatabase.getAuthInstance()!!.signInWithEmailAndPassword(userEmail, userPassword)
                 .addOnCompleteListener {
-                    if (fireAuth.currentUser != null) MainActivity.launchMainActivityAsFreshStart(activity!!)
+                    if (AppDatabase.getAuthInstance()!!.currentUser != null) MainActivity.launchMainActivityAsFreshStart(activity!!)
                     else {
                         fieldPassword.error = "Incorrect password"
                         enableButtons()
@@ -93,7 +93,7 @@ class LoginFragment : Fragment() {
     }
 
     private fun signUserIntoFireAuthWithCredential(credential: AuthCredential) {
-        fireAuth.signInWithCredential(credential)
+        AppDatabase.getAuthInstance()!!.signInWithCredential(credential)
                 .addOnCompleteListener {
                     if (it.isSuccessful) MainActivity.launchMainActivityAsFreshStart(activity!!)
                     else {
@@ -104,7 +104,7 @@ class LoginFragment : Fragment() {
     }
 
     private fun sendUserPasswordResetEmail(userEmail: String) {
-        fireAuth.sendPasswordResetEmail(userEmail).addOnCompleteListener {
+        AppDatabase.getAuthInstance()!!.sendPasswordResetEmail(userEmail).addOnCompleteListener {
             if (it.isSuccessful) Toast.makeText(activity, "Email sent", Toast.LENGTH_LONG).show()
             else Toast.makeText(activity, "Error = " + it.exception, Toast.LENGTH_LONG).show()
         }
@@ -148,7 +148,7 @@ class LoginFragment : Fragment() {
             val account: GoogleSignInAccount = completedTask.getResult(ApiException::class.java)!!
             val credential = GoogleService.getAuthCredentialFromAccount(account)
 
-            fireAuth.fetchSignInMethodsForEmail(account.email!!)
+            AppDatabase.getAuthInstance()!!.fetchSignInMethodsForEmail(account.email!!)
                     .addOnCompleteListener { task ->
                         //TODO: Catch network exception which is thrown when there is no internet
                         val isNewUser = task.result!!.signInMethods!!.isEmpty()
@@ -169,7 +169,6 @@ class LoginFragment : Fragment() {
     companion object {
         private const val RC_GOOGLE_SIGN_IN = 444
         private val TAG = LoginFragment::class.simpleName
-        private val fireAuth: FirebaseAuth = FirebaseAuth.getInstance()
 
         fun launchLogin(activity: FragmentActivity) {
             val fragmentManager: FragmentManager = activity.supportFragmentManager

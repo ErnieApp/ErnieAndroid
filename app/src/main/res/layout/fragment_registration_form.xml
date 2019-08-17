@@ -51,6 +51,7 @@
 
         </TableRow>
 
+        <!-- Start: View for previous/upcoming pay date -->
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
@@ -59,6 +60,66 @@
             android:layout_marginRight="20dp"
             android:layout_marginBottom="12dp"
             android:background="?android:attr/listDivider" />
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginEnd="14dp"
+                android:layout_marginRight="14dp"
+                android:text="Prev. pay date:"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/previousPayDateRegistrationEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:longClickable="false"
+                android:textSize="20sp" />
+
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginEnd="14dp"
+                android:layout_marginRight="14dp"
+                android:text="Next pay date:"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/upcomingPayDateRegistrationEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:longClickable="false"
+                android:textSize="20sp" />
+        </TableRow>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="12dp"
+            android:background="?android:attr/listDivider" />
+
+        <!-- End -->
 
         <TableRow
             android:layout_width="match_parent"

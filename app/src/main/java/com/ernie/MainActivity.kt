@@ -16,42 +16,47 @@ class MainActivity : AppIntro() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val fireAuth = FirebaseAuth.getInstance()
+        firebaseAuth = FirebaseAuth.getInstance()
+        appDatabase = AppDatabase(firebaseAuth!!)
 
-        if (fireAuth.currentUser == null) {
+        if (firebaseAuth!!.currentUser == null) {
             val intent = Intent(this, IntroActivity::class.java)
             startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK))
             finish()
-        }
+        } else {
+            homeFragment = HomeFragment(appDatabase!!)
+            journalFragment = JournalFragment(appDatabase!!)
+            profileFragment = ProfileFragment(appDatabase!!)
 
-        addSlide(homeFragment)
-        addSlide(journalFragment)
-        addSlide(profileFragment)
+            addSlide(homeFragment!!)
+            addSlide(journalFragment!!)
+            addSlide(profileFragment!!)
 
-        showPagerIndicator(false)
-        showSkipButton(false)
+            showPagerIndicator(false)
+            showSkipButton(false)
 
-        home.setOnClickListener { pager.setCurrentItem(0, true) }
-        journal.setOnClickListener { pager.setCurrentItem(1, true) }
-        profile.setOnClickListener { pager.setCurrentItem(2, true) }
+            home.setOnClickListener { pager.setCurrentItem(0, true) }
+            journal.setOnClickListener { pager.setCurrentItem(1, true) }
+            profile.setOnClickListener { pager.setCurrentItem(2, true) }
 
-        pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrollStateChanged(state: Int) {}
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
+            pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+                override fun onPageScrollStateChanged(state: Int) {}
+                override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
 
-            override fun onPageSelected(position: Int) {
-                if (slides[position] == homeFragment) {
-                    clearSelectedButton()
-                    home.setImageResource(R.drawable.ic_home_blue_24dp)
-                } else if (slides[position] == journalFragment) {
-                    clearSelectedButton()
-                    journal.setImageResource(R.drawable.ic_dashboard_blue_24dp)
-                } else if (slides[position] == profileFragment) {
-                    clearSelectedButton()
-                    profile.setImageResource(R.drawable.ic_notifications_blue_24dp)
+                override fun onPageSelected(position: Int) {
+                    if (slides[position] == homeFragment) {
+                        clearSelectedButton()
+                        home.setImageResource(R.drawable.ic_home_blue_24dp)
+                    } else if (slides[position] == journalFragment) {
+                        clearSelectedButton()
+                        journal.setImageResource(R.drawable.ic_dashboard_blue_24dp)
+                    } else if (slides[position] == profileFragment) {
+                        clearSelectedButton()
+                        profile.setImageResource(R.drawable.ic_notifications_blue_24dp)
+                    }
                 }
-            }
-        })
+            })
+        }
     }
 
     private fun clearSelectedButton() {
@@ -66,28 +71,37 @@ class MainActivity : AppIntro() {
 
     override fun onPause() {
         super.onPause()
-        val fireAuth = FirebaseAuth.getInstance()
-        if (fireAuth.currentUser != null) {
-            fireAuth.currentUser!!.reload().addOnFailureListener {
-                fireAuth.signOut()
+        if (firebaseAuth!!.currentUser != null) {
+            firebaseAuth!!.currentUser!!.reload().addOnFailureListener {
+                firebaseAuth!!.signOut()
                 finish()
             }
         }
+        appDatabase!!.removeListeners()
+        homeFragment!!.removeListeners()
     }
 
     override fun onBackPressed() {
-        if (slides[pager.currentItem] == journalFragment && (journalFragment.isAddEntryFormVisible() || journalFragment.isExpandedEntryVisible())) {
-            journalFragment.clickFloatingActionButton()
+        if (slides[pager.currentItem] == journalFragment && (journalFragment!!.isAddEntryFormVisible() || journalFragment!!.isExpandedEntryVisible())) {
+            journalFragment!!.clickFloatingActionButton()
         } else {
             super.onBackPressed()
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        appDatabase!!.addListeners()
+        homeFragment!!.addListeners()
+    }
+
     companion object {
         private val TAG = MainActivity::class.simpleName
-        private val homeFragment = HomeFragment()
-        private val journalFragment = JournalFragment()
-        private val profileFragment = ProfileFragment()
+        private var firebaseAuth: FirebaseAuth? = null
+        private var appDatabase: AppDatabase? = null
+        private var homeFragment: HomeFragment? = null
+        private var journalFragment: JournalFragment? = null
+        private var profileFragment: ProfileFragment? = null
 
         fun launchMainActivityAsFreshStart(activity: Activity) {
             val intent = Intent(activity, MainActivity::class.java)

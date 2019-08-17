@@ -7,11 +7,15 @@ import android.view.ViewGroup
 import androidx.annotation.IdRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import com.ernie.AppDatabase
 import com.ernie.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.fragment_journal.*
 
-class JournalFragment : Fragment() {
+class JournalFragment(appDatabase: AppDatabase) : Fragment() {
+    private val journalListAddEntryFragment = JournalListAddEntryFragment(appDatabase)
+    private val journalListFragment = JournalListFragment(appDatabase)
+    private val journalListExpandedEntryFragment = JournalListExpandedEntryFragment(appDatabase)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view: View = inflater.inflate(R.layout.fragment_journal, container, false)
@@ -69,8 +73,5 @@ class JournalFragment : Fragment() {
 
     companion object {
         private val TAG = JournalFragment::class.simpleName
-        private val journalListAddEntryFragment = JournalListAddEntryFragment()
-        private val journalListFragment = JournalListFragment()
-        private val journalListExpandedEntryFragment = JournalListExpandedEntryFragment()
     }
 }

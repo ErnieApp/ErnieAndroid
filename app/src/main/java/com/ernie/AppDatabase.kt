@@ -16,9 +16,9 @@ class AppDatabase {
     private var upcomingPayDateCached = ""
 
     constructor() {
-//        loadEntriesFromFireStore()
-//        loadPreviousPayDateFromFireStore()
-//        loadUpcomingPayDateFromFireStore()
+        loadEntriesFromFireStore()
+        loadPreviousPayDateFromFireStore()
+        loadUpcomingPayDateFromFireStore()
     }
 
     fun addUser(user: User) {
@@ -86,6 +86,7 @@ class AppDatabase {
     //COMPLETE
     private fun loadEntriesFromFireStore() {
 
+        Log.d(TAG, (fireAuth == null).toString())
 
         val collectionPath = "/users/" + fireAuth.currentUser?.uid!! + "/entries"
 

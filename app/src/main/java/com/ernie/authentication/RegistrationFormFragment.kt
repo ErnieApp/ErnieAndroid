@@ -115,28 +115,36 @@ class RegistrationFormFragment : Fragment() {
 
     private fun hasUserFilledOutForm(contractDaySwitches: List<Switch>, contractHourFields: List<EditText>): Boolean {
 
-        val formatter = SimpleDateFormat("EEE dd MMMM yyyy")
         var hasUserFilledOutForm = true
 
-        try {
-            //Create date objects
-            val dateBefore = formatter.parse(previousPayDateRegistrationEditText.text.toString())
-            val dateAfter = formatter.parse(upcomingPayDateRegistrationEditText.text.toString())
-            //Calculate the number of days before the dates
-            val difference = dateAfter.time - dateBefore.time
-            val daysBetween = (difference / (1000 * 60 * 60 * 24))
+        val formatter = SimpleDateFormat("EEE dd MMMM yyyy")
 
-            Log.d(TAG, "Number of days inbetween: " + daysBetween)
-            if (daysBetween <= 0) {
-                hasUserFilledOutForm = false
-                previousPayDateRegistrationEditText.error = "This field is incorrect."
+        if (previousPayDateRegistrationEditText.text.toString() == "") {
+            hasUserFilledOutForm = false
+            previousPayDateRegistrationEditText.error = "This field is incorrect."
+        } else if (upcomingPayDateRegistrationEditText.text.toString() == "") {
+            hasUserFilledOutForm = false
+            upcomingPayDateRegistrationEditText.error = "This field is incorrect."
+        } else {
+            try {
+                //Create date objects
+                val dateBefore = formatter.parse(previousPayDateRegistrationEditText.text.toString())
+                val dateAfter = formatter.parse(upcomingPayDateRegistrationEditText.text.toString())
+                //Calculate the number of days before the dates
+                val difference = dateAfter.time - dateBefore.time
+                val daysBetween = (difference / (1000 * 60 * 60 * 24))
+
+                Log.d(TAG, "Number of days inbetween: " + daysBetween)
+                if (daysBetween <= 0) {
+                    hasUserFilledOutForm = false
+                    previousPayDateRegistrationEditText.error = "This field is incorrect."
+                }
+
+
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
-
-
-        } catch (e: Exception) {
-            e.printStackTrace()
         }
-
         for (i in 0 until contractDaySwitches.size) {
             if (contractDaySwitches[i].isChecked) {
                 if (contractHourFields[i * 2].text.isBlank()) {

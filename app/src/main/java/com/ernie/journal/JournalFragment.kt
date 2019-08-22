@@ -14,13 +14,15 @@ import kotlinx.android.synthetic.main.fragment_journal.*
 
 class JournalFragment(appDatabase: AppDatabase) : Fragment() {
     private val journalListAddEntryFragment = JournalListAddEntryFragment(appDatabase)
-    private val journalListFragment = JournalListFragment(appDatabase)
+    private val journalListAdapter = JournalListAdapter(appDatabase.getEntries(), appDatabase)
+    private val journalListFragment = JournalListFragment(appDatabase, journalListAdapter)
     private val journalListExpandedEntryFragment = JournalListExpandedEntryFragment(appDatabase)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view: View = inflater.inflate(R.layout.fragment_journal, container, false)
         setupFloatingActionButtonListener(view.findViewById(R.id.floatingActionButton))
         showEntryList()
+        journalListAdapter.setJournalListFragment(journalListFragment)
         return view
     }
 
@@ -30,6 +32,9 @@ class JournalFragment(appDatabase: AppDatabase) : Fragment() {
                 showEntryList()
             } else {
                 showEntryAddForm()
+                if (journalListAdapter.isSelectionMode()) {
+                    journalListAdapter.toggleSelectionMode()
+                }
             }
 
             if (floatingActionButton.rotation != 45f) {
@@ -65,6 +70,14 @@ class JournalFragment(appDatabase: AppDatabase) : Fragment() {
 
     fun isExpandedEntryVisible(): Boolean {
         return journalListExpandedEntryFragment.isVisible
+    }
+
+    fun isSelectionMode(): Boolean {
+        return journalListAdapter.isSelectionMode()
+    }
+
+    fun toggleSelectionMode() {
+        journalListAdapter.toggleSelectionMode()
     }
 
     fun clickFloatingActionButton() {

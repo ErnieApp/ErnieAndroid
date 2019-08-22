@@ -169,7 +169,13 @@ class AppDatabase(fireAuth: FirebaseAuth) : Serializable {
             )
 
             // Store entry in the firestore entry collection
-            firestoreDB.collection("users").document(firebaseAuth!!.currentUser?.uid!!).collection("entries").document(newDocumentId).set(firestoreEntry)
+            entriesCollectionReference.document(newDocumentId).set(firestoreEntry)
+        }
+
+        fun addEntries(entries: List<Entry>) {
+            entries.forEach { entry ->
+                addEntry(entry)
+            }
         }
 
         fun deleteEntry(entry: Entry) {
@@ -178,6 +184,18 @@ class AppDatabase(fireAuth: FirebaseAuth) : Serializable {
                     .delete()
                     .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully deleted!") }
                     .addOnFailureListener { e -> Log.w(TAG, "Error deleting document", e) }
+        }
+
+        fun deleteEntries(entries: List<Entry>) {
+            val writeBatch = firestoreDB.batch()
+
+            entries.forEach { entry ->
+                writeBatch.delete(entriesCollectionReference.document(entry.id!!))
+            }
+
+            writeBatch.commit()
+                    .addOnSuccessListener { Log.d(TAG, "WriteBatch successfully committed!") }
+                    .addOnFailureListener { e -> Log.w(TAG, "Error deleting in a batch", e) }
         }
     }
 }

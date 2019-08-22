@@ -37,7 +37,7 @@
                 android:layout_marginRight="14dp"
                 android:layout_marginEnd="14dp"
                 android:text="Hourly wage:"
-                android:textSize="20sp"
+                android:textSize="14sp"
                 android:textStyle="bold" />
 
             <EditText
@@ -73,7 +73,7 @@
                 android:layout_marginEnd="14dp"
                 android:layout_marginRight="14dp"
                 android:text="Prev. pay date:"
-                android:textSize="20sp"
+                android:textSize="14sp"
                 android:textStyle="bold" />
 
             <EditText
@@ -83,7 +83,8 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:longClickable="false"
-                android:textSize="20sp" />
+                android:focusable="false"
+                android:textSize="14sp" />
 
         </TableRow>
 
@@ -97,7 +98,7 @@
                 android:layout_marginEnd="14dp"
                 android:layout_marginRight="14dp"
                 android:text="Next pay date:"
-                android:textSize="20sp"
+                android:textSize="14sp"
                 android:textStyle="bold" />
 
             <EditText
@@ -107,7 +108,8 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:longClickable="false"
-                android:textSize="20sp" />
+                android:focusable="false"
+                android:textSize="14sp" />
         </TableRow>
 
         <View
@@ -131,7 +133,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="14dp"
                 android:text="Monday"
-                android:textSize="20sp"
+                android:textSize="14sp"
                 android:textStyle="bold" />
 
             <EditText
@@ -167,7 +169,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="14dp"
                 android:text="Tuesday"
-                android:textSize="20sp"
+                android:textSize="14sp"
                 android:textStyle="bold" />
 
             <EditText
@@ -203,7 +205,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="14dp"
                 android:text="Wednesday"
-                android:textSize="20sp"
+                android:textSize="14sp"
                 android:textStyle="bold" />
 
             <EditText
@@ -239,7 +241,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="14dp"
                 android:text="Thursday"
-                android:textSize="20sp"
+                android:textSize="14sp"
                 android:textStyle="bold" />
 
             <EditText
@@ -275,7 +277,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="14dp"
                 android:text="Friday"
-                android:textSize="20sp"
+                android:textSize="14sp"
                 android:textStyle="bold" />
 
             <EditText
@@ -311,7 +313,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="14dp"
                 android:text="Saturday"
-                android:textSize="20sp"
+                android:textSize="14sp"
                 android:textStyle="bold" />
 
             <EditText
@@ -348,7 +350,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="14dp"
                 android:text="Sunday"
-                android:textSize="20sp"
+                android:textSize="14sp"
                 android:textStyle="bold" />
 
             <EditText
@@ -391,7 +393,7 @@
         android:text="@string/submit_button_text"
         android:textAllCaps="false"
         android:textColor="@android:color/white"
-        android:textSize="20sp"
+        android:textSize="14sp"
         android:textStyle="bold" />
 
 </LinearLayout>

@@ -10,10 +10,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ernie.AppDatabase
 import com.ernie.R
 import com.ernie.model.Entry
+import com.google.android.material.snackbar.Snackbar
 
-class JournalListAdapter(private var entryList: ArrayList<Entry>, private val appDatabase: AppDatabase, private val journalListFragment: JournalListFragment) : RecyclerView.Adapter<JournalListAdapter.ViewHolder>() {
+class JournalListAdapter(private var entryList: ArrayList<Entry>, private val appDatabase: AppDatabase) : RecyclerView.Adapter<JournalListAdapter.ViewHolder>() {
     private lateinit var recyclerView: RecyclerView
-    private val selectedEntryViewHolders: MutableSet<ViewHolder> = mutableSetOf()
+    private lateinit var journalListFragment: JournalListFragment
+    private val selectedEntryViewHolders: MutableMap<String, ViewHolder> = mutableMapOf()
     private var isSelectionMode = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -29,21 +31,21 @@ class JournalListAdapter(private var entryList: ArrayList<Entry>, private val ap
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         val entry = entryList[position]
 
-        viewHolder.positionInList = position
+        viewHolder.entryID = entry.id!!
         viewHolder.entryDate.text = entry.date_recorded.toString()
-        viewHolder.entryWorkedTime.text = entry.start_time + " - " + entry.end_time
-        viewHolder.entryBreakHours.text = entry.break_duration.toString() + " minutes"
-        viewHolder.entryEarned.text = "£" + entry.earned
+        viewHolder.entryWorkedTime.text = entry.start_time.plus(" - ").plus(entry.end_time)
+        viewHolder.entryBreakHours.text = entry.break_duration.toString().plus(" minutes")
+        viewHolder.entryEarned.text = "£".plus(entry.earned)
 
         viewHolder.itemView.setOnClickListener {
             if (isSelectionMode) {
-                if (selectedEntryViewHolders.contains(viewHolder)) {
+                if (selectedEntryViewHolders.contains(viewHolder.entryID)) {
                     removeHighlight(viewHolder)
-                    selectedEntryViewHolders.remove(viewHolder)
+                    selectedEntryViewHolders.remove(viewHolder.entryID)
                     journalListFragment.setSelectedAllCheckBoxStatus(false)
                 } else {
                     highlightEntry(viewHolder)
-                    selectedEntryViewHolders.add(viewHolder)
+                    selectedEntryViewHolders[viewHolder.entryID] = viewHolder
                     if (selectedEntryViewHolders.size == entryList.size) {
                         journalListFragment.setSelectedAllCheckBoxStatus(true)
                     }
@@ -57,7 +59,7 @@ class JournalListAdapter(private var entryList: ArrayList<Entry>, private val ap
             if (!isSelectionMode) {
                 highlightEntry(viewHolder)
                 viewHolder.itemView.findViewById<CheckBox>(R.id.checkBox).isChecked = true
-                selectedEntryViewHolders.add(viewHolder)
+                selectedEntryViewHolders[viewHolder.entryID] = viewHolder
                 journalListFragment.updateSelectionCountText(selectedEntryViewHolders.size)
                 toggleSelectionMode()
             } else {
@@ -81,7 +83,7 @@ class JournalListAdapter(private var entryList: ArrayList<Entry>, private val ap
     }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        var positionInList: Int = -1
+        var entryID: String = ""
         var entryDate: TextView = view.findViewById(R.id.entryDate)
         var entryEarned: TextView = view.findViewById(R.id.entryEarned)
         var entryBreakHours: TextView = view.findViewById(R.id.entryBreakHours)
@@ -99,7 +101,7 @@ class JournalListAdapter(private var entryList: ArrayList<Entry>, private val ap
                 val viewHolder = recyclerView.findViewHolderForAdapterPosition(i) as ViewHolder
                 viewHolder.checkBox.isChecked = true
                 highlightEntry(viewHolder)
-                selectedEntryViewHolders.add(viewHolder)
+                selectedEntryViewHolders[viewHolder.entryID] = viewHolder
             }
         } else {
             for (i in 0 until recyclerView.childCount) {
@@ -113,16 +115,28 @@ class JournalListAdapter(private var entryList: ArrayList<Entry>, private val ap
     }
 
     fun deleteSelectedEntries() {
-        var i = 0
-        selectedEntryViewHolders.forEach { vh ->
-            //TODO: improve this, it crashes when it tries to index at -1 => likely when deleting the first entry
-            AppDatabase.deleteEntry(entryList.removeAt(vh.positionInList - i))
-            i++
+        val removedEntries = mutableListOf<Entry>()
+        entryList.forEach { entry ->
+            if (selectedEntryViewHolders.containsKey(entry.id)) {
+                removedEntries.add(entry)
+            }
         }
+        AppDatabase.deleteEntries(removedEntries)
+
+        val snackbar = Snackbar.make(journalListFragment.view!!, "Successfully deleted", Snackbar.LENGTH_LONG)
+                .setAction("Undo") {
+                    AppDatabase.addEntries(removedEntries)
+                }
+
+        snackbar.show()
         toggleSelectionMode()
     }
 
-    private fun toggleSelectionMode() {
+    fun isSelectionMode(): Boolean {
+        return isSelectionMode
+    }
+
+    fun toggleSelectionMode() {
         isSelectionMode = !isSelectionMode
         if (isSelectionMode) {
             journalListFragment.setSelectionModeContainerVisibility(View.VISIBLE)
@@ -130,7 +144,11 @@ class JournalListAdapter(private var entryList: ArrayList<Entry>, private val ap
             journalListFragment.setSelectionModeContainerVisibility(View.GONE)
             selectedEntryViewHolders.clear()
         }
-        notifyDataSetChanged()
+        notifyEntryListChanged()
+    }
+
+    fun setJournalListFragment(jlf: JournalListFragment) {
+        journalListFragment = jlf
     }
 
     private fun highlightEntry(viewHolder: ViewHolder) {

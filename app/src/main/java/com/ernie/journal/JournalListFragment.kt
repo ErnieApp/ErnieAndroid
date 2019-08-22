@@ -19,7 +19,7 @@ import kotlinx.android.synthetic.main.fragment_journal_list.*
 
 private lateinit var snapShotListenerRegistration: ListenerRegistration
 
-class JournalListFragment(private val appDatabase: AppDatabase) : Fragment() {
+class JournalListFragment(private val appDatabase: AppDatabase, private val journalListAdapter: JournalListAdapter) : Fragment() {
 
     private val firestoreDB = FirebaseFirestore.getInstance()
     private lateinit var recyclerView: RecyclerView
@@ -28,7 +28,7 @@ class JournalListFragment(private val appDatabase: AppDatabase) : Fragment() {
         val view: View = inflater.inflate(R.layout.fragment_journal_list, container, false)
 
         recyclerView = view.findViewById(R.id.journalRecyclerView) as RecyclerView
-        recyclerView.adapter = JournalListAdapter(appDatabase.getEntries(), appDatabase, this)
+        recyclerView.adapter = journalListAdapter
         recyclerView.layoutManager = LinearLayoutManager(activity)
 
         val selectAllCheckBox = view.findViewById(R.id.selectAllCheckBox) as CheckBox

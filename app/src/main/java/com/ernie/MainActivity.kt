@@ -85,8 +85,10 @@ class MainActivity : AppIntro() {
     }
 
     override fun onBackPressed() {
-        if (slides[pager.currentItem] == journalFragment && (journalFragment!!.isAddEntryFormVisible() || journalFragment!!.isExpandedEntryVisible())) {
+        if (slides[pager.currentItem] == journalFragment && journalFragment!!.isAddEntryFormVisible()) {
             journalFragment!!.clickFloatingActionButton()
+        } else if (slides[pager.currentItem] == journalFragment && journalFragment!!.isSelectionMode()) {
+            journalFragment!!.toggleSelectionMode()
         } else {
             super.onBackPressed()
         }

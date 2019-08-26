@@ -116,6 +116,10 @@ class AppDatabase(fireAuth: FirebaseAuth) : Serializable {
         return currentUserCached!!.upcoming_pay_date!!
     }
 
+    fun getHourlyRate(): String {
+        return currentUserCached!!.hourly_rate!!
+    }
+
     fun getFireAuthInstance(): FirebaseAuth? {
         return firebaseAuth
     }

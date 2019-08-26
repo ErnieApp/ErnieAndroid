@@ -29,129 +29,120 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="?android:attr/listDivider"
-        app:layout_constraintBottom_toTopOf="@+id/tableLayout" />
+        app:layout_constraintBottom_toTopOf="@+id/linearLayoutList" />
 
-    <TableLayout
-        android:id="@+id/tableLayout"
+    <LinearLayout
+        android:id="@+id/linearLayoutList"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView">
 
-        <TableRow
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="12dp"
-            android:gravity="center_horizontal">
+            android:layout_height="wrap_content"
+            android:hint="Date"
+            android:textSize="20sp"
+            android:textStyle="bold">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Date:"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/dateUserInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
                 android:focusable="false"
                 android:longClickable="false"
                 android:textSize="20sp" />
-        </TableRow>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <TableRow
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="12dp"
-            android:gravity="center_horizontal">
+            android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Shift start:"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-            <EditText
-                android:id="@+id/startTimeUserInput"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:focusable="false"
-                android:hint="Start time"
-                android:longClickable="false"
-                android:textSize="20sp" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="12dp"
-            android:gravity="center_horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Shift end:"
+                android:layout_weight="1"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textStyle="bold">
 
-            <EditText
-                android:id="@+id/endTimeUserInput"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/startTimeUserInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:hint="Start"
+                    android:longClickable="false"
+                    android:textSize="20sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:focusable="false"
-                android:hint="End time"
-                android:longClickable="false"
-                android:textSize="20sp" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="12dp"
-            android:gravity="center_horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Break taken:"
+                android:layout_weight="1"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textStyle="bold">
 
-            <EditText
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/endTimeUserInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:hint="End"
+                    android:longClickable="false"
+                    android:textSize="20sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="20sp"
+                android:textStyle="bold">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/shiftDuration"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:editable="false"
+                    android:focusable="false"
+                    android:hint="Duration"
+                    android:longClickable="false"
+                    android:textSize="20sp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Break taken:"
+            android:textSize="20sp"
+            android:textStyle="bold">
+
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/breakDurationUserInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:hint="Minutes"
+                android:hint="Break"
                 android:inputType="none|number"
                 android:longClickable="false"
                 android:textSize="20sp" />
-        </TableRow>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <TableRow
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="12dp"
-            android:gravity="center_horizontal">
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:minWidth="130dp"
                 android:text="Base earned:"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -160,25 +151,24 @@
                 android:id="@+id/baseEarnedUserInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
                 android:editable="false"
                 android:inputType="none|number"
                 android:longClickable="false"
                 android:text="0.00"
                 android:textSize="20sp" />
-        </TableRow>
 
-        <TableRow
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="12dp"
-            android:gravity="center_horizontal">
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Amount earned:"
+                android:minWidth="130dp"
+                android:text="Total:"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
@@ -186,14 +176,14 @@
                 android:id="@+id/earnedUserInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
                 android:inputType="none|number"
                 android:longClickable="false"
                 android:text="0.00"
                 android:textSize="20sp" />
-        </TableRow>
-    </TableLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
 
     <ImageButton
         android:id="@+id/imageButton"
@@ -206,7 +196,7 @@
         android:scaleType="fitStart"
         android:src="@android:drawable/ic_menu_add"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tableLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutList" />
 
     <Button
         android:id="@+id/btnSubmit"
@@ -227,7 +217,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tableLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutList" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,6 +7,7 @@ import android.text.Editable
 import android.text.Selection
 import android.text.TextWatcher
 import android.text.format.DateFormat
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +19,7 @@ import com.ernie.AppDatabase
 import com.ernie.R
 import com.ernie.model.Entry
 import kotlinx.android.synthetic.main.fragment_journal_list_add_entry.*
+import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -31,7 +33,7 @@ class JournalListAddEntryFragment(private val appDatabase: AppDatabase) : Fragme
         super.onViewCreated(view, savedInstanceState)
         btnSubmit.setOnClickListener {
 
-            val entryDate = dateUserInput.text.split("/")
+            val entryDate = dateUserInput.text!!.split("/")
 
             val calendar = Calendar.getInstance()
             calendar.set(entryDate[2].toInt(), entryDate[1].toInt(), entryDate[0].toInt())
@@ -43,7 +45,7 @@ class JournalListAddEntryFragment(private val appDatabase: AppDatabase) : Fragme
                     startTimeUserInput.text.toString(),
                     endTimeUserInput.text.toString(),
                     breakDurationUserInput.text.toString().toInt(),
-                    earnedUserInput.text.toString(),
+                    baseEarnedUserInput.text.toString(),
                     currentDate))
             clearFields()
             activity!!.onBackPressed()
@@ -98,9 +100,56 @@ class JournalListAddEntryFragment(private val appDatabase: AppDatabase) : Fragme
                         if (minute.length == 1) minute = "0$minute"
 
                         field.setText(hour.plus(":").plus(minute))
+
+                        attemptToComputeBasePay()
                     }, 12, 0, true)
             timePickerDialog.show()
         }
+    }
+
+    private fun attemptToComputeBasePay() {
+        if (startTimeUserInput.text!!.isNotBlank() && endTimeUserInput.text!!.isNotBlank() && breakDurationUserInput.text!!.isNotBlank()) {
+            baseEarnedUserInput.setText("£".plus(calculateBasePay()))
+        }
+    }
+
+    private fun attemptToDuration() {
+        if (startTimeUserInput.text!!.isNotBlank() && endTimeUserInput.text!!.isNotBlank()) {
+            shiftDuration.setText(calculateShiftDuration(false).toString())
+        }
+    }
+
+    private fun calculateShiftDuration(asMinutes: Boolean): Float {
+        val simpleDateFormat = SimpleDateFormat("HH:mm")
+        val startDate = simpleDateFormat.parse(startTimeUserInput.text.toString())
+        val endDate = simpleDateFormat.parse(endTimeUserInput.text.toString())
+
+        var difference = endDate.time - startDate.time
+        if (difference < 0) {
+            val dateMax = simpleDateFormat.parse("24:00")
+            val dateMin = simpleDateFormat.parse("00:00")
+            difference = dateMax.time - startDate.time + (endDate.time - dateMin.time)
+        }
+        val days = (difference / (1000 * 60 * 60 * 24)).toInt()
+        val hours = ((difference - 1000 * 60 * 60 * 24 * days) / (1000 * 60 * 60)).toInt()
+        val min = (difference - (1000 * 60 * 60 * 24 * days).toLong() - (1000 * 60 * 60 * hours).toLong()).toInt() / (1000 * 60)
+
+        if (asMinutes) {
+            return (hours * 60 + min).toFloat()
+        } else {
+            return ("$hours" + ".$min").toFloat()
+        }
+
+    }
+
+    private fun calculateBasePay(): Float {
+        val duration = calculateShiftDuration(true)
+        val hourlyRate = appDatabase.getHourlyRate().toFloat()
+
+        Log.d("MERT", duration.toString())
+        Log.d("MERT", hourlyRate.toString())
+
+        return (duration * ((hourlyRate * 100) / 60)) / 100
     }
 
     private fun setupTotalAmountEarnedFormatter() {
@@ -130,10 +179,11 @@ class JournalListAddEntryFragment(private val appDatabase: AppDatabase) : Fragme
     }
 
     private fun clearFields() {
-        startTimeUserInput.text.clear()
-        endTimeUserInput.text.clear()
-        breakDurationUserInput.text.clear()
-        earnedUserInput.text.clear()
+        startTimeUserInput.text!!.clear()
+        endTimeUserInput.text!!.clear()
+        breakDurationUserInput.text!!.clear()
+        earnedUserInput.text!!.clear()
+        earnedUserInput.text!!.clear()
     }
 
     companion object {

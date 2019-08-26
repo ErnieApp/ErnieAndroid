@@ -45,7 +45,7 @@ class JournalListAddEntryFragment(private val appDatabase: AppDatabase) : Fragme
                     startTimeUserInput.text.toString(),
                     endTimeUserInput.text.toString(),
                     breakDurationUserInput.text.toString().toInt(),
-                    baseEarnedUserInput.text.toString(),
+                    baseEarnedUserInput.text.toString().substring(1),
                     currentDate))
             clearFields()
             activity!!.onBackPressed()
@@ -55,6 +55,20 @@ class JournalListAddEntryFragment(private val appDatabase: AppDatabase) : Fragme
         setupTimeFieldOnClickListener(endTimeUserInput)
         setupTotalAmountEarnedFormatter()
         setDefaultDateForDateField()
+
+        breakDurationUserInput.addTextChangedListener(object : TextWatcher {
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+
+            override fun afterTextChanged(s: Editable) {
+                if (s.isBlank()) {
+                    breakDurationUserInput.setText("0")
+                } else if (!s.toString().matches("([1-9][0-9]*|0)".toRegex())) {
+                    breakDurationUserInput.setText(breakDurationUserInput.text.toString().substring(1))
+                }
+                attemptToComputeBasePay()
+            }
+        })
     }
 
     private fun setDefaultDateForDateField() {
@@ -102,6 +116,7 @@ class JournalListAddEntryFragment(private val appDatabase: AppDatabase) : Fragme
                         field.setText(hour.plus(":").plus(minute))
 
                         attemptToComputeBasePay()
+                        attemptToDuration()
                     }, 12, 0, true)
             timePickerDialog.show()
         }
@@ -110,12 +125,26 @@ class JournalListAddEntryFragment(private val appDatabase: AppDatabase) : Fragme
     private fun attemptToComputeBasePay() {
         if (startTimeUserInput.text!!.isNotBlank() && endTimeUserInput.text!!.isNotBlank() && breakDurationUserInput.text!!.isNotBlank()) {
             baseEarnedUserInput.setText("£".plus(calculateBasePay()))
+            if (baseEarnedUserInput.text.toString().split(".")[1].length == 1) {
+                baseEarnedUserInput.setText(baseEarnedUserInput.text.toString().plus(0))
+            }
         }
     }
 
     private fun attemptToDuration() {
         if (startTimeUserInput.text!!.isNotBlank() && endTimeUserInput.text!!.isNotBlank()) {
-            shiftDuration.setText(calculateShiftDuration(false).toString())
+            val hoursDotMins = calculateShiftDuration(false).toString().split(".")
+            val hours = hoursDotMins[0]
+            val mins = hoursDotMins[1]
+            if (hours.equals("0") && mins.equals("0")) {
+                shiftDuration.setText("0 mins")
+            } else if (hours.equals("0")) {
+                shiftDuration.setText(mins + " min")
+            } else if (mins.equals("0")) {
+                shiftDuration.setText(hours + " h ")
+            } else {
+                shiftDuration.setText(hours + " h " + mins + " min")
+            }
         }
     }
 

@@ -36,12 +36,15 @@ class AppDatabase(fireAuth: FirebaseAuth) : Serializable {
     }
 
     fun addListeners() {
+
+        Log.d(TAG, "addListeners")
         addEntriesListener()
         addContractListener()
         addUserListener()
     }
 
     fun removeListeners() {
+        Log.d(TAG, "removeListeners")
         entriesSnapshotListener.remove()
         contractSnapshotListener.remove()
         userSnapshotListener.remove()

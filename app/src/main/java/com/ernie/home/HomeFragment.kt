@@ -31,8 +31,8 @@ class HomeFragment(private val appDatabase: AppDatabase) : Fragment() {
     private var previousPayDate: String = ""
     private var upcomingPayDate: String = ""
     private var currentListOfEntries: ArrayList<Entry>? = null
-    private lateinit var entriesSnapshotListener: ListenerRegistration
-    private lateinit var userSnapshotListener: ListenerRegistration
+    private var entriesSnapshotListener: ListenerRegistration? = null
+    private var userSnapshotListener: ListenerRegistration? = null
 
     // Piechart entries arraylist
     private var pieEntries = ArrayList<PieEntry>()
@@ -40,7 +40,6 @@ class HomeFragment(private val appDatabase: AppDatabase) : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         currentListOfEntries = appDatabase.getEntries()
-        addListeners()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -60,37 +59,54 @@ class HomeFragment(private val appDatabase: AppDatabase) : Fragment() {
     }
 
     fun removeListeners() {
-        entriesSnapshotListener.remove()
-        userSnapshotListener.remove()
+
+        if (entriesSnapshotListener != null && userSnapshotListener != null) {
+            entriesSnapshotListener!!.remove()
+            Log.d("homeRemoveListener", " userSnapshotListener.remove()")
+            userSnapshotListener!!.remove()
+            userSnapshotListener = null
+            entriesSnapshotListener = null
+        }
+
     }
 
     fun addListeners() {
+        Log.d(TAG, " userSnapshotListener.remove()")
         addUserListener()
+
         addEntriesLisener()
+
+
     }
 
     private fun addUserListener() {
-        userSnapshotListener = appDatabase.getUserDocumentReference().addSnapshotListener(EventListener { userDoc, e ->
-            if (e != null) {
-                Log.e(TAG, "Snapshot listener failed")
-                Toast.makeText(activity!!, "NO INTERNET - GET LOST", Toast.LENGTH_LONG).show()
-                return@EventListener
-            }
-            previousPayDate = userDoc!!.getString("previous_pay_date")!!
-            upcomingPayDate = userDoc.getString("upcoming_pay_date")!!
-            redrawView()
-        })
+
+        if (userSnapshotListener == null) {
+            userSnapshotListener = appDatabase.getUserDocumentReference().addSnapshotListener(EventListener { userDoc, e ->
+                if (e != null) {
+                    Log.e(TAG, "Snapshot listener failed")
+                    Toast.makeText(activity!!, "NO INTERNET - GET LOST", Toast.LENGTH_LONG).show()
+                    return@EventListener
+                }
+                previousPayDate = userDoc!!.getString("previous_pay_date")!!
+                upcomingPayDate = userDoc.getString("upcoming_pay_date")!!
+                redrawView()
+            })
+        }
     }
 
     fun addEntriesLisener() {
-        entriesSnapshotListener = appDatabase.getEntriesCollectionReference().addSnapshotListener(EventListener { entries, e ->
-            if (e != null) {
-                Log.e(TAG, "Snapshot listener failed")
-                Toast.makeText(activity!!, "NO INTERNET - GET LOST", Toast.LENGTH_LONG).show()
-                return@EventListener
-            }
-            redrawView()
-        })
+
+        if (entriesSnapshotListener == null) {
+            entriesSnapshotListener = appDatabase.getEntriesCollectionReference().addSnapshotListener(EventListener { entries, e ->
+                if (e != null) {
+                    Log.e(TAG, "Snapshot listener failed")
+                    Toast.makeText(activity!!, "NO INTERNET - GET LOST", Toast.LENGTH_LONG).show()
+                    return@EventListener
+                }
+                redrawView()
+            })
+        }
     }
 
     private fun redrawView() {

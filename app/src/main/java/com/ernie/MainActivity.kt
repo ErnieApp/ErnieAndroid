@@ -3,6 +3,7 @@ package com.ernie
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.viewpager.widget.ViewPager
 import com.ernie.home.HomeFragment
 import com.ernie.journal.JournalFragment
@@ -77,6 +78,8 @@ class MainActivity : AppIntro() {
                 finish()
             }
         }
+
+        Log.d("Mert was  here", "onPause")
         appDatabase!!.removeListeners()
         homeFragment!!.removeListeners()
     }
@@ -91,8 +94,15 @@ class MainActivity : AppIntro() {
 
     override fun onStart() {
         super.onStart()
-        appDatabase!!.addListeners()
-        homeFragment!!.addListeners()
+
+        if (firebaseAuth!!.currentUser != null) {
+            Log.d("Mert was  here", "onStart")
+            appDatabase!!.addListeners()
+            homeFragment!!.addListeners()
+        }
+
+
+
     }
 
     companion object {

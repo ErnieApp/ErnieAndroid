@@ -10,6 +10,7 @@ import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.ernie.AppDatabase
 import com.ernie.R
 import com.google.firebase.firestore.EventListener
@@ -39,6 +40,12 @@ class JournalListFragment(private val appDatabase: AppDatabase, private val jour
         val deleteButton = view.findViewById(R.id.deleteIcon) as ImageView
         deleteButton.setOnClickListener {
             (recyclerView.adapter as JournalListAdapter).deleteSelectedEntries()
+        }
+
+        val swipeToRefresh = view.findViewById(R.id.swipe_container) as SwipeRefreshLayout
+        swipeToRefresh.setOnRefreshListener {
+            journalListAdapter.notifyEntryListChanged()
+            swipeToRefresh.isRefreshing = false
         }
 
         return view

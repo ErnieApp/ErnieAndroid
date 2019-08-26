@@ -89,6 +89,8 @@ class MainActivity : AppIntro() {
             journalFragment!!.clickFloatingActionButton()
         } else if (slides[pager.currentItem] == journalFragment && journalFragment!!.isSelectionMode()) {
             journalFragment!!.toggleSelectionMode()
+        } else if (slides[pager.currentItem] == journalFragment && journalFragment!!.isExpandedEntryVisible()) {
+            journalFragment!!.showEntryList()
         } else {
             super.onBackPressed()
         }
@@ -102,8 +104,6 @@ class MainActivity : AppIntro() {
             appDatabase!!.addListeners()
             homeFragment!!.addListeners()
         }
-
-
 
     }
 

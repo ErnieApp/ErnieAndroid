@@ -52,10 +52,13 @@ class JournalListAdapter(private var entryList: ArrayList<Entry>, private val ap
                 }
                 viewHolder.checkBox.isChecked = !viewHolder.checkBox.isChecked
                 journalListFragment.updateSelectionCountText(selectedEntryViewHolders.size)
+            } else {
+                journalListFragment.expandEntry(entryList.findLast { entry -> entry.id.equals(viewHolder.entryID) }!!)
             }
         }
 
         viewHolder.itemView.setOnLongClickListener {
+            //TODO: Seems to highlight wrong entry when long click
             if (!isSelectionMode) {
                 highlightEntry(viewHolder)
                 viewHolder.itemView.findViewById<CheckBox>(R.id.checkBox).isChecked = true

@@ -8,11 +8,13 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.ernie.AppDatabase
 import com.ernie.R
+import com.ernie.model.Entry
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
@@ -20,7 +22,7 @@ import kotlinx.android.synthetic.main.fragment_journal_list.*
 
 private lateinit var snapShotListenerRegistration: ListenerRegistration
 
-class JournalListFragment(private val appDatabase: AppDatabase, private val journalListAdapter: JournalListAdapter) : Fragment() {
+class JournalListFragment(private val appDatabase: AppDatabase, private val journalListAdapter: JournalListAdapter, private val journalListExpandedEntryFragment: JournalListExpandedEntryFragment) : Fragment() {
 
     private val firestoreDB = FirebaseFirestore.getInstance()
     private lateinit var recyclerView: RecyclerView
@@ -84,6 +86,15 @@ class JournalListFragment(private val appDatabase: AppDatabase, private val jour
 
     fun setSelectedAllCheckBoxStatus(value: Boolean) {
         (activity!!.findViewById(R.id.selectAllCheckBox) as CheckBox).isChecked = value
+    }
+
+    fun expandEntry(entry: Entry) {
+        journalListExpandedEntryFragment.setEntry(entry)
+
+        val fragmentManager: FragmentManager = activity!!.supportFragmentManager
+        val transaction = fragmentManager.beginTransaction()
+        transaction.replace(R.id.journalFrameContainer, journalListExpandedEntryFragment)
+        transaction.commit()
     }
 
     companion object {

@@ -26,7 +26,7 @@
         android:layout_marginBottom="8dp"
         android:orientation="horizontal"
         android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/journalRecyclerView"
+        app:layout_constraintBottom_toTopOf="@+id/swipe_container"
         app:layout_constraintStart_toStartOf="@+id/journalListToolBar"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -59,20 +59,25 @@
             android:src="@android:drawable/ic_menu_delete" />
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/journalRecyclerView"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_container"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:clickable="true"
-        android:longClickable="true"
         android:paddingBottom="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/journalListToolBar"
-        tools:listitem="@layout/fragment_journal_list_entry">
+        app:layout_constraintTop_toBottomOf="@+id/journalListToolBar">
 
-    </androidx.recyclerview.widget.RecyclerView>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/journalRecyclerView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:clickable="true"
+            android:longClickable="true"
+            tools:listitem="@layout/fragment_journal_list_entry" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

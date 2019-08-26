@@ -211,8 +211,9 @@ class JournalListAddEntryFragment(private val appDatabase: AppDatabase) : Fragme
     private fun clearFields() {
         startTimeUserInput.text!!.clear()
         endTimeUserInput.text!!.clear()
+        shiftDuration.text!!.clear()
         breakDurationUserInput.text!!.clear()
-        earnedUserInput.text!!.clear()
+        baseEarnedUserInput.text!!.clear()
         earnedUserInput.text!!.clear()
     }
 

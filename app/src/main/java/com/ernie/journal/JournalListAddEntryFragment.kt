@@ -65,6 +65,7 @@ class JournalListAddEntryFragment(private val appDatabase: AppDatabase) : Fragme
                     breakDurationUserInput.setText("0")
                 } else if (!s.toString().matches("([1-9][0-9]*|0)".toRegex())) {
                     breakDurationUserInput.setText(breakDurationUserInput.text.toString().substring(1))
+                    Selection.setSelection(breakDurationUserInput.text, breakDurationUserInput.text.toString().length)
                 }
                 attemptToComputeBasePay()
             }
